@@ -1,0 +1,37 @@
+parameters:
+  thrift.host: localhost
+  thrift.port: 5775
+  thrift.buffer.size: 4096
+services:
+  ds.stack:
+    class: Ds\Stack
+    shared: false
+  id.generator.random:
+    class: CodeTool\OpenTracing\Id\RandomIntGenerator
+  id.generator.span: '@id.generator.random'
+  span.factory:
+    class: CodeTool\OpenTracing\Span\Factory\SpanFactory
+    arguments: ['@id.generator.span']
+  client.thrift:
+    class: CodeTool\OpenTracing\Client\ThriftClient
+    arguments: ['@thrift.agent']
+  thrift.agent:
+    class: CodeTool\OpenTracing\Jaeger\Thrift\Agent\AgentClient
+  thrift.transport.udp:
+    class: Jaeger\TUDPTransport
+    arguments: ['%thrift.host%', '%thrift.port%']
+  thrift.transport.buffered:
+    class: Thrift\Transport\TBufferedTransport
+    arguments: ['@thrift.transport.udp', '%thrift.buffer.size%', '%thrift.buffer.size%']
+    calls:
+      -
+        method: open
+        arguments: []
+  thrift.transport: '@thrift.transport.buffered'
+  thrift.protocol.compact:
+    class: Thrift\Protocol\TCompactProtocol
+    arguments: ['@thrift.transport']
+  thrift.protocol: '@thrift.protocol.compact'
+  tracer:
+    class: CodeTool\OpenTracing\Tracer\Tracer
+    arguments: ['@ds.stack', '@span.factory', '@client.thrift']

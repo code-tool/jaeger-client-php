@@ -1,0 +1,18 @@
+{
+  "name": "code-tool/opentracing-php",
+  "autoload": {
+    "psr-0": {
+      "CodeTool\\OpenTracing": "./src"
+    }
+  },
+  "require": {
+    "php": ">=7.1",
+    "packaged/thrift": "@stable"
+  },
+  "require-dev": {
+    "php-ds/php-ds": "@stable",
+    "phpunit/phpunit": "@stable"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
