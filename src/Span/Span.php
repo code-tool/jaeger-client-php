@@ -53,7 +53,7 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
 
     public function addLog(Log $log): SpanInterface
     {
-        $this->tags[] = $log;
+        $this->logs[] = $log;
 
         return $this;
     }
