@@ -1,8 +1,8 @@
 {
   "name": "code-tool/opentracing-php",
   "autoload": {
-    "psr-0": {
-      "CodeTool\\OpenTracing": "./src"
+    "psr-4": {
+      "CodeTool\\OpenTracing": "src/"
     }
   },
   "require": {
