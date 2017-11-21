@@ -1,6 +1,6 @@
 parameters:
   thrift.host: localhost
-  thrift.port: 5778
+  thrift.port: 5775
   thrift.buffer.size: 4096
 services:
   ds.stack:
@@ -23,7 +23,7 @@ services:
     arguments: ['@thrift.transport']
   thrift.protocol: '@thrift.protocol.compact'
   thrift.transport.udp:
-    class: Thrift\Transport\TSocket
+    class: CodeTool\OpenTracing\Zipkin\TUDPTransport
     arguments: ['%thrift.host%', '%thrift.port%']
   thrift.transport.buffered:
     class: Thrift\Transport\TBufferedTransport
