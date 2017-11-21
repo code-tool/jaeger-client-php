@@ -8,10 +8,14 @@ use CodeTool\OpenTracing\Id\IdGeneratorInterface;
 use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
+use CodeTool\OpenTracing\Zipkin\BinaryStringAnnotation;
+use CodeTool\OpenTracing\Zipkin\Endpoint;
 use Ds\Stack;
 
 class Tracer implements TracerInterface
 {
+    private $name;
+
     private $contextStack;
 
     private $spanFactory;
@@ -21,11 +25,13 @@ class Tracer implements TracerInterface
     private $idGenerator;
 
     public function __construct(
+        string $name,
         Stack $stack,
         SpanFactoryInterface $factory,
         ClientInterface $client,
         IdGeneratorInterface $idGenerator
     ) {
+        $this->name = $name;
         $this->contextStack = $stack;
         $this->spanFactory = $factory;
         $this->client = $client;
@@ -55,9 +61,18 @@ class Tracer implements TracerInterface
         return $this;
     }
 
+    public function getLocalTags()
+    {
+        return [new BinaryStringAnnotation('lc', new Endpoint($this->name), $this->name)];
+    }
+
     public function start(string $operationName, array $tags = []): SpanInterface
     {
-        $span = $this->spanFactory->create($this->contextStack->peek(), $operationName, $tags);
+        $span = $this->spanFactory->create(
+            $this->contextStack->peek(),
+            $operationName,
+            array_merge($this->getLocalTags(), $tags)
+        );
         $this->contextStack->push($span->getContext());
 
         return $span;
