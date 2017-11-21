@@ -5,10 +5,10 @@ namespace CodeTool\OpenTracing\Log;
 
 class Log extends \CodeTool\OpenTracing\Jaeger\Thrift\Log implements LogInterface
 {
-    public function __construct(int $timestamp, array $fields = [])
+    public function __construct(array $tags = [])
     {
-        $this->timestamp = $timestamp;
-        $this->fields = $fields;
+        $this->timestamp = (int)round(microtime(true) * 1000000);
+        $this->fields = $tags;
         parent::__construct();
     }
 }
