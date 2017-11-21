@@ -20,7 +20,7 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
     ) {
         $this->context = $context;
         $this->traceIdLow = $context->getTraceId();
-        $this->traceIdHigh = $context->getTraceId();
+        $this->traceIdHigh = 0;
         $this->spanId = $context->getSpanId();
         $this->parentSpanId = $context->getParentId();
         $this->operationName = $operationName;
@@ -56,7 +56,7 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
         return $this;
     }
 
-    public function withItem(string $key, $item) : SpanInterface
+    public function withItem(string $key, $item): SpanInterface
     {
         $this->context = $this->context->withItem($key, $item);
 
@@ -68,7 +68,7 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
         return $this->context->getItem($key, $default);
     }
 
-    public function withoutItem(string $key) : SpanInterface
+    public function withoutItem(string $key): SpanInterface
     {
         $this->context = $this->context->withoutItem($key);
 
