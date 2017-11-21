@@ -39,6 +39,7 @@ class SpanFactory implements SpanFactoryInterface
                 $logs
             );
         }
+
         return new Span(
             new SpanContext(
                 $parentContext->getTraceId(),

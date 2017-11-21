@@ -5,6 +5,7 @@ namespace CodeTool\OpenTracing\Tracer;
 
 use CodeTool\OpenTracing\Client\ClientInterface;
 use CodeTool\OpenTracing\Id\IdGeneratorInterface;
+use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
 use CodeTool\OpenTracing\Tag\BoolTag;
@@ -70,18 +71,22 @@ class Tracer implements TracerInterface
         ];
     }
 
-    public function start(string $operationName, array $tags = []): SpanInterface
+    public function getCurrentContext(): ?SpanContext
     {
         if (0 === $this->contextStack->count()) {
-            $span = $this->spanFactory->create($operationName, array_merge($this->getLocalTags(), $tags));
-        } else {
-            $span = $this->spanFactory->create(
-                $operationName,
-                array_merge($this->getLocalTags(), $tags),
-                $this->contextStack->peek()
-            );
+            return null;
         }
 
+        return $this->contextStack->peek();
+    }
+
+    public function start(string $operationName, array $tags = []): SpanInterface
+    {
+        $span = $this->spanFactory->create(
+            $operationName,
+            array_merge($this->getLocalTags(), $tags),
+            $this->getCurrentContext()
+        );
         $this->contextStack->push($span->getContext());
 
         return $span;
