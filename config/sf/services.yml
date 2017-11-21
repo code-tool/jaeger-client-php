@@ -17,6 +17,11 @@ services:
     arguments: ['@thrift.agent']
   thrift.agent:
     class: CodeTool\OpenTracing\Jaeger\Thrift\Agent\AgentClient
+    arguments: ['@thrift.protocol']
+  thrift.protocol.compact:
+    class: Thrift\Protocol\TCompactProtocol
+    arguments: ['@thrift.transport']
+  thrift.protocol: '@thrift.protocol.compact'
   thrift.transport.udp:
     class: Jaeger\TUDPTransport
     arguments: ['%thrift.host%', '%thrift.port%']
@@ -28,10 +33,6 @@ services:
         method: open
         arguments: []
   thrift.transport: '@thrift.transport.buffered'
-  thrift.protocol.compact:
-    class: Thrift\Protocol\TCompactProtocol
-    arguments: ['@thrift.transport']
-  thrift.protocol: '@thrift.protocol.compact'
   tracer:
     class: CodeTool\OpenTracing\Tracer\Tracer
     arguments: ['%service_name%', '@ds.stack', '@span.spanFactory', '@client.thrift', '@id.generator.span']
