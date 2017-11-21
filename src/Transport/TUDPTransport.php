@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Zipkin;
+namespace CodeTool\OpenTracing;
 
 use Thrift\Exception\TTransportException;
 use Thrift\Transport\TTransport;
