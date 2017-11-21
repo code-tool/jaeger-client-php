@@ -23,7 +23,7 @@ services:
     arguments: ['@thrift.transport']
   thrift.protocol: '@thrift.protocol.compact'
   thrift.transport.udp:
-    class: CodeTool\OpenTracing\Zipkin\TUDPTransport
+    class: CodeTool\OpenTracing\TUDPTransport
     arguments: ['%thrift.host%', '%thrift.port%']
   thrift.transport.buffered:
     class: Thrift\Transport\TBufferedTransport
