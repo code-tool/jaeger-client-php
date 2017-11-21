@@ -37,7 +37,7 @@ class Tracer implements TracerInterface
         $this->idGenerator = $idGenerator;
     }
 
-    public function onKernelRequest(): Tracer
+    public function onStart(): TracerInterface
     {
         //        $this->contextStack->push(
         //            new SpanContext(
@@ -53,7 +53,7 @@ class Tracer implements TracerInterface
         return $this;
     }
 
-    public function onFinishRequest(): Tracer
+    public function onFinish(): TracerInterface
     {
         $this->client->flush();
 
@@ -74,7 +74,6 @@ class Tracer implements TracerInterface
     {
         if (0 === $this->contextStack->count()) {
             $span = $this->spanFactory->create($operationName, array_merge($this->getLocalTags(), $tags));
-
         } else {
             $span = $this->spanFactory->create(
                 $operationName,
