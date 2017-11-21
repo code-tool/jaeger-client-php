@@ -5,7 +5,7 @@ namespace CodeTool\OpenTracing\Zipkin;
 
 abstract class AbstractBinaryAnnotation extends \CodeTool\OpenTracing\Jaeger\Thrift\Agent\Zipkin\BinaryAnnotation
 {
-    public function __construct(string $key, $value, int $type, string $host)
+    public function __construct(string $key, $value, int $type, Endpoint $host)
     {
         $this->key = $key;
         $this->value = $value;

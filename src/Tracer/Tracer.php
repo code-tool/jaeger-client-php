@@ -63,7 +63,7 @@ class Tracer implements TracerInterface
 
     public function getLocalTags()
     {
-        return [new BinaryStringAnnotation('lc', new Endpoint($this->name), $this->name)];
+        return [new BinaryStringAnnotation('lc', $this->name, new Endpoint($this->name))];
     }
 
     public function start(string $operationName, array $tags = []): SpanInterface

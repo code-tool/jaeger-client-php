@@ -7,7 +7,7 @@ use CodeTool\OpenTracing\Jaeger\Thrift\Agent\Zipkin\AnnotationType;
 
 class BinaryWordAnnotation extends AbstractBinaryAnnotation
 {
-    public function __construct(string $key, $value, string $host)
+    public function __construct(string $key, $value, Endpoint $host)
     {
         parent::__construct($key, $value, AnnotationType::I16, $host);
     }

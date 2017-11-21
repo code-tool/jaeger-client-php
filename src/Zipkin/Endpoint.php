@@ -9,7 +9,7 @@ class Endpoint extends \CodeTool\OpenTracing\Jaeger\Thrift\Agent\Zipkin\Endpoint
         string $serviceName,
         string $ip4Address = '127.0.0.1',
         string $ip6Address = '::1',
-        int $port = 7777
+        int $port = 5778
     ) {
         $this->service_name = $serviceName;
         $this->ipv4 = ip2long($ip4Address);
