@@ -28,8 +28,8 @@ class SpanFactory implements SpanFactoryInterface
                 new SpanContext(
                     $this->idGenerator->next(),
                     $this->idGenerator->next(),
-                    null,
-                    null,
+                    0,
+                    0,
                     0x01,
                     []
                 ),

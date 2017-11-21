@@ -22,7 +22,7 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
         $this->traceIdLow = $context->getTraceId();
         $this->traceIdHigh = 0;
         $this->spanId = $context->getSpanId();
-        $this->parentSpanId = 0;//$context->getParentId();
+        $this->parentSpanId = $context->getParentId();
         $this->flags = $context->getFlags();
         $this->operationName = $operationName;
         $this->startTime = $startTime;

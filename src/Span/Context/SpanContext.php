@@ -20,8 +20,8 @@ class SpanContext implements \IteratorAggregate
     public function __construct(
         int $traceId,
         int $spanId,
-        ?int $parentId,
-        ?int $debugId,
+        int $parentId,
+        int $debugId,
         int $flags = 0,
         array $baggage = []
     ) {
@@ -43,12 +43,12 @@ class SpanContext implements \IteratorAggregate
         return $this->spanId;
     }
 
-    public function getParentId(): ?int
+    public function getParentId(): int
     {
         return $this->parentId;
     }
 
-    public function getDebugId(): ?int
+    public function getDebugId(): int
     {
         return $this->debugId;
     }
