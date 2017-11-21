@@ -23,7 +23,7 @@ services:
     arguments: ['@thrift.transport']
   thrift.protocol: '@thrift.protocol.compact'
   thrift.transport.udp:
-    class: Jaeger\TUDPTransport
+    class: Thrift\Transport\TSocket
     arguments: ['%thrift.host%', '%thrift.port%']
   thrift.transport.buffered:
     class: Thrift\Transport\TBufferedTransport
