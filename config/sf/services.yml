@@ -1,6 +1,6 @@
 parameters:
   thrift.host: localhost
-  thrift.port: 5775
+  thrift.port: 5778
   thrift.buffer.size: 4096
 services:
   ds.stack:

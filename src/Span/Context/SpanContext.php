@@ -60,7 +60,7 @@ class SpanContext implements \IteratorAggregate
 
     public function getIterator()
     {
-        return $this->baggage;
+        return new \ArrayIterator($this->baggage);
     }
 
     public function withItem(string $key, $item)

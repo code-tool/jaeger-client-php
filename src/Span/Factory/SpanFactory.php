@@ -33,7 +33,7 @@ class SpanFactory implements SpanFactoryInterface
                 iterator_to_array($parentContext->getIterator())
             ),
             $operationName,
-            microtime(true) * 1000,
+            (int)round(microtime(true) * 1000),
             $tags,
             $logs
         );
