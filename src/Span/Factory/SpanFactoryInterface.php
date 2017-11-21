@@ -9,8 +9,8 @@ use CodeTool\OpenTracing\Span\SpanInterface;
 interface SpanFactoryInterface
 {
     public function create(
+        SpanContext $parentContext,
         string $operationName,
-        SpanContext $spanContext,
         array $tags = [],
         array $logs = []
     ): SpanInterface;

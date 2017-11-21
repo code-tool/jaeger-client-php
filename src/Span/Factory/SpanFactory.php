@@ -18,69 +18,22 @@ class SpanFactory implements SpanFactoryInterface
     }
 
     public function create(
+        SpanContext $parentContext,
         string $operationName,
-        SpanContext $spanContext,
         array $tags = [],
         array $logs = []
     ): SpanInterface {
-
-        if (0 === $spanContext->getParentId()) {
-            $traceId = $this->idGenerator->next();
-
-            return new Span(
-                $traceId,
-                $traceId,
-                $traceId,
-                0,
-                $operationName,
-                microtime(true) * 1000000,
-                0x01,
-                $tags,
-                $logs
-            );
-        }
-
-        if ($spanContext->isDebugStarting()) {
-            $traceId = $this->idGenerator->next();
-            $tags[''] = $spanContext->getDebugId();
-
-            return new Span(
-                $traceId,
-                $traceId,
-                $traceId,
-                $spanContext->getParentId(),
-                $operationName,
-                microtime(true) * 1000000,
-                0x01 | 0x02,
-                $tags,
-                $logs
-            );
-        }
-
-        if (null !== $tags && ('server' === $tags['span.kind'] ?? null)) {
-            return new Span(
-                $spanContext->getTraceId(),
-                $spanContext->getTraceId(),
-                $spanContext->getSpanId(),
-                $spanContext->getParentId(),
-                $operationName,
-                microtime(true) * 1000,
-                $spanContext->getFlags(),
-                $tags,
-                $logs
-            );
-        }
-
-        $spanId = $this->idGenerator->next();
-
         return new Span(
-            $spanContext->getTraceId(),
-            $spanContext->getTraceId(),
-            $spanId,
-            $spanId,
+            new SpanContext(
+                $parentContext->getTraceId(),
+                $this->idGenerator->next(),
+                $parentContext->getSpanId(),
+                $parentContext->getDebugId(),
+                $parentContext->getFlags(),
+                iterator_to_array($parentContext->getIterator())
+            ),
             $operationName,
             microtime(true) * 1000,
-            $spanContext->getFlags(),
             $tags,
             $logs
         );

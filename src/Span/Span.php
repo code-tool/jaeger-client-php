@@ -5,55 +5,34 @@ namespace CodeTool\OpenTracing\Span;
 
 use CodeTool\OpenTracing\Jaeger\Thrift\Log;
 use CodeTool\OpenTracing\Jaeger\Thrift\Tag;
+use CodeTool\OpenTracing\Span\Context\SpanContext;
 
 class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInterface
 {
+    private $context;
+
     public function __construct(
-        int $traceIdHigh,
-        int $traceIdLow,
-        int $spanId,
-        int $parentSpanId,
+        SpanContext $context,
         string $operationName,
         int $startTime,
-        int $flags = 0,
         array $tags = [],
         array $logs = []
     ) {
-        $this->traceIdHigh = $traceIdHigh;
-        $this->traceIdLow = $traceIdLow;
-        $this->spanId = $spanId;
-        $this->parentSpanId = $parentSpanId;
+        $this->context = $context;
+        $this->traceIdLow = $context->getTraceId();
+        $this->traceIdHigh = $context->getTraceId();
+        $this->spanId = $context->getSpanId();
+        $this->parentSpanId = $context->getParentId();
         $this->operationName = $operationName;
         $this->startTime = $startTime;
-        $this->flags = $flags;
         $this->tags = $tags;
         $this->logs = $logs;
         parent::__construct();
     }
 
-    public function getTraceId(): int
+    public function getContext(): SpanContext
     {
-        return $this->traceIdLow + $this->traceIdHigh;
-    }
-
-    public function getId(): int
-    {
-        return $this->spanId;
-    }
-
-    public function getParentId(): int
-    {
-        return $this->parentSpanId;
-    }
-
-    public function getFlags(): int
-    {
-        return $this->flags;
-    }
-
-    public function getOperationName(): string
-    {
-        return $this->operationName;
+        return $this->context;
     }
 
     public function finish()
@@ -62,7 +41,6 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
 
         return $this;
     }
-
 
     public function addTag(Tag $tag): SpanInterface
     {
@@ -74,6 +52,25 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
     public function addLog(Log $log): SpanInterface
     {
         $this->logs[] = $log;
+
+        return $this;
+    }
+
+    public function withItem(string $key, $item) : SpanInterface
+    {
+        $this->context = $this->context->withItem($key, $item);
+
+        return $this;
+    }
+
+    public function getItem(string $key, $default = null)
+    {
+        return $this->context->getItem($key, $default);
+    }
+
+    public function withoutItem(string $key) : SpanInterface
+    {
+        $this->context = $this->context->withoutItem($key);
 
         return $this;
     }

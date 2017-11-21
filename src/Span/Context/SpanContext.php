@@ -22,8 +22,8 @@ class SpanContext implements \IteratorAggregate
         int $spanId,
         int $parentId,
         int $debugId,
-        int $flags = 0,
-        array $baggage = []
+        int $flags,
+        array $baggage
     ) {
         $this->traceId = $traceId;
         $this->spanId = $spanId;
@@ -58,13 +58,33 @@ class SpanContext implements \IteratorAggregate
         return $this->flags;
     }
 
-    public function isDebugStarting() : bool
-    {
-        return 0 === $this->traceId && 0 !== $this->debugId;
-    }
-
     public function getIterator()
     {
-        return new \ArrayIterator($this->baggage);
+        return $this->baggage;
+    }
+
+    public function withItem(string $key, $item)
+    {
+        $copy = clone $this;
+        $copy->baggage[$key] = $item;
+
+        return $copy;
+    }
+
+    public function getItem(string $key, $default = null)
+    {
+        if (false === array_key_exists($key, $this->baggage)) {
+            return $default;
+        }
+
+        return $this->baggage[$key];
+    }
+
+    public function withoutItem(string $key)
+    {
+        $copy = clone $this;
+        unset($copy->baggage[$key]);
+
+        return $copy;
     }
 }

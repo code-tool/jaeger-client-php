@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace CodeTool\OpenTracing\Tracer;
 
 use CodeTool\OpenTracing\Client\ClientInterface;
+use CodeTool\OpenTracing\Id\IdGeneratorInterface;
 use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
@@ -11,22 +12,38 @@ use Ds\Stack;
 
 class Tracer implements TracerInterface
 {
-    private $stack;
+    private $contextStack;
 
-    private $factory;
+    private $spanFactory;
 
     private $client;
 
-    public function __construct(Stack $stack, SpanFactoryInterface $factory, ClientInterface $client)
-    {
-        $this->stack = $stack;
-        $this->factory = $factory;
+    private $idGenerator;
+
+    public function __construct(
+        Stack $stack,
+        SpanFactoryInterface $factory,
+        ClientInterface $client,
+        IdGeneratorInterface $idGenerator
+    ) {
+        $this->contextStack = $stack;
+        $this->spanFactory = $factory;
         $this->client = $client;
+        $this->idGenerator = $idGenerator;
     }
 
     public function onKernelRequest(): Tracer
     {
-        $this->stack->push(new SpanContext(0, 0, 0, 0));
+        $this->contextStack->push(
+            new SpanContext(
+                $this->idGenerator->next(),
+                $this->idGenerator->next(),
+                0,
+                $this->idGenerator->next(),
+                0,
+                []
+            )
+        );
 
         return $this;
     }
@@ -40,23 +57,8 @@ class Tracer implements TracerInterface
 
     public function start(string $operationName, array $tags = []): SpanInterface
     {
-        /**
-         * @var SpanContext $context
-         */
-        if (null === ($context = $this->stack->peek())) {
-            throw new \RuntimeException();
-        }
-
-        $span = $this->factory->create($operationName, $context, $tags);
-        $this->stack->push(
-            new SpanContext(
-                $context->getTraceId(),
-                $context->getSpanId(),
-                $span->getId(),
-                $context->getDebugId()
-            )
-        );
-
+        $span = $this->spanFactory->create($this->contextStack->peek(), $operationName, $tags);
+        $this->contextStack->push($span->getContext());
 
         return $span;
     }
@@ -64,7 +66,7 @@ class Tracer implements TracerInterface
     public function finish(SpanInterface $span): TracerInterface
     {
         $this->client->add($span->finish());
-        $this->stack->pop();
+        $this->contextStack->pop();
 
         return $this;
     }
