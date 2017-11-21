@@ -3,7 +3,7 @@ parameters:
   thrift.port: 5775
   thrift.buffer.size: 4096
 services:
-  ds.contextStack:
+  ds.stack:
     class: Ds\Stack
     shared: false
   id.generator.random:
@@ -34,4 +34,4 @@ services:
   thrift.protocol: '@thrift.protocol.compact'
   tracer:
     class: CodeTool\OpenTracing\Tracer\Tracer
-    arguments: ['@ds.contextStack', '@span.spanFactory', '@client.thrift', '@id.generator.span']
+    arguments: ['%service_name%', '@ds.stack', '@span.spanFactory', '@client.thrift', '@id.generator.span']
