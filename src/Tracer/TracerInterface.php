@@ -11,7 +11,7 @@ interface TracerInterface
 
     public function onFinish() : TracerInterface;
 
-    public function start(string $name, array $tags) : SpanInterface;
+    public function start(string $name, array $tags = []) : SpanInterface;
 
     public function finish(SpanInterface $span);
 }
