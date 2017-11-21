@@ -18,11 +18,27 @@ class SpanFactory implements SpanFactoryInterface
     }
 
     public function create(
-        SpanContext $parentContext,
         string $operationName,
         array $tags = [],
+        SpanContext $parentContext = null,
         array $logs = []
     ): SpanInterface {
+        if (null === $parentContext) {
+            return new Span(
+                new SpanContext(
+                    $this->idGenerator->next(),
+                    $this->idGenerator->next(),
+                    null,
+                    null,
+                    0x01,
+                    []
+                ),
+                $operationName,
+                (int)round(microtime(true) * 1000000),
+                $tags,
+                $logs
+            );
+        }
         return new Span(
             new SpanContext(
                 $parentContext->getTraceId(),

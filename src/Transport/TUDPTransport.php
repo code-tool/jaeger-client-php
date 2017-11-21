@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing;
+namespace CodeTool\OpenTracing\Transport;
 
 use Thrift\Exception\TTransportException;
 use Thrift\Transport\TTransport;
@@ -61,6 +61,7 @@ class TUDPTransport extends TTransport
      */
     public function read($len)
     {
+        return '';
     }
 
     /**

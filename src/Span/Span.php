@@ -22,9 +22,11 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
         $this->traceIdLow = $context->getTraceId();
         $this->traceIdHigh = 0;
         $this->spanId = $context->getSpanId();
-        $this->parentSpanId = $context->getParentId();
+        $this->parentSpanId = 0;//$context->getParentId();
+        $this->flags = $context->getFlags();
         $this->operationName = $operationName;
         $this->startTime = $startTime;
+
         $this->tags = $tags;
         $this->logs = $logs;
         parent::__construct();
@@ -51,7 +53,7 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
 
     public function addLog(Log $log): SpanInterface
     {
-        $this->logs[] = $log;
+        $this->tags[] = $log;
 
         return $this;
     }

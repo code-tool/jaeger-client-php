@@ -15,7 +15,7 @@ for f in ${FILES}; do
 done
 
 rm -rf ../src/Jaeger/Thrift/
-mv ../jaeger-idl/gen-php/CodeTool/OpenTracing/Jaeger/Thrift/ ../src/Jaeger/Thrift
+mv ../jaeger-idl/gen-php/CodeTool/OpenTracing/Jaeger/Thrift ../src/Jaeger/Thrift
 
 popd
 rm -rf jaeger-idl

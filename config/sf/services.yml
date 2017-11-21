@@ -1,6 +1,6 @@
 parameters:
   thrift.host: localhost
-  thrift.port: 5775
+  thrift.port: 6832
   thrift.buffer.size: 4096
 services:
   ds.stack:
@@ -14,16 +14,19 @@ services:
     arguments: ['@id.generator.span']
   client.thrift:
     class: CodeTool\OpenTracing\Client\ThriftClient
-    arguments: ['@thrift.agent']
+    arguments: ['%service_name%', '@thrift.agent']
   thrift.agent:
     class: CodeTool\OpenTracing\Jaeger\Thrift\Agent\AgentClient
     arguments: ['@thrift.protocol']
   thrift.protocol.compact:
     class: Thrift\Protocol\TCompactProtocol
     arguments: ['@thrift.transport']
-  thrift.protocol: '@thrift.protocol.compact'
+  thrift.protocol.binary:
+    class: Thrift\Protocol\TBinaryProtocol
+    arguments: ['@thrift.transport']
+  thrift.protocol: '@thrift.protocol.binary'
   thrift.transport.udp:
-    class: CodeTool\OpenTracing\TUDPTransport
+    class: CodeTool\OpenTracing\Transport\TUDPTransport
     arguments: ['%thrift.host%', '%thrift.port%']
   thrift.transport.buffered:
     class: Thrift\Transport\TBufferedTransport

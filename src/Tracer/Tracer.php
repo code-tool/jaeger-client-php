@@ -5,11 +5,10 @@ namespace CodeTool\OpenTracing\Tracer;
 
 use CodeTool\OpenTracing\Client\ClientInterface;
 use CodeTool\OpenTracing\Id\IdGeneratorInterface;
-use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
-use CodeTool\OpenTracing\Zipkin\BinaryStringAnnotation;
-use CodeTool\OpenTracing\Zipkin\Endpoint;
+use CodeTool\OpenTracing\Tag\BoolTag;
+use CodeTool\OpenTracing\Tag\StringTag;
 use Ds\Stack;
 
 class Tracer implements TracerInterface
@@ -40,16 +39,16 @@ class Tracer implements TracerInterface
 
     public function onKernelRequest(): Tracer
     {
-        $this->contextStack->push(
-            new SpanContext(
-                $this->idGenerator->next(),
-                $this->idGenerator->next(),
-                0,
-                $this->idGenerator->next(),
-                0,
-                []
-            )
-        );
+        //        $this->contextStack->push(
+        //            new SpanContext(
+        //                $this->idGenerator->next(),
+        //                $this->idGenerator->next(),
+        //                0,
+        //                $this->idGenerator->next(),
+        //                0,
+        //                []
+        //            )
+        //        );
 
         return $this;
     }
@@ -63,16 +62,27 @@ class Tracer implements TracerInterface
 
     public function getLocalTags()
     {
-        return [new BinaryStringAnnotation('lc', $this->name, new Endpoint($this->name))];
+        return [
+            new StringTag('jaeger.version', 'PHP'),
+            new StringTag('jaeger.hostname', gethostname()),
+            new StringTag('sample.type', 'const'),
+            new BoolTag('sample.param', true),
+        ];
     }
 
     public function start(string $operationName, array $tags = []): SpanInterface
     {
-        $span = $this->spanFactory->create(
-            $this->contextStack->peek(),
-            $operationName,
-            array_merge($this->getLocalTags(), $tags)
-        );
+        if (0 === $this->contextStack->count()) {
+            $span = $this->spanFactory->create($operationName, array_merge($this->getLocalTags(), $tags));
+
+        } else {
+            $span = $this->spanFactory->create(
+                $operationName,
+                array_merge($this->getLocalTags(), $tags),
+                $this->contextStack->peek()
+            );
+        }
+
         $this->contextStack->push($span->getContext());
 
         return $span;
