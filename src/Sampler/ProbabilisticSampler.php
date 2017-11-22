@@ -7,15 +7,24 @@ class ProbabilisticSampler implements SamplerInterface
 {
     private $rate;
 
+    private $threshold;
+
     public function __construct(float $rate)
     {
         $this->rate = $rate;
+        $this->threshold = $rate * PHP_INT_MAX;
     }
 
     public function decide(int $traceId, string $operationName): SamplerResult
     {
-        if ($traceId > $this->rate * PHP_INT_MAX) {
-            return new SamplerResult(false);
+        if ($traceId > $this->threshold) {
+            return new SamplerResult(
+                false,
+                [
+                    new SamplerTypeTag('probabilistic'),
+                    new SamplerParamTag((string)$this->rate)
+                ]
+            );
         }
 
         return new SamplerResult(

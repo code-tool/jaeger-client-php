@@ -17,7 +17,7 @@ class ConstSampler implements SamplerInterface
     public function decide(int $traceId, string $operationName): SamplerResult
     {
         return new SamplerResult(
-            true,
+            $this->debugEnabled,
             [
                 new SamplerTypeTag('const'),
                 new SamplerParamTag($this->debugEnabled ? 'True' : 'False')
