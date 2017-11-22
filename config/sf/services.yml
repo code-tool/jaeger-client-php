@@ -2,6 +2,7 @@ parameters:
   thrift.host: localhost
   thrift.port: 6831
   thrift.buffer.size: 4096
+  opentrace.sampler.rate: 0.1
 services:
   ds.stack:
     class: Ds\Stack
@@ -9,9 +10,19 @@ services:
   id.generator.random:
     class: CodeTool\OpenTracing\Id\RandomIntGenerator
   id.generator.span: '@id.generator.random'
-  span.spanFactory:
+  sampler.always:
+    class: CodeTool\OpenTracing\Sampler\ConstSampler
+    arguments: [true]
+  sampler.const:
+    class: CodeTool\OpenTracing\Sampler\ConstSampler
+    arguments: ['%kernel.debug%']
+  sampler.probabilistic:
+    class: CodeTool\OpenTracing\Sampler\ProbabilisticSampler
+    arguments: ['%opentrace.sampler.rate%']
+  opentrace.sampler: '@sampler.always'
+  span.factory:
     class: CodeTool\OpenTracing\Span\Factory\SpanFactory
-    arguments: ['@id.generator.span']
+    arguments: ['@id.generator.span', '@opentrace.sampler']
   client.thrift:
     class: CodeTool\OpenTracing\Client\ThriftClient
     arguments: ['%service_name%', '@thrift.agent']
@@ -38,4 +49,4 @@ services:
   thrift.transport: '@thrift.transport.buffered'
   tracer:
     class: CodeTool\OpenTracing\Tracer\Tracer
-    arguments: ['%service_name%', '@ds.stack', '@span.spanFactory', '@client.thrift', '@id.generator.span']
+    arguments: ['@ds.stack', '@span.factory', '@client.thrift']

@@ -14,43 +14,25 @@ use Ds\Stack;
 
 class Tracer implements TracerInterface
 {
-    private $name;
+    private $stack;
 
-    private $contextStack;
-
-    private $spanFactory;
+    private $factory;
 
     private $client;
 
-    private $idGenerator;
-
     public function __construct(
-        string $name,
         Stack $stack,
         SpanFactoryInterface $factory,
         ClientInterface $client,
         IdGeneratorInterface $idGenerator
     ) {
-        $this->name = $name;
-        $this->contextStack = $stack;
-        $this->spanFactory = $factory;
+        $this->stack = $stack;
+        $this->factory = $factory;
         $this->client = $client;
-        $this->idGenerator = $idGenerator;
     }
 
     public function onStart(): TracerInterface
     {
-        //        $this->contextStack->push(
-        //            new SpanContext(
-        //                $this->idGenerator->next(),
-        //                $this->idGenerator->next(),
-        //                0,
-        //                $this->idGenerator->next(),
-        //                0,
-        //                []
-        //            )
-        //        );
-
         return $this;
     }
 
@@ -73,21 +55,21 @@ class Tracer implements TracerInterface
 
     public function getCurrentContext(): ?SpanContext
     {
-        if (0 === $this->contextStack->count()) {
+        if (0 === $this->stack->count()) {
             return null;
         }
 
-        return $this->contextStack->peek();
+        return $this->stack->peek();
     }
 
     public function start(string $operationName, array $tags = []): SpanInterface
     {
-        $span = $this->spanFactory->create(
+        $span = $this->factory->create(
             $operationName,
             array_merge($this->getLocalTags(), $tags),
             $this->getCurrentContext()
         );
-        $this->contextStack->push($span->getContext());
+        $this->stack->push($span->getContext());
 
         return $span;
     }
@@ -95,7 +77,7 @@ class Tracer implements TracerInterface
     public function finish(SpanInterface $span): TracerInterface
     {
         $this->client->add($span->finish());
-        $this->contextStack->pop();
+        $this->stack->pop();
 
         return $this;
     }
