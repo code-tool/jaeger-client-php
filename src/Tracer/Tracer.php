@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace CodeTool\OpenTracing\Tracer;
 
 use CodeTool\OpenTracing\Client\ClientInterface;
-use CodeTool\OpenTracing\Id\IdGeneratorInterface;
 use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
@@ -20,12 +19,8 @@ class Tracer implements TracerInterface
 
     private $client;
 
-    public function __construct(
-        Stack $stack,
-        SpanFactoryInterface $factory,
-        ClientInterface $client,
-        IdGeneratorInterface $idGenerator
-    ) {
+    public function __construct(Stack $stack, SpanFactoryInterface $factory, ClientInterface $client)
+    {
         $this->stack = $stack;
         $this->factory = $factory;
         $this->client = $client;
