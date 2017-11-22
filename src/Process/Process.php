@@ -5,10 +5,10 @@ namespace CodeTool\OpenTracing\Process;
 
 class Process extends \CodeTool\OpenTracing\Jaeger\Thrift\Process
 {
-    public function __construct(string $serviceName, array $tags = [])
+    public function __construct(string $serviceName)
     {
         $this->serviceName = $serviceName;
-        $this->tags = $tags;
+        $this->tags = [new ProcessPidTag(), new ProcessSapiTag(), new ProcessUidTag(), new ProcessGidTag()];
         parent::__construct();
     }
 }
