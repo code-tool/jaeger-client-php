@@ -7,7 +7,6 @@ use CodeTool\OpenTracing\Client\ClientInterface;
 use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
-use CodeTool\OpenTracing\Tag\BoolTag;
 use CodeTool\OpenTracing\Tag\StringTag;
 use Ds\Stack;
 
@@ -41,10 +40,8 @@ class Tracer implements TracerInterface
     public function getLocalTags()
     {
         return [
-            new StringTag('jaeger.version', 'PHP'),
+            new StringTag('jaeger.version', 'PHP ' . PHP_VERSION),
             new StringTag('jaeger.hostname', gethostname()),
-            new StringTag('sample.type', 'const'),
-            new BoolTag('sample.param', true),
         ];
     }
 
