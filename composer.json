@@ -7,7 +7,6 @@
   },
   "require": {
     "php": ">=7.1",
-    "ext-ds": "*",
     "packaged/thrift": "@stable"
   },
   "require-dev": {

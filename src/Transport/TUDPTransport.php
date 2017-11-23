@@ -21,7 +21,7 @@ class TUDPTransport extends TTransport
         $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     }
 
-    public function isOpen() : bool
+    public function isOpen(): bool
     {
         return $this->socket !== null;
     }
@@ -30,7 +30,7 @@ class TUDPTransport extends TTransport
     {
         $ok = socket_connect($this->socket, $this->host, $this->port);
         if ($ok === false) {
-            throw new TTransportException('socket_connect failed');
+            throw new TTransportException('Cannot open socket socket');
         }
     }
 
@@ -40,22 +40,22 @@ class TUDPTransport extends TTransport
         $this->socket = null;
     }
 
-    public function read($len) : string
+    public function read($len): string
     {
         return '';
     }
 
     public function write($buf)
     {
-        if (!$this->isOpen()) {
-            throw new TTransportException('transport is closed');
+        if (false === $this->isOpen()) {
+            throw new TTransportException('Transport is closed');
         }
 
         $length = strlen($buf);
         while (true) {
             $result = socket_write($this->socket, $buf);
             if ($result === false) {
-                throw new TTransportException('socket_write failed');
+                throw new TTransportException('Cannot write to socket');
             }
             if ($result >= $length) {
                 break;
