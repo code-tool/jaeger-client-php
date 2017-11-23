@@ -20,6 +20,7 @@ abstract class AbstractTag extends Tag implements TagInterface
         $this->vType = $type;
         $this->vStr = $vStr;
         $this->vDouble = $vDouble;
+        $this->vBool = $vBool;
         $this->vLong = $vLong;
         $this->vBinary = $vBinary;
         parent::__construct();

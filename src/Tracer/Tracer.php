@@ -31,6 +31,9 @@ class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, 
     public function flush(): FlushableInterface
     {
         $this->client->flush();
+        if (0 !== $this->stack->count()) {
+            throw new \RuntimeException('Corrupted stack');
+        }
 
         return $this;
     }
@@ -64,11 +67,10 @@ class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, 
 
     public function start(string $operationName, array $tags = []): SpanInterface
     {
-        $span = $this->factory->create(
-            $operationName,
-            array_merge($this->getLocalTags(), $tags),
-            $this->getContext()
-        );
+        if (null === ($context = $this->getContext())) {
+            $tags = array_merge($this->getLocalTags(), $tags);
+        }
+        $span = $this->factory->create($operationName, $tags, $this->getContext());
         $this->stack->push($span->getContext());
 
         return $span;
