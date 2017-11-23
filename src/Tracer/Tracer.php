@@ -41,7 +41,6 @@ class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, 
         return $this;
     }
 
-
     public function getContext(): ?SpanContext
     {
         if (0 === $this->stack->count()) {
