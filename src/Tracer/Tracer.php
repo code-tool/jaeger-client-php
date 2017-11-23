@@ -13,7 +13,7 @@ use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
 use Ds\Stack;
 
-class Tracer implements TracerInterface
+class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, FlushableInterface
 {
     private $stack;
 
@@ -28,7 +28,7 @@ class Tracer implements TracerInterface
         $this->client = $client;
     }
 
-    public function flush(): TracerInterface
+    public function flush(): FlushableInterface
     {
         $this->client->flush();
 
@@ -45,7 +45,7 @@ class Tracer implements TracerInterface
         ];
     }
 
-    public function assign(SpanContext $context): TracerInterface
+    public function assign(SpanContext $context): ExtractorInterface
     {
         $this->stack->push([$context]);
 
@@ -53,7 +53,7 @@ class Tracer implements TracerInterface
     }
 
 
-    public function getCurrentContext(): ?SpanContext
+    public function getContext(): ?SpanContext
     {
         if (0 === $this->stack->count()) {
             return null;
@@ -67,7 +67,7 @@ class Tracer implements TracerInterface
         $span = $this->factory->create(
             $operationName,
             array_merge($this->getLocalTags(), $tags),
-            $this->getCurrentContext()
+            $this->getContext()
         );
         $this->stack->push($span->getContext());
 
