@@ -10,7 +10,9 @@ use Thrift\Transport\TTransport;
 class TUDPTransport extends TTransport
 {
     private $socket;
+
     private $host;
+
     private $port;
 
     public function __construct(string $host, int $port)
@@ -38,7 +40,7 @@ class TUDPTransport extends TTransport
     public function open()
     {
         $ok = socket_connect($this->socket, $this->host, $this->port);
-        if ($ok === FALSE) {
+        if ($ok === false) {
             throw new TTransportException('socket_connect failed');
         }
     }
@@ -56,6 +58,7 @@ class TUDPTransport extends TTransport
      * Read some data into the array.
      *
      * @param int $len How much to read
+     *
      * @return string The data that has been read
      * @throws TTransportException if cannot read any more data
      */
@@ -68,6 +71,7 @@ class TUDPTransport extends TTransport
      * Writes the given data out.
      *
      * @param string $buf The data to write
+     *
      * @throws TTransportException if writing fails
      */
     public function write($buf)
@@ -76,9 +80,17 @@ class TUDPTransport extends TTransport
             throw new TTransportException('transport is closed');
         }
 
-        $ok = socket_write($this->socket, $buf);
-        if ($ok === FALSE) {
-            throw new TTransportException('socket_write failed');
+        $length = strlen($buf);
+        while (true) {
+            $result = socket_write($this->socket, $buf);
+            if ($result === false) {
+                throw new TTransportException('socket_write failed');
+            }
+            if ($result >= $length) {
+                break;
+            }
+            $buf = substr($buf, $result);
+            $length -= $result;
         }
     }
 }
