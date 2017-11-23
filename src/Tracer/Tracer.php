@@ -67,10 +67,7 @@ class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, 
 
     public function start(string $operationName, array $tags = []): SpanInterface
     {
-        if (null === ($context = $this->getContext())) {
-            $tags = array_merge($this->getLocalTags(), $tags);
-        }
-        $span = $this->factory->create($operationName, $tags, $this->getContext());
+        $span = $this->factory->create($operationName, array_merge($this->getLocalTags(), $tags), $this->getContext());
         $this->stack->push($span->getContext());
 
         return $span;
