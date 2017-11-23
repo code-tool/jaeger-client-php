@@ -28,10 +28,7 @@ class TUDPTransport extends TTransport
 
     public function open()
     {
-        $ok = socket_connect($this->socket, $this->host, $this->port);
-        if ($ok === false) {
-            throw new TTransportException('Cannot open socket socket');
-        }
+        @socket_connect($this->socket, $this->host, $this->port);
     }
 
     public function close()
@@ -53,9 +50,9 @@ class TUDPTransport extends TTransport
 
         $length = strlen($buf);
         while (true) {
-            $result = socket_write($this->socket, $buf);
+            $result = @socket_write($this->socket, $buf);
             if ($result === false) {
-                throw new TTransportException('Cannot write to socket');
+                break;
             }
             if ($result >= $length) {
                 break;
