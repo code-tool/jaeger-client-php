@@ -4,10 +4,6 @@ declare(strict_types=1);
 namespace CodeTool\OpenTracing\Tracer;
 
 use CodeTool\OpenTracing\Client\ClientInterface;
-use CodeTool\OpenTracing\General\PhpBinaryTag;
-use CodeTool\OpenTracing\General\PhpVersionTag;
-use CodeTool\OpenTracing\General\JaegerHostnameTag;
-use CodeTool\OpenTracing\General\JaegerVersionTag;
 use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
@@ -38,16 +34,6 @@ class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, 
         return $this;
     }
 
-    public function getLocalTags()
-    {
-        return [
-            new JaegerVersionTag(),
-            new JaegerHostnameTag(),
-            new PhpBinaryTag(),
-            new PhpVersionTag(),
-        ];
-    }
-
     public function assign(SpanContext $context): ExtractorInterface
     {
         $this->stack->push([$context]);
@@ -67,7 +53,7 @@ class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, 
 
     public function start(string $operationName, array $tags = []): SpanInterface
     {
-        $span = $this->factory->create($operationName, array_merge($this->getLocalTags(), $tags), $this->getContext());
+        $span = $this->factory->create($operationName, $tags, $this->getContext());
         $this->stack->push($span->getContext());
 
         return $span;
