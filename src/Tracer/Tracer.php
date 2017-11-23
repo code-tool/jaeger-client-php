@@ -4,12 +4,13 @@ declare(strict_types=1);
 namespace CodeTool\OpenTracing\Tracer;
 
 use CodeTool\OpenTracing\Client\ClientInterface;
+use CodeTool\OpenTracing\Span\Context\ContextAwareInterface;
 use CodeTool\OpenTracing\Span\Context\SpanContext;
 use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
 use CodeTool\OpenTracing\Span\SpanInterface;
 use Ds\Stack;
 
-class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, FlushableInterface
+class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface
 {
     private $stack;
 
@@ -34,7 +35,7 @@ class Tracer implements TracerInterface, ExtractorInterface, InjectorInterface, 
         return $this;
     }
 
-    public function assign(SpanContext $context): ExtractorInterface
+    public function assign(SpanContext $context): InjectableInterface
     {
         $this->stack->push([$context]);
 

@@ -32,7 +32,7 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
         parent::__construct();
     }
 
-    public function getContext(): SpanContext
+    public function getContext(): ?SpanContext
     {
         return $this->context;
     }

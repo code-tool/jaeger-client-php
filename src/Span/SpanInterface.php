@@ -5,12 +5,10 @@ namespace CodeTool\OpenTracing\Span;
 
 use CodeTool\OpenTracing\Jaeger\Thrift\Log;
 use CodeTool\OpenTracing\Jaeger\Thrift\Tag;
-use CodeTool\OpenTracing\Span\Context\SpanContext;
+use CodeTool\OpenTracing\Span\Context\ContextAwareInterface;
 
-interface SpanInterface
+interface SpanInterface extends ContextAwareInterface
 {
-    public function getContext(): SpanContext;
-
     public function finish();
 
     public function addTag(Tag $tag): SpanInterface;

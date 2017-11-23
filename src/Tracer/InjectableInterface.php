@@ -5,7 +5,7 @@ namespace CodeTool\OpenTracing\Tracer;
 
 use CodeTool\OpenTracing\Span\Context\SpanContext;
 
-interface InjectorInterface
+interface InjectableInterface
 {
-    public function getContext() : ?SpanContext;
+    public function assign(SpanContext $context): InjectableInterface;
 }
