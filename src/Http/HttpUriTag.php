@@ -1,13 +1,16 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Http;
 
 use Jaeger\Tag\StringTag;
 
 class HttpUriTag extends StringTag
 {
-    public function __construct(string $uri)
+    /**
+     * HttpUriTag constructor.
+     *
+     * @param string $uri
+     */
+    public function __construct($uri)
     {
         parent::__construct('http.url', $uri);
     }
