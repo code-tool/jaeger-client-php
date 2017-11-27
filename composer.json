@@ -1,5 +1,5 @@
 {
-  "name": "code-tool/opentracing-php",
+  "name": "code-tool/jaeger-client-php",
   "autoload": {
     "psr-4": {
       "Jaeger\\": "src/"
