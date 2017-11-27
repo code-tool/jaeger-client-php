@@ -36,7 +36,7 @@ class SpanFactory implements SpanFactoryInterface
     ) {
         $spanId = $this->idGenerator->next();
         if (null === $parentContext) {
-            $traceId = $this->idGenerator->next();
+            $traceId = $spanId;
             $debugId = 0;
             $parentId = 0;
             $flags = 0;
