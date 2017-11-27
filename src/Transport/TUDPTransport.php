@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Transport;
 
@@ -14,14 +13,23 @@ class TUDPTransport extends TTransport
 
     private $port;
 
-    public function __construct(string $host, int $port)
+    /**
+     * TUDPTransport constructor.
+     *
+     * @param string $host
+     * @param int    $port
+     */
+    public function __construct($host, $port)
     {
         $this->host = $host;
         $this->port = $port;
         $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     }
 
-    public function isOpen(): bool
+    /**
+     * @return bool
+     */
+    public function isOpen()
     {
         return $this->socket !== null;
     }
@@ -37,7 +45,12 @@ class TUDPTransport extends TTransport
         $this->socket = null;
     }
 
-    public function read($len): string
+    /**
+     * @param int $len
+     *
+     * @return string
+     */
+    public function read($len)
     {
         return '';
     }
@@ -47,7 +60,6 @@ class TUDPTransport extends TTransport
         if (false === $this->isOpen()) {
             throw new TTransportException('Transport is closed');
         }
-
         $length = strlen($buf);
         while (true) {
             $result = @socket_write($this->socket, $buf);

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Sampler;
 
@@ -9,12 +8,23 @@ class ConstSampler implements SamplerInterface
 
     private $debugEnabled;
 
-    public function __construct(bool $debugEnabled)
+    /**
+     * ConstSampler constructor.
+     *
+     * @param bool $debugEnabled
+     */
+    public function __construct($debugEnabled)
     {
         $this->debugEnabled = $debugEnabled;
     }
 
-    public function decide(int $traceId, string $operationName): SamplerResult
+    /**
+     * @param int    $traceId
+     * @param string $operationName
+     *
+     * @return SamplerResult
+     */
+    public function decide($traceId, $operationName)
     {
         return new SamplerResult(
             $this->debugEnabled,

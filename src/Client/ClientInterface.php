@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Client;
 
@@ -7,7 +6,15 @@ use CodeTool\OpenTracing\Span\SpanInterface;
 
 interface ClientInterface
 {
-    public function add(SpanInterface $span) : ClientInterface;
+    /**
+     * @param SpanInterface $span
+     *
+     * @return ClientInterface
+     */
+    public function add(SpanInterface $span);
 
-    public function flush() : ClientInterface;
+    /**
+     * @return ClientInterface
+     */
+    public function flush();
 }

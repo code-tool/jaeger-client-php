@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Log;
 
@@ -7,7 +6,13 @@ use CodeTool\OpenTracing\Tag\StringTag;
 
 class ErrorLog extends AbstractLog
 {
-    public function __construct(string $message, string $stack)
+    /**
+     * ErrorLog constructor.
+     *
+     * @param string $message
+     * @param string $stack
+     */
+    public function __construct($message, $stack)
     {
         parent::__construct(
             [

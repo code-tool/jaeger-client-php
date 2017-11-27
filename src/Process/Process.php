@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Process;
 
@@ -10,7 +9,12 @@ use CodeTool\OpenTracing\General\PhpVersionTag;
 
 class Process extends \CodeTool\OpenTracing\Jaeger\Thrift\Process
 {
-    public function __construct(string $serviceName)
+    /**
+     * Process constructor.
+     *
+     * @param string $serviceName
+     */
+    public function __construct($serviceName)
     {
         $this->serviceName = $serviceName;
         $this->tags = [

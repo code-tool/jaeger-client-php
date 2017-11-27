@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Client;
 
@@ -16,20 +15,34 @@ class ThriftClient implements ClientInterface
 
     private $spans = [];
 
-    public function __construct(string $serviceName, AgentInterface $agent)
+    /**
+     * ThriftClient constructor.
+     *
+     * @param string         $serviceName
+     * @param AgentInterface $agent
+     */
+    public function __construct($serviceName, AgentInterface $agent)
     {
         $this->serviceName = $serviceName;
         $this->agent = $agent;
     }
 
-    public function add(SpanInterface $span): ClientInterface
+    /**
+     * @param SpanInterface $span
+     *
+     * @return ClientInterface
+     */
+    public function add(SpanInterface $span)
     {
         $this->spans[] = $span;
 
         return $this;
     }
 
-    public function flush(): ClientInterface
+    /**
+     * @return ClientInterface
+     */
+    public function flush()
     {
         $this->agent->emitBatch(new SpanBatch(new Process($this->serviceName), $this->spans));
         $this->spans = [];

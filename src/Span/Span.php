@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Span;
 
@@ -11,10 +10,19 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
 {
     private $context;
 
+    /**
+     * Span constructor.
+     *
+     * @param SpanContext $context
+     * @param string      $operationName
+     * @param int         $startTime
+     * @param array       $tags
+     * @param array       $logs
+     */
     public function __construct(
         SpanContext $context,
-        string $operationName,
-        int $startTime,
+        $operationName,
+        $startTime,
         array $tags = [],
         array $logs = []
     ) {
@@ -26,13 +34,15 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
         $this->flags = $context->getFlags();
         $this->operationName = $operationName;
         $this->startTime = $startTime;
-
         $this->tags = $tags;
         $this->logs = $logs;
         parent::__construct();
     }
 
-    public function getContext(): ?SpanContext
+    /**
+     * @return SpanContext
+     */
+    public function getContext()
     {
         return $this->context;
     }
@@ -44,33 +54,60 @@ class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInter
         return $this;
     }
 
-    public function addTag(Tag $tag): SpanInterface
+    /**
+     * @param Tag $tag
+     *
+     * @return SpanInterface
+     */
+    public function addTag(Tag $tag)
     {
         $this->tags[] = $tag;
 
         return $this;
     }
 
-    public function addLog(Log $log): SpanInterface
+    /**
+     * @param Log $log
+     *
+     * @return SpanInterface
+     */
+    public function addLog(Log $log)
     {
         $this->logs[] = $log;
 
         return $this;
     }
 
-    public function withItem(string $key, $item): SpanInterface
+    /**
+     * @param string $key
+     * @param mixed  $item
+     *
+     * @return SpanInterface
+     */
+    public function withItem($key, $item)
     {
         $this->context = $this->context->withItem($key, $item);
 
         return $this;
     }
 
-    public function getItem(string $key, $default = null)
+    /**
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getItem($key, $default = null)
     {
         return $this->context->getItem($key, $default);
     }
 
-    public function withoutItem(string $key): SpanInterface
+    /**
+     * @param string $key
+     *
+     * @return SpanInterface
+     */
+    public function withoutItem($key)
     {
         $this->context = $this->context->withoutItem($key);
 

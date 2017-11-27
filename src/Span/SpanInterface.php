@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Span;
 
@@ -9,16 +8,45 @@ use CodeTool\OpenTracing\Span\Context\ContextAwareInterface;
 
 interface SpanInterface extends ContextAwareInterface
 {
+    /**
+     * @return SpanInterface
+     */
     public function finish();
 
-    public function addTag(Tag $tag): SpanInterface;
+    /**,
+     * @param Tag $tag
+     *
+     * @return SpanInterface
+     */
+    public function addTag(Tag $tag);
 
-    public function addLog(Log $log): SpanInterface;
+    /**
+     * @param Log $log
+     *
+     * @return SpanInterface
+     */
+    public function addLog(Log $log);
 
-    public function withItem(string $key, $item): SpanInterface;
+    /**
+     * @param string $key
+     * @param mixed  $item
+     *
+     * @return SpanInterface
+     */
+    public function withItem($key, $item);
 
-    public function getItem(string $key, $default = null);
+    /**
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getItem($key, $default = null);
 
-    public function withoutItem(string $key): SpanInterface;
+    /**
+     * @param string $key
+     *
+     * @return SpanInterface
+     */
+    public function withoutItem($key);
 }
-

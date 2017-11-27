@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Tracer;
 
@@ -7,7 +6,13 @@ use CodeTool\OpenTracing\Span\SpanInterface;
 
 interface TracerInterface
 {
-    public function start(string $name, array $tags = []): SpanInterface;
+    /**
+     * @param string $name
+     * @param array  $tags
+     *
+     * @return SpanInterface
+     */
+    public function start($name, array $tags = []);
 
     public function finish(SpanInterface $span);
 }

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Span\Factory;
 
@@ -8,10 +7,18 @@ use CodeTool\OpenTracing\Span\SpanInterface;
 
 interface SpanFactoryInterface
 {
+    /**
+     * @param string           $operationName
+     * @param array            $tags
+     * @param SpanContext|null $parentContext
+     * @param array            $logs
+     *
+     * @return SpanInterface
+     */
     public function create(
-        string $operationName,
+        $operationName,
         array $tags = [],
         SpanContext $parentContext = null,
         array $logs = []
-    ): SpanInterface;
+    );
 }

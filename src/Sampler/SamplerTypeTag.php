@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Sampler;
 
@@ -7,7 +6,12 @@ use CodeTool\OpenTracing\Tag\StringTag;
 
 class SamplerTypeTag extends StringTag
 {
-    public function __construct(string $type)
+    /**
+     * SamplerTypeTag constructor.
+     *
+     * @param string $type
+     */
+    public function __construct($type)
     {
         parent::__construct('sampler.type', $type);
     }

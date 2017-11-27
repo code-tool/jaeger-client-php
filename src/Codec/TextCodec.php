@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Codec;
 
@@ -7,7 +6,12 @@ use CodeTool\OpenTracing\Span\Context\SpanContext;
 
 class TextCodec implements CodecInterface
 {
-    public function decode($data): ?SpanContext
+    /**
+     * @param $data
+     *
+     * @return SpanContext|null
+     */
+    public function decode($data)
     {
         if (false === is_string($data)) {
             return null;
@@ -26,6 +30,11 @@ class TextCodec implements CodecInterface
         );
     }
 
+    /**
+     * @param SpanContext $context
+     *
+     * @return string
+     */
     public function encode(SpanContext $context)
     {
         return sprintf(

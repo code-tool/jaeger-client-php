@@ -1,9 +1,8 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Log;
 
-abstract class AbstractLog extends \CodeTool\OpenTracing\Jaeger\Thrift\Log implements LogInterface
+abstract class AbstractLog extends \CodeTool\OpenTracing\Jaeger\Thrift\Log
 {
     public function __construct(array $tags = [])
     {

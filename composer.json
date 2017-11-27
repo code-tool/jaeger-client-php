@@ -6,7 +6,7 @@
     }
   },
   "require": {
-    "php": ">=7.1",
+    "php": ">=5.6",
     "packaged/thrift": "@stable"
   },
   "require-dev": {

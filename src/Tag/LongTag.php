@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Tag;
 
@@ -7,7 +6,13 @@ use CodeTool\OpenTracing\Jaeger\Thrift\TagType;
 
 class LongTag extends AbstractTag
 {
-    public function __construct(string $key, int $value)
+    /**
+     * LongTag constructor.
+     *
+     * @param string $key
+     * @param int    $value
+     */
+    public function __construct($key, $value)
     {
         parent::__construct($key, TagType::LONG, null, null, null, $value, null);
     }

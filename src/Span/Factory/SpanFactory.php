@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Span\Factory;
 
@@ -21,12 +20,20 @@ class SpanFactory implements SpanFactoryInterface
         $this->sampler = $sampler;
     }
 
+    /**
+     * @param string           $operationName
+     * @param array            $tags
+     * @param SpanContext|null $parentContext
+     * @param array            $logs
+     *
+     * @return SpanInterface
+     */
     public function create(
-        string $operationName,
+        $operationName,
         array $tags = [],
         SpanContext $parentContext = null,
         array $logs = []
-    ): SpanInterface {
+    ) {
         $spanId = $this->idGenerator->next();
         if (null === $parentContext) {
             $traceId = $this->idGenerator->next();

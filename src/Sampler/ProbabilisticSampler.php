@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Sampler;
 
@@ -9,13 +8,24 @@ class ProbabilisticSampler implements SamplerInterface
 
     private $threshold;
 
-    public function __construct(float $rate)
+    /**
+     * ProbabilisticSampler constructor.
+     *
+     * @param float $rate
+     */
+    public function __construct($rate)
     {
         $this->rate = $rate;
         $this->threshold = $rate * PHP_INT_MAX;
     }
 
-    public function decide(int $traceId, string $operationName): SamplerResult
+    /**
+     * @param int    $traceId
+     * @param string $operationName
+     *
+     * @return SamplerResult
+     */
+    public function decide($traceId, $operationName)
     {
         if ($traceId > $this->threshold) {
             return new SamplerResult(

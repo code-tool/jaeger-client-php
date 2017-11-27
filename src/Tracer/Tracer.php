@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Tracer;
 
@@ -25,7 +24,10 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
         $this->client = $client;
     }
 
-    public function flush(): FlushableInterface
+    /**
+     * @return FlushableInterface
+     */
+    public function flush()
     {
         $this->client->flush();
         if (0 !== $this->stack->count()) {
@@ -35,14 +37,22 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
         return $this;
     }
 
-    public function assign(SpanContext $context): InjectableInterface
+    /**
+     * @param SpanContext $context
+     *
+     * @return InjectableInterface
+     */
+    public function assign(SpanContext $context)
     {
         $this->stack->push([$context]);
 
         return $this;
     }
 
-    public function getContext(): ?SpanContext
+    /**
+     * @return SpanContext|null
+     */
+    public function getContext()
     {
         if (0 === $this->stack->count()) {
             return null;
@@ -51,7 +61,13 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
         return $this->stack->peek();
     }
 
-    public function start(string $operationName, array $tags = []): SpanInterface
+    /**
+     * @param string $operationName
+     * @param array  $tags
+     *
+     * @return SpanInterface
+     */
+    public function start($operationName, array $tags = [])
     {
         $span = $this->factory->create($operationName, $tags, $this->getContext());
         $this->stack->push($span->getContext());
@@ -59,7 +75,12 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
         return $span;
     }
 
-    public function finish(SpanInterface $span): TracerInterface
+    /**
+     * @param SpanInterface $span
+     *
+     * @return TracerInterface
+     */
+    public function finish(SpanInterface $span)
     {
         $this->client->add($span->finish());
         $this->stack->pop();

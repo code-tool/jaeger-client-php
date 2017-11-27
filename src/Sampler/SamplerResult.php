@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Sampler;
 
@@ -9,18 +8,30 @@ class SamplerResult
 
     private $tags;
 
-    public function __construct(bool $sampled, array $tags = [])
+    /**
+     * SamplerResult constructor.
+     *
+     * @param bool  $sampled
+     * @param array $tags
+     */
+    public function __construct($sampled, array $tags = [])
     {
         $this->sampled = $sampled;
         $this->tags = $tags;
     }
 
-    public function isSampled(): bool
+    /**
+     * @return bool
+     */
+    public function isSampled()
     {
         return $this->sampled;
     }
 
-    public function getTags(): array
+    /**
+     * @return array
+     */
+    public function getTags()
     {
         return $this->tags;
     }

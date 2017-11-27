@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Span\Context;
 
@@ -17,12 +16,22 @@ class SpanContext implements \IteratorAggregate
 
     private $baggage;
 
+    /**
+     * SpanContext constructor.
+     *
+     * @param int   $traceId
+     * @param int   $spanId
+     * @param int   $parentId
+     * @param int   $debugId
+     * @param int   $flags
+     * @param array $baggage
+     */
     public function __construct(
-        int $traceId,
-        int $spanId,
-        int $parentId,
-        int $debugId,
-        int $flags = 0,
+        $traceId,
+        $spanId,
+        $parentId,
+        $debugId,
+        $flags = 0,
         array $baggage = []
     ) {
         $this->traceId = $traceId;
@@ -33,27 +42,27 @@ class SpanContext implements \IteratorAggregate
         $this->baggage = $baggage;
     }
 
-    public function getTraceId(): int
+    public function getTraceId()
     {
         return $this->traceId;
     }
 
-    public function getSpanId(): int
+    public function getSpanId()
     {
         return $this->spanId;
     }
 
-    public function getParentId(): int
+    public function getParentId()
     {
         return $this->parentId;
     }
 
-    public function getDebugId(): int
+    public function getDebugId()
     {
         return $this->debugId;
     }
 
-    public function getFlags(): int
+    public function getFlags()
     {
         return $this->flags;
     }
@@ -63,7 +72,13 @@ class SpanContext implements \IteratorAggregate
         return new \ArrayIterator($this->baggage);
     }
 
-    public function withItem(string $key, $item)
+    /**
+     * @param string $key
+     * @param mixed  $item
+     *
+     * @return SpanContext
+     */
+    public function withItem($key, $item)
     {
         $copy = clone $this;
         $copy->baggage[$key] = $item;
@@ -71,7 +86,13 @@ class SpanContext implements \IteratorAggregate
         return $copy;
     }
 
-    public function getItem(string $key, $default = null)
+    /**
+     * @param string $key
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getItem($key, $default = null)
     {
         if (false === array_key_exists($key, $this->baggage)) {
             return $default;
@@ -80,7 +101,12 @@ class SpanContext implements \IteratorAggregate
         return $this->baggage[$key];
     }
 
-    public function withoutItem(string $key)
+    /**
+     * @param string $key
+     *
+     * @return SpanContext
+     */
+    public function withoutItem($key)
     {
         $copy = clone $this;
         unset($copy->baggage[$key]);

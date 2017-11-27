@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 namespace CodeTool\OpenTracing\Codec;
 
@@ -37,6 +36,5 @@ class CodecRegistry implements \ArrayAccess
 
         return $this;
     }
-
 
 }
