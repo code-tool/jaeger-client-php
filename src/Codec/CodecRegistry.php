@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Codec;
+namespace Jaeger\Codec;
 
 class CodecRegistry implements \ArrayAccess
 {
@@ -37,6 +37,4 @@ class CodecRegistry implements \ArrayAccess
 
         return $this;
     }
-
-
 }

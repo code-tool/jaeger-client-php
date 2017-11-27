@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Log;
+namespace Jaeger\Log;
 
-use CodeTool\OpenTracing\Tag\StringTag;
+use Jaeger\Tag\StringTag;
 
 class ErrorLog extends AbstractLog
 {

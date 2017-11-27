@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Codec;
+namespace Jaeger\Codec;
 
-use CodeTool\OpenTracing\Span\Context\SpanContext;
+use Jaeger\Span\Context\SpanContext;
 
 class TextCodec implements CodecInterface
 {

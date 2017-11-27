@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Id;
+namespace Jaeger\Id;
 
 class RandomIntGenerator implements IdGeneratorInterface
 {

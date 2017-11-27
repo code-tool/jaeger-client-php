@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Process;
+namespace Jaeger\Process;
 
-use CodeTool\OpenTracing\Tag\LongTag;
+use Jaeger\Tag\LongTag;
 
 class ProcessUidTag extends LongTag
 {

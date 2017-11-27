@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Sampler;
+namespace Jaeger\Sampler;
 
-use CodeTool\OpenTracing\Tag\StringTag;
+use Jaeger\Tag\StringTag;
 
 class SamplerParamTag extends StringTag
 {

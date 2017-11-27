@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Sampler;
+namespace Jaeger\Sampler;
 
 class ConstSampler implements SamplerInterface
 {

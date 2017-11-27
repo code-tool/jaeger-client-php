@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Client;
+namespace Jaeger\Client;
 
-use CodeTool\OpenTracing\Span\SpanInterface;
+use Jaeger\Span\SpanInterface;
 
 interface ClientInterface
 {

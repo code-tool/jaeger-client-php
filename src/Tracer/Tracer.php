@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Tracer;
+namespace Jaeger\Tracer;
 
-use CodeTool\OpenTracing\Client\ClientInterface;
-use CodeTool\OpenTracing\Span\Context\ContextAwareInterface;
-use CodeTool\OpenTracing\Span\Context\SpanContext;
-use CodeTool\OpenTracing\Span\Factory\SpanFactoryInterface;
-use CodeTool\OpenTracing\Span\SpanInterface;
+use Jaeger\Client\ClientInterface;
+use Jaeger\Span\Context\ContextAwareInterface;
+use Jaeger\Span\Context\SpanContext;
+use Jaeger\Span\Factory\SpanFactoryInterface;
+use Jaeger\Span\SpanInterface;
 use Ds\Stack;
 
 class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Span;
+namespace Jaeger\Span;
 
-use CodeTool\OpenTracing\Jaeger\Thrift\Log;
-use CodeTool\OpenTracing\Jaeger\Thrift\Tag;
-use CodeTool\OpenTracing\Span\Context\SpanContext;
+use Jaeger\Thrift\Log;
+use Jaeger\Thrift\Tag;
+use Jaeger\Span\Context\SpanContext;
 
-class Span extends \CodeTool\OpenTracing\Jaeger\Thrift\Span implements SpanInterface
+class Span extends \Jaeger\Thrift\Span implements SpanInterface
 {
     private $context;
 

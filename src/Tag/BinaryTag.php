@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Tag;
+namespace Jaeger\Tag;
 
-use CodeTool\OpenTracing\Jaeger\Thrift\TagType;
+use Jaeger\Thrift\TagType;
 
 class BinaryTag extends AbstractTag
 {

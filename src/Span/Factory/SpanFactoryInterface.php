@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Span\Factory;
+namespace Jaeger\Span\Factory;
 
-use CodeTool\OpenTracing\Span\Context\SpanContext;
-use CodeTool\OpenTracing\Span\SpanInterface;
+use Jaeger\Span\Context\SpanContext;
+use Jaeger\Span\SpanInterface;
 
 interface SpanFactoryInterface
 {

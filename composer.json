@@ -2,7 +2,7 @@
   "name": "code-tool/opentracing-php",
   "autoload": {
     "psr-4": {
-      "CodeTool\\OpenTracing\\": "src/"
+      "Jaeger\\": "src/"
     }
   },
   "require": {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Span\Context;
+namespace Jaeger\Span\Context;
 
 class SpanContext implements \IteratorAggregate
 {

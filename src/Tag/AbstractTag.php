@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Tag;
+namespace Jaeger\Tag;
 
-use CodeTool\OpenTracing\Jaeger\Thrift\Tag;
+use Jaeger\Thrift\Tag;
 
 abstract class AbstractTag extends Tag implements TagInterface
 {

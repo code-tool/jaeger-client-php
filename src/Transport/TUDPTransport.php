@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Transport;
+namespace Jaeger\Transport;
 
 use Thrift\Exception\TTransportException;
 use Thrift\Transport\TTransport;

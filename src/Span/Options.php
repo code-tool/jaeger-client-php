@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace CodeTool\OpenTracing\Span;
+namespace Jaeger\Span;
 
 class Options
 {
