@@ -36,5 +36,4 @@ class CodecRegistry implements \ArrayAccess
 
         return $this;
     }
-
 }
