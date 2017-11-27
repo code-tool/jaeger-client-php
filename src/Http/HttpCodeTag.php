@@ -9,6 +9,6 @@ class HttpCodeTag extends LongTag
 {
     public function __construct(int $code)
     {
-        parent::__construct('http.code', $code);
+        parent::__construct('http.status_code', $code);
     }
 }
