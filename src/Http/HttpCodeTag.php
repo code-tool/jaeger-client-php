@@ -1,13 +1,16 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Http;
 
 use Jaeger\Tag\LongTag;
 
 class HttpCodeTag extends LongTag
 {
-    public function __construct(int $code)
+    /**
+     * HttpCodeTag constructor.
+     *
+     * @param int $code
+     */
+    public function __construct($code)
     {
         parent::__construct('http.code', $code);
     }
