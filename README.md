@@ -5,7 +5,7 @@
 ## Installation
 
 ```
-composer required code-tool/jaeger-client-php
+composer require code-tool/jaeger-client-php
 ```
 
 ## Getting Started
