@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeTool\OpenTracing\Codec;
+namespace Jaeger\Codec;
 
 class CodecRegistry implements \ArrayAccess
 {

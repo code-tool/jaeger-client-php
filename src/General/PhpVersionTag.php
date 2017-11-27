@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\General;
+namespace Jaeger\General;
 
-use CodeTool\OpenTracing\Tag\StringTag;
+use Jaeger\Tag\StringTag;
 
 class PhpVersionTag extends StringTag
 {

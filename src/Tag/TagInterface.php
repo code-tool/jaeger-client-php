@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeTool\OpenTracing\Tag;
+namespace Jaeger\Tag;
 
 interface TagInterface
 {

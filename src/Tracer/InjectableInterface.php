@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\Tracer;
+namespace Jaeger\Tracer;
 
-use CodeTool\OpenTracing\Span\Context\SpanContext;
+use Jaeger\Span\Context\SpanContext;
 
 interface InjectableInterface
 {

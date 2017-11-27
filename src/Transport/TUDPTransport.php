@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeTool\OpenTracing\Transport;
+namespace Jaeger\Transport;
 
 use Thrift\Exception\TTransportException;
 use Thrift\Transport\TTransport;

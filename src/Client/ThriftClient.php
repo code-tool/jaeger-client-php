@@ -1,11 +1,11 @@
 <?php
 
-namespace CodeTool\OpenTracing\Client;
+namespace Jaeger\Client;
 
-use CodeTool\OpenTracing\Jaeger\Thrift\Agent\AgentIf as AgentInterface;
-use CodeTool\OpenTracing\Process\Process;
-use CodeTool\OpenTracing\Span\Batch\SpanBatch;
-use CodeTool\OpenTracing\Span\SpanInterface;
+use Jaeger\Thrift\Agent\AgentIf as AgentInterface;
+use Jaeger\Process\Process;
+use Jaeger\Span\Batch\SpanBatch;
+use Jaeger\Span\SpanInterface;
 
 class ThriftClient implements ClientInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeTool\OpenTracing\Id;
+namespace Jaeger\Id;
 
 interface IdGeneratorInterface
 {

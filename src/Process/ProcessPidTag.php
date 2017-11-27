@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\Process;
+namespace Jaeger\Process;
 
-use CodeTool\OpenTracing\Tag\LongTag;
+use Jaeger\Tag\LongTag;
 
 class ProcessPidTag extends LongTag
 {

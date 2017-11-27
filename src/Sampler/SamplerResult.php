@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeTool\OpenTracing\Sampler;
+namespace Jaeger\Sampler;
 
 class SamplerResult
 {

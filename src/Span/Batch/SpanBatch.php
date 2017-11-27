@@ -1,9 +1,9 @@
 <?php
 
-namespace CodeTool\OpenTracing\Span\Batch;
+namespace Jaeger\Span\Batch;
 
-use CodeTool\OpenTracing\Jaeger\Thrift\Batch;
-use CodeTool\OpenTracing\Process\Process;
+use Jaeger\Thrift\Batch;
+use Jaeger\Process\Process;
 
 class SpanBatch extends Batch
 {

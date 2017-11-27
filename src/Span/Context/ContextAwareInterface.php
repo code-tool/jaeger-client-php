@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeTool\OpenTracing\Span\Context;
+namespace Jaeger\Span\Context;
 
 interface ContextAwareInterface
 {

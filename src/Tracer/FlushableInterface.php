@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeTool\OpenTracing\Tracer;
+namespace Jaeger\Tracer;
 
 interface FlushableInterface
 {

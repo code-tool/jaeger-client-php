@@ -1,13 +1,13 @@
 <?php
 
-namespace CodeTool\OpenTracing\Process;
+namespace Jaeger\Process;
 
-use CodeTool\OpenTracing\General\JaegerHostnameTag;
-use CodeTool\OpenTracing\General\JaegerVersionTag;
-use CodeTool\OpenTracing\General\PhpBinaryTag;
-use CodeTool\OpenTracing\General\PhpVersionTag;
+use Jaeger\General\JaegerHostnameTag;
+use Jaeger\General\JaegerVersionTag;
+use Jaeger\General\PhpBinaryTag;
+use Jaeger\General\PhpVersionTag;
 
-class Process extends \CodeTool\OpenTracing\Jaeger\Thrift\Process
+class Process extends \Jaeger\Thrift\Process
 {
     /**
      * Process constructor.

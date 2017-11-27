@@ -1,10 +1,10 @@
 <?php
 
-namespace CodeTool\OpenTracing\Span;
+namespace Jaeger\Span;
 
-use CodeTool\OpenTracing\Jaeger\Thrift\Log;
-use CodeTool\OpenTracing\Jaeger\Thrift\Tag;
-use CodeTool\OpenTracing\Span\Context\ContextAwareInterface;
+use Jaeger\Thrift\Log;
+use Jaeger\Thrift\Tag;
+use Jaeger\Span\Context\ContextAwareInterface;
 
 interface SpanInterface extends ContextAwareInterface
 {

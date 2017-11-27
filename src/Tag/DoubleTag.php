@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\Tag;
+namespace Jaeger\Tag;
 
-use CodeTool\OpenTracing\Jaeger\Thrift\TagType;
+use Jaeger\Thrift\TagType;
 
 class DoubleTag extends AbstractTag
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\Sampler;
+namespace Jaeger\Sampler;
 
-use CodeTool\OpenTracing\Tag\StringTag;
+use Jaeger\Tag\StringTag;
 
 class SamplerTypeTag extends StringTag
 {

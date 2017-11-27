@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\Codec;
+namespace Jaeger\Codec;
 
-use CodeTool\OpenTracing\Span\Context\SpanContext;
+use Jaeger\Span\Context\SpanContext;
 
 interface CodecInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\Process;
+namespace Jaeger\Process;
 
-use CodeTool\OpenTracing\Tag\StringTag;
+use Jaeger\Tag\StringTag;
 
 class ProcessSapiTag extends StringTag
 {

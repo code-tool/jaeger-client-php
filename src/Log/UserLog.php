@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeTool\OpenTracing\Log;
+namespace Jaeger\Log;
 
-use CodeTool\OpenTracing\Tag\StringTag;
+use Jaeger\Tag\StringTag;
 
 class UserLog extends AbstractLog
 {
