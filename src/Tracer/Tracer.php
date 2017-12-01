@@ -43,7 +43,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
      */
     public function assign(SpanContext $context)
     {
-        $this->stack->push([$context]);
+        $this->stack->push($context);
 
         return $this;
     }
