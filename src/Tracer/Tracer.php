@@ -8,7 +8,6 @@ use Jaeger\Span\Context\ContextAwareInterface;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Factory\SpanFactoryInterface;
 use Jaeger\Span\SpanInterface;
-use Ds\Stack;
 
 class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface
 {
@@ -18,7 +17,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
 
     private $client;
 
-    public function __construct(Stack $stack, SpanFactoryInterface $factory, ClientInterface $client)
+    public function __construct(\SplStack $stack, SpanFactoryInterface $factory, ClientInterface $client)
     {
         $this->stack = $stack;
         $this->factory = $factory;
@@ -48,7 +47,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
             return null;
         }
 
-        return $this->stack->peek();
+        return $this->stack->top();
     }
 
     public function start(string $operationName, array $tags = []): SpanInterface
