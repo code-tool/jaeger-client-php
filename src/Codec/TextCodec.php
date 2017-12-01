@@ -6,6 +6,11 @@ use Jaeger\Span\Context\SpanContext;
 
 class TextCodec implements CodecInterface
 {
+    public function getName()
+    {
+        return 'text';
+    }
+
     /**
      * @param $data
      *

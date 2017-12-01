@@ -7,6 +7,11 @@ use Jaeger\Span\Context\SpanContext;
 interface CodecInterface
 {
     /**
+     * @return string
+     */
+    public function getName();
+
+    /**
      * @param $data
      *
      * @return SpanContext|null
