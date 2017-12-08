@@ -18,9 +18,9 @@ interface TracerInterface
 
     /**
      * @param SpanInterface $span
-     * @param int           $finishedAt
+     * @param int           $duration
      *
      * @return mixed
      */
-    public function finish(SpanInterface $span, $finishedAt = 0);
+    public function finish(SpanInterface $span, $duration = 0);
 }

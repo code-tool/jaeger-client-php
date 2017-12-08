@@ -47,12 +47,9 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         return $this->context;
     }
 
-    public function finish(int $finishedAt = 0)
+    public function finish(int $duration = 0) : SpanInterface
     {
-        if (0 === $finishedAt) {
-            $finishedAt = round(microtime(true) * 1000000);
-        }
-        $this->duration = $finishedAt - $this->startTime;
+        $this->duration = $duration ?? round(microtime(true) * 1000000) - $this->startTime;
 
         return $this;
     }

@@ -61,8 +61,8 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     }
 
     /**
-     * @param string $operationName
-     * @param array  $tags
+     * @param string      $operationName
+     * @param array       $tags
      * @param SpanContext $context
      *
      * @return SpanInterface
@@ -77,13 +77,13 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
 
     /**
      * @param SpanInterface $span
-     * @param int $finishedAt
+     * @param int           $duration
      *
      * @return TracerInterface
      */
-    public function finish(SpanInterface $span, $finishedAt = 0)
+    public function finish(SpanInterface $span, $duration = 0)
     {
-        $this->client->add($span->finish($finishedAt));
+        $this->client->add($span->finish($duration));
         $this->stack->pop();
 
         return $this;
