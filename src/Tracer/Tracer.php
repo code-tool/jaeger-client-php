@@ -29,9 +29,6 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     public function flush()
     {
         $this->client->flush();
-        if (0 !== $this->stack->count()) {
-            throw new \RuntimeException('Corrupted stack');
-        }
 
         return $this;
     }
