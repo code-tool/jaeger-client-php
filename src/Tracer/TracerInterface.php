@@ -3,11 +3,12 @@ declare(strict_types=1);
 
 namespace Jaeger\Tracer;
 
+use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\SpanInterface;
 
 interface TracerInterface
 {
-    public function start(string $name, array $tags = []): SpanInterface;
+    public function start(string $operationName, array $tags = [], SpanContext $context = null): SpanInterface;
 
-    public function finish(SpanInterface $span);
+    public function finish(SpanInterface $span, int $finishedAt = 0);
 }
