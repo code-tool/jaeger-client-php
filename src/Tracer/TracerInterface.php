@@ -14,7 +14,7 @@ interface TracerInterface
      *
      * @return SpanInterface
      */
-    public function start($name, array $tags = [], SpanContext $context = null));
+    public function start($name, array $tags = [], SpanContext $context = null);
 
     /**
      * @param SpanInterface $span
