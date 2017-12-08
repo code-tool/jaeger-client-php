@@ -9,9 +9,11 @@ use Jaeger\Span\Context\ContextAwareInterface;
 interface SpanInterface extends ContextAwareInterface
 {
     /**
+     * @param int $finishedAt
+     *
      * @return SpanInterface
      */
-    public function finish();
+    public function finish($finishedAt = 0);
 
     /**,
      * @param Tag $tag

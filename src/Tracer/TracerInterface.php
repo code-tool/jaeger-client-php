@@ -2,17 +2,25 @@
 
 namespace Jaeger\Tracer;
 
+use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\SpanInterface;
 
 interface TracerInterface
 {
     /**
-     * @param string $name
-     * @param array  $tags
+     * @param string      $name
+     * @param array       $tags
+     * @param SpanContext $context
      *
      * @return SpanInterface
      */
-    public function start($name, array $tags = []);
+    public function start($name, array $tags = [], SpanContext $context = null));
 
-    public function finish(SpanInterface $span);
+    /**
+     * @param SpanInterface $span
+     * @param int           $finishedAt
+     *
+     * @return mixed
+     */
+    public function finish(SpanInterface $span, $finishedAt = 0);
 }
