@@ -70,7 +70,8 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
      */
     public function start($operationName, array $tags = [], SpanContext $context = null)
     {
-        $span = $this->factory->create($operationName, $tags, $context ?? $this->context);
+        $context = $context ? $context : $this->context;
+        $span = $this->factory->create($operationName, $tags, $context);
         $this->stack->push($span->getContext());
         $this->context = $this->stack->top();
 
