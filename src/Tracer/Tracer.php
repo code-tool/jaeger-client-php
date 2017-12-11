@@ -11,6 +11,8 @@ use Jaeger\Span\SpanInterface;
 
 class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface
 {
+    private $context;
+
     private $stack;
 
     private $factory;
@@ -26,6 +28,12 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
 
     public function flush(): FlushableInterface
     {
+        if (0 !== $this->stack->count()) {
+            trigger_error(
+                'You are flushing non-empty tracer stack, some span(-s) were started but not finished',
+                E_WARNING
+            );
+        }
         $this->client->flush();
 
         return $this;
@@ -33,24 +41,21 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
 
     public function assign(SpanContext $context): InjectableInterface
     {
-        $this->stack->push($context);
+        $this->context = $context;
 
         return $this;
     }
 
     public function getContext(): ?SpanContext
     {
-        if (0 === $this->stack->count()) {
-            return null;
-        }
-
-        return $this->stack->top();
+        return $this->context;
     }
 
     public function start(string $operationName, array $tags = [], SpanContext $context = null): SpanInterface
     {
-        $span = $this->factory->create($operationName, $tags, $context ?? $this->getContext());
+        $span = $this->factory->create($operationName, $tags, $context ?? $this->context);
         $this->stack->push($span->getContext());
+        $this->context = $this->stack->top();
 
         return $span;
     }
@@ -59,6 +64,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     {
         $this->client->add($span->finish($duration));
         $this->stack->pop();
+        $this->context = $this->stack->top();
 
         return $this;
     }
