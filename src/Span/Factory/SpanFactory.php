@@ -49,11 +49,11 @@ class SpanFactory implements SpanFactoryInterface
 
         return new Span(
             new SpanContext(
-                $traceId,
-                $spanId,
-                $parentId,
-                $debugId,
-                $flags,
+                (int)$traceId,
+                (int)$spanId,
+                (int)$parentId,
+                (int)$debugId,
+                (int)$flags,
                 $baggage
             ),
             $operationName,
