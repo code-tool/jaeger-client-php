@@ -64,7 +64,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     {
         $this->client->add($span->finish($duration));
         $this->stack->pop();
-        $this->context = $this->stack->top();
+        $this->context = $this->stack->count() ? $this->stack->top() : null;
 
         return $this;
     }
