@@ -18,11 +18,11 @@ class TextCodec implements CodecInterface
         }
 
         return new SpanContext(
-            hexdec($elements[0]),
-            hexdec($elements[1]),
-            hexdec($elements[2]),
+            (int)hexdec($elements[0]),
+            (int)hexdec($elements[1]),
+            (int)hexdec($elements[2]),
             0,
-            hexdec($elements[3])
+            (int)hexdec($elements[3])
         );
     }
 
