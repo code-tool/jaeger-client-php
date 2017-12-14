@@ -9,6 +9,13 @@ use Jaeger\Span\Context\ContextAwareInterface;
 interface SpanInterface extends ContextAwareInterface
 {
     /**
+     * @param int $startTimeUsec
+     *
+     * @return SpanInterface
+     */
+    public function start($startTimeUsec);
+
+    /**
      * @param int $duration
      *
      * @return SpanInterface
