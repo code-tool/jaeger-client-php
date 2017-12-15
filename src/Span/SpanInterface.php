@@ -16,11 +16,11 @@ interface SpanInterface extends ContextAwareInterface
     public function start($startTimeUsec);
 
     /**
-     * @param int $duration
+     * @param int $durationUsec
      *
      * @return SpanInterface
      */
-    public function finish($duration = 0);
+    public function finish($durationUsec = 0);
 
     /**,
      * @param Tag $tag
