@@ -11,7 +11,7 @@ interface SpanInterface extends ContextAwareInterface
 {
     public function start(int $startTimeUsec) : SpanInterface;
 
-    public function finish(int $duration = 0) : SpanInterface;
+    public function finish(int $durationUsec = 0) : SpanInterface;
 
     public function addTag(Tag $tag): SpanInterface;
 
