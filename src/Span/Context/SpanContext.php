@@ -22,7 +22,7 @@ class SpanContext implements \IteratorAggregate
      * @param int   $traceId
      * @param int   $spanId
      * @param int   $parentId
-     * @param int   $debugId
+     * @param bool  $isDebug
      * @param int   $flags
      * @param array $baggage
      */

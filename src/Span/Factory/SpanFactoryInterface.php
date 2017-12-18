@@ -36,5 +36,4 @@ interface SpanFactoryInterface
         array $tags = [],
         array $logs = []
     );
-
 }

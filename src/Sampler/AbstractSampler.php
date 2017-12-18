@@ -1,13 +1,24 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Sampler;
 
 abstract class AbstractSampler implements SamplerInterface
 {
-    abstract public function doDecide(int $tracerId, string $operationName): SamplerResult;
+    /**
+     * @param $tracerId
+     * @param $operationName
+     *
+     * @return SamplerResult
+     */
+    abstract public function doDecide($tracerId, $operationName);
 
-    public function decide(int $traceId, string $operationName, bool $isDebug): SamplerResult
+    /**
+     * @param int    $traceId
+     * @param string $operationName
+     * @param bool   $isDebug
+     *
+     * @return SamplerResult
+     */
+    public function decide($traceId, $operationName, $isDebug)
     {
         if (false === $isDebug) {
             return $this->doDecide($traceId, $operationName);

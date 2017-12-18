@@ -13,7 +13,7 @@ interface TracerInterface
      *
      * @return SpanInterface
      */
-    public function debug($operationName, array $tags = []): SpanInterface;
+    public function debug($operationName, array $tags = []);
 
     /**
      * @param string      $operationName

@@ -48,6 +48,8 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
     }
 
     /**
+     * @param int $startTimeUsec
+     *
      * @return SpanInterface
      */
     public function start($startTimeUsec)
@@ -58,6 +60,8 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
     }
 
     /**
+     * @param int $durationUsec
+     *
      * @return SpanInterface
      */
     public function finish($durationUsec = 0)
