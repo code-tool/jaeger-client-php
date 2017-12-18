@@ -30,7 +30,6 @@ class TextCodec implements CodecInterface
             (int)hexdec($elements[0]),
             (int)hexdec($elements[1]),
             (int)hexdec($elements[2]),
-            0,
             (int)hexdec($elements[3])
         );
     }
