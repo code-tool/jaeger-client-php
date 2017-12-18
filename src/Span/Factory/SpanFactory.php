@@ -36,7 +36,6 @@ class SpanFactory implements SpanFactoryInterface
                 (int)$traceId,
                 (int)$spanId,
                 0,
-                $isDebug,
                 (int)$samplerResult->getFlags()
             ),
             $operationName,
@@ -57,7 +56,6 @@ class SpanFactory implements SpanFactoryInterface
                 $parentContext->getTraceId(),
                 $this->idGenerator->next(),
                 $parentContext->getSpanId(),
-                $parentContext->isDebug(),
                 $parentContext->getFlags()
             ),
             $operationName,
