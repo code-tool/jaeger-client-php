@@ -21,47 +21,59 @@ class SpanFactory implements SpanFactoryInterface
     }
 
     /**
-     * @param string           $operationName
-     * @param array            $tags
-     * @param SpanContext|null $parentContext
-     * @param array            $logs
+     * @param string $operationName
+     * @param bool   $isDebug
+     * @param array  $tags
+     * @param array  $logs
      *
      * @return SpanInterface
      */
-    public function create(
+    public function parent(
         $operationName,
+        $isDebug = false,
         array $tags = [],
-        SpanContext $parentContext = null,
         array $logs = []
     ) {
         $spanId = $this->idGenerator->next();
-        if (null === $parentContext) {
-            $traceId = $spanId;
-            $debugId = 0;
-            $parentId = 0;
-            $flags = 0;
-            $baggage = [];
-            $samplerResult = $this->sampler->decide($traceId, $operationName);
-            if ($samplerResult->isSampled()) {
-                $flags = 0x01;
-                $tags = array_merge($tags, $samplerResult->getTags());
-            }
-        } else {
-            $traceId = $parentContext->getTraceId();
-            $parentId = $parentContext->getSpanId();
-            $debugId = $parentContext->getDebugId();
-            $flags = $parentContext->getFlags();
-            $baggage = [];
-        }
+        $traceId = $spanId;
+        $samplerResult = $this->sampler->decide($traceId, $operationName, $isDebug);
 
         return new Span(
             new SpanContext(
                 (int)$traceId,
                 (int)$spanId,
-                (int)$parentId,
-                (int)$debugId,
-                (int)$flags,
-                $baggage
+                0,
+                (bool)$isDebug,
+                (int)$samplerResult->getFlags()
+            ),
+            $operationName,
+            (int)round(microtime(true) * 1000000),
+            array_merge($tags, $samplerResult->getTags()),
+            $logs
+        );
+    }
+
+    /**
+     * @param string      $operationName
+     * @param SpanContext $parentContext
+     * @param array       $tags
+     * @param array       $logs
+     *
+     * @return SpanInterface
+     */
+    public function child(
+        $operationName,
+        SpanContext $parentContext,
+        array $tags = [],
+        array $logs = []
+    ) {
+        return new Span(
+            new SpanContext(
+                (int)$parentContext->getTraceId(),
+                (int)$this->idGenerator->next(),
+                (int)$parentContext->getSpanId(),
+                (bool)$parentContext->isDebug(),
+                (int)$parentContext->getFlags()
             ),
             $operationName,
             (int)round(microtime(true) * 1000000),
