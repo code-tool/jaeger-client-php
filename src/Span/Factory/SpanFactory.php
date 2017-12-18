@@ -21,40 +21,44 @@ class SpanFactory implements SpanFactoryInterface
         $this->sampler = $sampler;
     }
 
-    public function create(
+    public function parent(
         string $operationName,
+        bool $isDebug = false,
         array $tags = [],
-        SpanContext $parentContext = null,
         array $logs = []
     ): SpanInterface {
         $spanId = $this->idGenerator->next();
-        if (null === $parentContext) {
-            $traceId = $spanId;
-            $debugId = 0;
-            $parentId = 0;
-            $flags = 0;
-            $baggage = [];
-            $samplerResult = $this->sampler->decide($traceId, $operationName);
-            if ($samplerResult->isSampled()) {
-                $flags = 0x01;
-                $tags = array_merge($tags, $samplerResult->getTags());
-            }
-        } else {
-            $traceId = $parentContext->getTraceId();
-            $parentId = $parentContext->getSpanId();
-            $debugId = $parentContext->getDebugId();
-            $flags = $parentContext->getFlags();
-            $baggage = [];
-        }
+        $traceId = $spanId;
+        $samplerResult = $this->sampler->decide($traceId, $operationName, $isDebug);
 
         return new Span(
             new SpanContext(
                 (int)$traceId,
                 (int)$spanId,
-                (int)$parentId,
-                (int)$debugId,
-                (int)$flags,
-                $baggage
+                0,
+                $isDebug,
+                (int)$samplerResult->getFlags()
+            ),
+            $operationName,
+            (int)round(microtime(true) * 1000000),
+            array_merge($tags, $samplerResult->getTags()),
+            $logs
+        );
+    }
+
+    public function child(
+        string $operationName,
+        SpanContext $parentContext,
+        array $tags = [],
+        array $logs = []
+    ): SpanInterface {
+        return new Span(
+            new SpanContext(
+                $parentContext->getTraceId(),
+                $this->idGenerator->next(),
+                $parentContext->getSpanId(),
+                $parentContext->isDebug(),
+                $parentContext->getFlags()
             ),
             $operationName,
             (int)round(microtime(true) * 1000000),

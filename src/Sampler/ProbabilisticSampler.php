@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Jaeger\Sampler;
 
-class ProbabilisticSampler implements SamplerInterface
+class ProbabilisticSampler extends AbstractSampler
 {
     private $rate;
 
@@ -15,11 +15,12 @@ class ProbabilisticSampler implements SamplerInterface
         $this->threshold = $rate * PHP_INT_MAX;
     }
 
-    public function decide(int $traceId, string $operationName): SamplerResult
+    public function doDecide(int $traceId, string $operationName): SamplerResult
     {
         if ($traceId > $this->threshold) {
             return new SamplerResult(
                 false,
+                0x00,
                 [
                     new SamplerTypeTag('probabilistic'),
                     new SamplerParamTag((string)$this->rate)
@@ -29,6 +30,7 @@ class ProbabilisticSampler implements SamplerInterface
 
         return new SamplerResult(
             true,
+            0x01,
             [
                 new SamplerTypeTag('probabilistic'),
                 new SamplerParamTag((string)$this->rate)

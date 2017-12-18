@@ -7,12 +7,20 @@ class SamplerResult
 {
     private $sampled;
 
+    private $flags;
+
     private $tags;
 
-    public function __construct(bool $sampled, array $tags = [])
+    public function __construct(bool $sampled, int $flags, array $tags = [])
     {
         $this->sampled = $sampled;
+        $this->flags = $flags;
         $this->tags = $tags;
+    }
+
+    public function getFlags() : int
+    {
+        return $this->flags;
     }
 
     public function isSampled(): bool

@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Jaeger\Sampler;
 
-class ConstSampler implements SamplerInterface
+class ConstSampler extends AbstractSampler
 {
-    const SAMPLER_TYPE_CONST = '';
-
     private $debugEnabled;
 
     public function __construct(bool $debugEnabled)
@@ -14,13 +12,25 @@ class ConstSampler implements SamplerInterface
         $this->debugEnabled = $debugEnabled;
     }
 
-    public function decide(int $traceId, string $operationName): SamplerResult
+    public function doDecide(int $traceId, string $operationName): SamplerResult
     {
+        if (false === $this->debugEnabled) {
+            return new SamplerResult(
+                false,
+                0,
+                [
+                    new SamplerTypeTag('const'),
+                    new SamplerParamTag('False')
+                ]
+            );
+        }
+
         return new SamplerResult(
-            $this->debugEnabled,
+            true,
+            0x01,
             [
                 new SamplerTypeTag('const'),
-                new SamplerParamTag($this->debugEnabled ? 'True' : 'False')
+                new SamplerParamTag('True')
             ]
         );
     }

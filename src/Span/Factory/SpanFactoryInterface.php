@@ -8,10 +8,17 @@ use Jaeger\Span\SpanInterface;
 
 interface SpanFactoryInterface
 {
-    public function create(
+    public function parent(
         string $operationName,
+        bool $isDebug = false,
         array $tags = [],
-        SpanContext $parentContext = null,
+        array $logs = []
+    ): SpanInterface;
+
+    public function child(
+        string $operationName,
+        SpanContext $parentContext,
+        array $tags = [],
         array $logs = []
     ): SpanInterface;
 }

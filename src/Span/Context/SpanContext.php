@@ -11,7 +11,7 @@ class SpanContext implements \IteratorAggregate
 
     private $parentId;
 
-    private $debugId;
+    private $isDebug;
 
     private $flags;
 
@@ -21,14 +21,14 @@ class SpanContext implements \IteratorAggregate
         int $traceId,
         int $spanId,
         int $parentId,
-        int $debugId,
+        bool $isDebug,
         int $flags = 0,
         array $baggage = []
     ) {
         $this->traceId = $traceId;
         $this->spanId = $spanId;
         $this->parentId = $parentId;
-        $this->debugId = $debugId;
+        $this->isDebug = $isDebug;
         $this->flags = $flags;
         $this->baggage = $baggage;
     }
@@ -48,9 +48,9 @@ class SpanContext implements \IteratorAggregate
         return $this->parentId;
     }
 
-    public function getDebugId(): int
+    public function isDebug(): bool
     {
-        return $this->debugId;
+        return $this->isDebug;
     }
 
     public function getFlags(): int
