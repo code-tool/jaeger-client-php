@@ -27,10 +27,10 @@ class TextCodec implements CodecInterface
         }
 
         return new SpanContext(
-            (int)unpack('J', pack('H*', $elements[0])),
-            (int)unpack('J', pack('H*', $elements[1])),
-            (int)unpack('J', pack('H*', $elements[2])),
-            (int)unpack('J', pack('H*', $elements[3]))
+            (int)unpack('J', pack('H*', str_pad($elements[0], 16, '0', STR_PAD_LEFT))),
+            (int)unpack('J', pack('H*', str_pad($elements[1], 16, '0', STR_PAD_LEFT))),
+            (int)unpack('J', pack('H*', str_pad($elements[2], 16, '0', STR_PAD_LEFT))),
+            (int)unpack('J', pack('H*', str_pad($elements[3], 16, '0', STR_PAD_LEFT)))
         );
     }
 
