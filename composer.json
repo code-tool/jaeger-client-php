@@ -7,7 +7,7 @@
     }
   },
   "require": {
-    "php": "~5.6 | ~7",
+    "php": "~5.6 || ~7",
     "packaged/thrift": "dev-master"
   },
   "require-dev": {
