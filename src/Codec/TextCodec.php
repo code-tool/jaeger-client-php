@@ -12,6 +12,18 @@ class TextCodec implements CodecInterface
     }
 
     /**
+     * @param string $hex
+     *
+     * @return int
+     */
+    public function convertInt64($hex)
+    {
+        $hex8byte = str_pad($hex, 16, '0', STR_PAD_LEFT);
+
+        return unpack('Jint64', pack('H*', $hex8byte))['int64'];
+    }
+
+    /**
      * @param $data
      *
      * @return SpanContext|null
@@ -27,10 +39,10 @@ class TextCodec implements CodecInterface
         }
 
         return new SpanContext(
-            (int)unpack('J', pack('H*', str_pad($elements[0], 16, '0', STR_PAD_LEFT))),
-            (int)unpack('J', pack('H*', str_pad($elements[1], 16, '0', STR_PAD_LEFT))),
-            (int)unpack('J', pack('H*', str_pad($elements[2], 16, '0', STR_PAD_LEFT))),
-            (int)unpack('J', pack('H*', str_pad($elements[3], 16, '0', STR_PAD_LEFT)))
+            $this->convertInt64($elements[0]),
+            $this->convertInt64($elements[1]),
+            $this->convertInt64($elements[2]),
+            $this->convertInt64($elements[3])
         );
     }
 
