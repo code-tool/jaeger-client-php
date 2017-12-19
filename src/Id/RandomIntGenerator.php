@@ -9,6 +9,6 @@ class RandomIntGenerator implements IdGeneratorInterface
      */
     public function next()
     {
-        return random_int(PHP_INT_MIN, PHP_INT_MAX);
+        return rand(PHP_INT_MIN, PHP_INT_MAX);
     }
 }
