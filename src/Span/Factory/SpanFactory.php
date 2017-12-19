@@ -46,7 +46,7 @@ class SpanFactory implements SpanFactoryInterface
                 (int)$samplerResult->getFlags()
             ),
             $operationName,
-            (int)round(microtime(true) * 1000000),
+            (int)(microtime(true) * 1000000),
             array_merge($tags, $samplerResult->getTags()),
             $logs
         );
@@ -74,7 +74,7 @@ class SpanFactory implements SpanFactoryInterface
                 (int)$parentContext->getFlags()
             ),
             $operationName,
-            (int)round(microtime(true) * 1000000),
+            (int)(microtime(true) * 1000000),
             $tags,
             $logs
         );
