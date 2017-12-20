@@ -3,37 +3,43 @@ declare(strict_types=1);
 
 namespace Jaeger\Transport;
 
-use Thrift\Exception\TTransportException;
 use Thrift\Transport\TTransport;
 
 class TUDPTransport extends TTransport
 {
-    private $socket;
-
     private $host;
 
     private $port;
+
+    /**
+     * @var resource
+     */
+    private $socket;
+
+    private $buffer = '';
 
     public function __construct(string $host, int $port)
     {
         $this->host = $host;
         $this->port = $port;
-        $this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
     }
 
     public function isOpen(): bool
     {
-        return $this->socket !== null;
+        return true;
     }
 
     public function open()
     {
-        @socket_connect($this->socket, $this->host, $this->port);
     }
 
     public function close()
     {
-        socket_close($this->socket);
+        if (null === $this->socket) {
+            return;
+        }
+
+        \socket_close($this->socket);
         $this->socket = null;
     }
 
@@ -44,21 +50,46 @@ class TUDPTransport extends TTransport
 
     public function write($buf)
     {
-        if (false === $this->isOpen()) {
-            throw new TTransportException('Transport is closed');
+        $this->buffer .= $buf;
+    }
+
+    private function getConnectedSocket()
+    {
+        if (null === $this->socket) {
+            if (false !== $socket = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+                @\socket_connect($socket, $this->host, $this->port);
+            }
+
+            $this->socket = $socket;
         }
 
-        $length = strlen($buf);
+        return $this->socket;
+    }
+
+    private function doWrite($buf)
+    {
+        $socket = $this->getConnectedSocket();
+
+        $length = \strlen($buf);
         while (true) {
-            $result = @socket_write($this->socket, $buf);
-            if ($result === false) {
+            if (false === $result = @\socket_write($socket, $buf)) {
                 break;
             }
             if ($result >= $length) {
                 break;
             }
-            $buf = substr($buf, $result);
+            $buf = \substr($buf, $result);
             $length -= $result;
         }
+    }
+
+    public function flush()
+    {
+        if ('' === $this->buffer) {
+            return;
+        }
+
+        $this->doWrite($this->buffer);
+        $this->buffer = '';
     }
 }
