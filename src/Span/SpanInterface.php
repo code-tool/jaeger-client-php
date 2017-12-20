@@ -58,4 +58,9 @@ interface SpanInterface extends ContextAwareInterface
      * @return SpanInterface
      */
     public function withoutItem($key);
+
+    /**
+     * @return bool
+     */
+    public function isSampled();
 }
