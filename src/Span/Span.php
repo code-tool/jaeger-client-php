@@ -37,6 +37,11 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         return $this->context;
     }
 
+    public function isSampled(): bool
+    {
+        return (bool)($this->flags & 1);
+    }
+
     public function start(int $startTimeUsec) : SpanInterface
     {
         $this->startTime = $startTimeUsec;

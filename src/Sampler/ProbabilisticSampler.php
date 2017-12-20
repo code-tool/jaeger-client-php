@@ -12,12 +12,12 @@ class ProbabilisticSampler extends AbstractSampler
     public function __construct(float $rate)
     {
         $this->rate = $rate;
-        $this->threshold = $rate * PHP_INT_MAX;
+        $this->threshold = 0.5 * $rate * PHP_INT_MAX;
     }
 
     public function doDecide(int $traceId, string $operationName): SamplerResult
     {
-        if ($traceId > $this->threshold) {
+        if (abs($traceId) > $this->threshold) {
             return new SamplerResult(
                 false,
                 0x00,
