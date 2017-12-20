@@ -1,11 +1,14 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tag;
 
 class PeerHostnameTag extends StringTag
 {
-    public function __construct(string $value)
+    /**
+     * PeerHostnameTag constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
     {
         parent::__construct('peer.hostname', $value);
     }

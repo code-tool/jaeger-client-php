@@ -1,11 +1,14 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tag;
 
 class PeerIpv4Tag extends StringTag
 {
-    public function __construct(string $value)
+    /**
+     * PeerIpv4Tag constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
     {
         parent::__construct('peer.ip', $value);
     }

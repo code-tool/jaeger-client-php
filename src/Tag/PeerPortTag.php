@@ -1,12 +1,15 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tag;
 
 class PeerPortTag extends LongTag
 {
-    public function __construct(int $value)
+    /**
+     * PeerPortTag constructor.
+     *
+     * @param int $value
+     */
+    public function __construct($value)
     {
-        parent::__construct('peer.port', $value);
+        parent::__construct('peer.port', (int)$value);
     }
 }
