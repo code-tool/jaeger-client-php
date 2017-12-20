@@ -16,7 +16,12 @@ abstract class AbstractSampler implements SamplerInterface
         return new SamplerResult(
             true,
             0x03,
-            [new SamplerTypeTag('debug'), new SamplingPriorityTag(1)]
+            [
+                new SamplerDecisionTag(true),
+                new SamplerTypeTag('debug'),
+                new SamplerFlagsTag(0x03),
+                new SamplingPriorityTag(1)
+            ]
         );
     }
 }
