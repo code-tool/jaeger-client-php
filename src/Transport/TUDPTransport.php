@@ -81,7 +81,6 @@ class TUDPTransport extends TTransport
     private function doWrite($buf)
     {
         $socket = $this->getConnectedSocket();
-
         $length = \strlen($buf);
         while (true) {
             if (false === $result = @\socket_write($socket, $buf)) {
