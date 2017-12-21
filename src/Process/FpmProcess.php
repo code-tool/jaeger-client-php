@@ -1,11 +1,14 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Process;
 
 class FpmProcess extends AbstractProcess
 {
-    public function __construct(string $serviceName)
+    /**
+     * FpmProcess constructor.
+     *
+     * @param string $serviceName
+     */
+    public function __construct($serviceName)
     {
         parent::__construct($serviceName, [new ProcessIpTag()]);
     }

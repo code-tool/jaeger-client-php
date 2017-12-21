@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Process;
 
 use Jaeger\General\JaegerHostnameTag;
@@ -11,7 +9,13 @@ use Jaeger\Thrift\Process;
 
 abstract class AbstractProcess extends Process
 {
-    public function __construct(string $serviceName, array $tags = [])
+    /**
+     * AbstractProcess constructor.
+     *
+     * @param string $serviceName
+     * @param array  $tags
+     */
+    public function __construct($serviceName, array $tags = [])
     {
         $this->serviceName = $serviceName;
         $this->tags = array_merge(
