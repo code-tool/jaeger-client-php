@@ -2,8 +2,6 @@
 
 namespace Jaeger\Log;
 
-use Jaeger\Tag\StringTag;
-
 class ErrorLog extends AbstractLog
 {
     /**
@@ -16,9 +14,9 @@ class ErrorLog extends AbstractLog
     {
         parent::__construct(
             [
-                new StringTag('event', 'error'),
-                new StringTag('message', $message),
-                new StringTag('stack', $stack)
+                new EventTag('error'),
+                new MessageTag($message),
+                new StackTag($stack)
             ]
         );
     }
