@@ -2,12 +2,12 @@
 
 namespace Jaeger\Span\Batch;
 
+use Jaeger\Process\AbstractProcess;
 use Jaeger\Thrift\Batch;
-use Jaeger\Process\CliProcess;
 
 class SpanBatch extends Batch
 {
-    public function __construct(CliProcess $process, array $spans = [])
+    public function __construct(AbstractProcess $process, array $spans = [])
     {
         $this->process = $process;
         $this->spans = $spans;
