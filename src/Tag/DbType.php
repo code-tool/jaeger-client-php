@@ -1,11 +1,14 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tag;
 
 class DbType extends StringTag
 {
-    public function __construct(string $value)
+    /**
+     * DbType constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
     {
         parent::__construct('db.type', $value);
     }

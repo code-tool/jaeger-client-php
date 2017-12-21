@@ -1,11 +1,14 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tag;
 
 class DbInstanceTag extends StringTag
 {
-    public function __construct(string $value)
+    /**
+     * DbInstanceTag constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
     {
         parent::__construct('db.instance', $value);
     }

@@ -2,7 +2,9 @@
 
 namespace Jaeger\Log;
 
-abstract class AbstractLog extends \Jaeger\Thrift\Log
+use Jaeger\Thrift\Log;
+
+abstract class AbstractLog extends Log
 {
     public function __construct(array $tags = [])
     {

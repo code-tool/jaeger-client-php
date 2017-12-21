@@ -1,11 +1,14 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tag;
 
 class DbUser extends StringTag
 {
-    public function __construct(string $value)
+    /**
+     * DbUser constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
     {
         parent::__construct('db.user', $value);
     }

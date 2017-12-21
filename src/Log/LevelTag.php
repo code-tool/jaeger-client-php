@@ -1,13 +1,16 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Log;
 
 use Jaeger\Tag\StringTag;
 
 class LevelTag extends StringTag
 {
-    public function __construct(string $value)
+    /**
+     * LevelTag constructor.
+     *
+     * @param string $value
+     */
+    public function __construct($value)
     {
         parent::__construct('level', $value);
     }
