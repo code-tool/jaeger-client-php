@@ -29,10 +29,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     public function flush(): FlushableInterface
     {
         if (0 !== $this->stack->count()) {
-            trigger_error(
-                'You are flushing non-empty tracer stack, some span(-s) were started but not finished',
-                E_WARNING
-            );
+            trigger_error('You are flushing non-empty tracer stack, some span(-s) were started but not finished');
         }
         $this->client->flush();
 
