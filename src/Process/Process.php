@@ -18,6 +18,7 @@ class Process extends \Jaeger\Thrift\Process
             new JaegerHostnameTag(),
             new PhpBinaryTag(),
             new PhpVersionTag(),
+            new ProcessIpTag(),
             new ProcessPidTag(),
             new ProcessSapiTag(),
             new ProcessUidTag(),

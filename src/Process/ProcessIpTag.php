@@ -7,7 +7,7 @@ use Jaeger\Tag\StringTag;
 
 class ProcessIpTag extends StringTag
 {
-    public function __construct(string $key, string $value)
+    public function __construct()
     {
         parent::__construct('ip', $_SERVER['SERVER_ADDR'] ?? '127.0.0.1');
     }
