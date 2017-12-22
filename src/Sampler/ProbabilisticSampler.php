@@ -16,7 +16,7 @@ class ProbabilisticSampler extends AbstractSampler
     public function __construct($rate)
     {
         $this->rate = $rate;
-        $this->threshold = 0.5 * $rate * PHP_INT_MAX;
+        $this->threshold = $rate * PHP_INT_MAX;
     }
 
     /**
