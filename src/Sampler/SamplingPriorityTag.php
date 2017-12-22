@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Sampler;
 
 use Jaeger\Tag\LongTag;

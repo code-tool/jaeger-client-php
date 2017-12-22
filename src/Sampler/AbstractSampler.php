@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Sampler;
 
 abstract class AbstractSampler implements SamplerInterface

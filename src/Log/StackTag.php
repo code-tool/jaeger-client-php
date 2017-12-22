@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Log;
 
 use Jaeger\Tag\StringTag;

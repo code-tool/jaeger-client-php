@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Tag;
 
 class PeerServiceTag extends StringTag

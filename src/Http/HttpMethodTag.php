@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Http;
 
 use Jaeger\Tag\StringTag;

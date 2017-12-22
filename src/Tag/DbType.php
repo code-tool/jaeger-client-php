@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Tag;
 
 class DbType extends StringTag

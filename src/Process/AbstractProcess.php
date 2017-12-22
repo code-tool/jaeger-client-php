@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Process;
 
 use Jaeger\General\JaegerHostnameTag;

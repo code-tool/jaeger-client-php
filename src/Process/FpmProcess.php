@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Process;
 
 class FpmProcess extends AbstractProcess

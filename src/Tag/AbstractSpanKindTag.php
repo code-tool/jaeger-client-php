@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Tag;
 
 abstract class AbstractSpanKindTag extends StringTag

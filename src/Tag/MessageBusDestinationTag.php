@@ -1,4 +1,5 @@
 <?php
+
 namespace Jaeger\Tag;
 
 class MessageBusDestinationTag extends StringTag
