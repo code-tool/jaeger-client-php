@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Jaeger\Client;
 
 use Jaeger\Process\FpmProcess;
+use Jaeger\Process\InternalServerProcess;
 use Jaeger\Thrift\Agent\AgentIf as AgentInterface;
 use Jaeger\Process\CliProcess;
 use Jaeger\Span\Batch\SpanBatch;
@@ -32,10 +33,16 @@ class ThriftClient implements ClientInterface
 
     public function flush(): ClientInterface
     {
-        if (PHP_SAPI === 'cli') {
-            $process = new CliProcess($this->serviceName);
-        } else {
-            $process = new FpmProcess($this->serviceName);
+        switch (PHP_SAPI) {
+            case 'cli':
+                $process = new CliProcess($this->serviceName);
+                break;
+            case 'cli-server':
+                $process = new InternalServerProcess($this->serviceName);
+                break;
+            default:
+                $process = new FpmProcess($this->serviceName);
+                break;
         }
         $this->agent->emitBatch(new SpanBatch($process, $this->spans));
         $this->spans = [];
