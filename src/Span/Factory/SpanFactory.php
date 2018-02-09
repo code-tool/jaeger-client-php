@@ -7,6 +7,7 @@ use Jaeger\Sampler\SamplerInterface;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Span;
 use Jaeger\Span\SpanInterface;
+use Jaeger\Tag\StringTag;
 
 class SpanFactory implements SpanFactoryInterface
 {
@@ -66,6 +67,11 @@ class SpanFactory implements SpanFactoryInterface
         array $tags = [],
         array $logs = []
     ) {
+        $baggateTags = [];
+        foreach ($parentContext->getBaggage() as $name => $value) {
+            $baggateTags[] = new StringTag($name, $value);
+        }
+
         return new Span(
             new SpanContext(
                 (int)$parentContext->getTraceId(),
@@ -76,7 +82,7 @@ class SpanFactory implements SpanFactoryInterface
             ),
             $operationName,
             (int)(microtime(true) * 1000000),
-            $tags,
+            array_merge($tags, $baggateTags),
             $logs
         );
     }
