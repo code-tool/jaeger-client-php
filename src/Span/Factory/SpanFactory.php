@@ -51,12 +51,14 @@ class SpanFactory implements SpanFactoryInterface
         array $tags = [],
         array $logs = []
     ): SpanInterface {
+
         return new Span(
             new SpanContext(
                 $parentContext->getTraceId(),
                 $this->idGenerator->next(),
                 $parentContext->getSpanId(),
-                $parentContext->getFlags()
+                $parentContext->getFlags(),
+                $parentContext->getBaggage()
             ),
             $operationName,
             (int)(microtime(true) * 1000000),
