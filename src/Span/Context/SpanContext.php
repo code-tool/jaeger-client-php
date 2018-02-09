@@ -62,7 +62,7 @@ class SpanContext implements \IteratorAggregate
         return $this->flags;
     }
 
-    public function getBaggage() : array
+    public function getBaggage()
     {
         return $this->baggage;
     }
