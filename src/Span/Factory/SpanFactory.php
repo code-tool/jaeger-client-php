@@ -23,13 +23,13 @@ class SpanFactory implements SpanFactoryInterface
 
     public function parent(
         string $operationName,
-        bool $isDebug = false,
+        string $debugId,
         array $tags = [],
         array $logs = []
     ): SpanInterface {
         $spanId = $this->idGenerator->next();
         $traceId = $spanId;
-        $samplerResult = $this->sampler->decide($traceId, $operationName, $isDebug);
+        $samplerResult = $this->sampler->decide($traceId, $operationName, $debugId);
 
         return new Span(
             new SpanContext(
@@ -51,7 +51,6 @@ class SpanFactory implements SpanFactoryInterface
         array $tags = [],
         array $logs = []
     ): SpanInterface {
-
         return new Span(
             new SpanContext(
                 $parentContext->getTraceId(),

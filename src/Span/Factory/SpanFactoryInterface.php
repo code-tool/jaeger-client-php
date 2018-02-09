@@ -10,7 +10,7 @@ interface SpanFactoryInterface
 {
     public function parent(
         string $operationName,
-        bool $isDebug = false,
+        string $debugId,
         array $tags = [],
         array $logs = []
     ): SpanInterface;
