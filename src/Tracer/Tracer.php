@@ -9,9 +9,12 @@ use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Factory\SpanFactoryInterface;
 use Jaeger\Span\SpanInterface;
 
-class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface
+class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface,
+                        DebuggableInterface
 {
     private $stack;
+
+    private $debugId = '';
 
     private $factory;
 
@@ -22,6 +25,20 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
         $this->stack = $stack;
         $this->factory = $factory;
         $this->client = $client;
+    }
+
+    public function enable(string $debugId): DebuggableInterface
+    {
+        $this->debugId = $debugId;
+
+        return $this;
+    }
+
+    public function disable(): DebuggableInterface
+    {
+        $this->debugId = '';
+
+        return $this;
     }
 
     public function flush(): FlushableInterface
@@ -56,7 +73,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
 
     public function debug(string $operationName, array $tags = []): SpanInterface
     {
-        $span = $this->factory->parent($operationName, true, $tags);
+        $span = $this->factory->parent($operationName, str_shuffle('01234567890abcdef'), $tags);
         $this->stack->push($span->getContext());
 
         return $span;
@@ -66,7 +83,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     public function start(string $operationName, array $tags = [], SpanContext $userContext = null): SpanInterface
     {
         if (null === ($context = $this->getContext($userContext))) {
-            $span = $this->factory->parent($operationName, false, $tags);
+            $span = $this->factory->parent($operationName, $this->debugId, $tags);
         } else {
             $span = $this->factory->child($operationName, $context, $tags);
         }
