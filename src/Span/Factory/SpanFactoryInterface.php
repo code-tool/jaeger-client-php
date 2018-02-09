@@ -17,7 +17,7 @@ interface SpanFactoryInterface
      */
     public function parent(
         $operationName,
-        $isDebug = false,
+        $debugId,
         array $tags = [],
         array $logs = []
     );

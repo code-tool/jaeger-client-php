@@ -2,6 +2,8 @@
 
 namespace Jaeger\Sampler;
 
+use Jaeger\Tag\DebugRequestTag;
+
 abstract class AbstractSampler implements SamplerInterface
 {
     /**
@@ -15,13 +17,13 @@ abstract class AbstractSampler implements SamplerInterface
     /**
      * @param int    $traceId
      * @param string $operationName
-     * @param bool   $isDebug
+     * @param string $debugId
      *
      * @return SamplerResult
      */
-    public function decide($traceId, $operationName, $isDebug)
+    public function decide($traceId, $operationName, $debugId)
     {
-        if (false === $isDebug) {
+        if ('' === $debugId) {
             return $this->doDecide($traceId, $operationName);
         }
 
@@ -31,6 +33,7 @@ abstract class AbstractSampler implements SamplerInterface
             [
                 new SamplerDecisionTag(true),
                 new SamplerTypeTag('debug'),
+                new DebugRequestTag($debugId),
                 new SamplerFlagsTag(0x03),
                 new SamplingPriorityTag(1)
             ]

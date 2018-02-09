@@ -8,14 +8,6 @@ use Jaeger\Span\SpanInterface;
 interface TracerInterface
 {
     /**
-     * @param string $operationName
-     * @param array  $tags
-     *
-     * @return SpanInterface
-     */
-    public function debug($operationName, array $tags = []);
-
-    /**
      * @param string      $operationName
      * @param array       $tags
      * @param SpanContext $context

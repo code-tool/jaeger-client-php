@@ -7,9 +7,9 @@ interface SamplerInterface
     /**
      * @param int    $traceId
      * @param string $operationName
-     * @param bool   $isDebug
+     * @param bool   $debugId
      *
      * @return SamplerResult
      */
-    public function decide($traceId, $operationName, $isDebug);
+    public function decide($traceId, $operationName, $debugId);
 }
