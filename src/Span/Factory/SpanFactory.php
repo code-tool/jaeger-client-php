@@ -71,7 +71,8 @@ class SpanFactory implements SpanFactoryInterface
                 (int)$parentContext->getTraceId(),
                 (int)$this->idGenerator->next(),
                 (int)$parentContext->getSpanId(),
-                (int)$parentContext->getFlags()
+                (int)$parentContext->getFlags(),
+                $parentContext->getBaggage()
             ),
             $operationName,
             (int)(microtime(true) * 1000000),
