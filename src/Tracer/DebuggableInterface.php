@@ -1,15 +1,29 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tracer;
 
 use Jaeger\Span\SpanInterface;
 
 interface DebuggableInterface
 {
-    public function enable(string $requestId): DebuggableInterface;
+    /**
+     * @param string $requestId
+     *
+     * @return DebuggableInterface
+     */
+    public function enable($requestId);
 
-    public function disable(): DebuggableInterface;
+    /**
+     * @return DebuggableInterface
+     *
+     * @return DebuggableInterface
+     */
+    public function disable();
 
-    public function debug(string $operationName, array $tags = []): SpanInterface;
+    /**
+     * @param string $operationName
+     * @param array  $tags
+     *
+     * @return SpanInterface
+     */
+    public function debug($operationName, array $tags = []);
 }

@@ -40,7 +40,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     }
 
     /**
-     * @return $this|DebuggableInterface
+     * @return DebuggableInterface
      */
     public function disable()
     {
