@@ -11,8 +11,6 @@ use Jaeger\Span\SpanInterface;
 
 class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface
 {
-    private $context;
-
     private $stack;
 
     private $factory;
@@ -38,35 +36,41 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
 
     public function assign(SpanContext $context): InjectableInterface
     {
-        $this->context = $context;
+        $this->stack->push($context);
 
         return $this;
     }
 
-    public function getContext(): ?SpanContext
+    public function getContext(SpanContext $userContext = null): ?SpanContext
     {
-        return $this->context;
+        if (null !== $userContext) {
+            return $userContext;
+        }
+
+        if (0 !== $this->stack->count()) {
+            return $this->stack->top();
+        }
+
+        return null;
     }
 
     public function debug(string $operationName, array $tags = []): SpanInterface
     {
         $span = $this->factory->parent($operationName, true, $tags);
         $this->stack->push($span->getContext());
-        $this->context = $this->stack->top();
 
         return $span;
     }
 
 
-    public function start(string $operationName, array $tags = [], SpanContext $context = null): SpanInterface
+    public function start(string $operationName, array $tags = [], SpanContext $userContext = null): SpanInterface
     {
-        if (null === $context && null === $this->context) {
+        if (null === ($context = $this->getContext($userContext))) {
             $span = $this->factory->parent($operationName, false, $tags);
         } else {
-            $span = $this->factory->child($operationName, $context ?? $this->context, $tags);
+            $span = $this->factory->child($operationName, $context, $tags);
         }
         $this->stack->push($span->getContext());
-        $this->context = $this->stack->top();
 
         return $span;
     }
@@ -74,7 +78,6 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     public function finish(SpanInterface $span, int $duration = 0): TracerInterface
     {
         $this->stack->pop();
-        $this->context = $this->stack->count() ? $this->stack->top() : null;
         if (false === $span->isSampled()) {
             return $this;
         }
