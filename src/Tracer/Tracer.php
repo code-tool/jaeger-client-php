@@ -79,7 +79,6 @@ class Tracer implements TracerInterface,
         return $span;
     }
 
-
     public function start(string $operationName, array $tags = [], SpanContext $userContext = null): SpanInterface
     {
         if (null === ($context = $this->getContext($userContext))) {
