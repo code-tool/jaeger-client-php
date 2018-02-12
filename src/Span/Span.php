@@ -3,21 +3,28 @@ declare(strict_types=1);
 
 namespace Jaeger\Span;
 
+use Jaeger\Tag\ErrorTag;
+use Jaeger\Tag\OutOfScopeTag;
 use Jaeger\Thrift\Log;
 use Jaeger\Thrift\Tag;
 use Jaeger\Span\Context\SpanContext;
+use Jaeger\Tracer\TracerInterface;
 
 class Span extends \Jaeger\Thrift\Span implements SpanInterface
 {
+    private $tracer;
+
     private $context;
 
     public function __construct(
+        TracerInterface $tracer,
         SpanContext $context,
         string $operationName,
         int $startTime,
         array $tags = [],
         array $logs = []
     ) {
+        $this->tracer = $tracer;
         $this->context = $context;
         $this->traceIdLow = $context->getTraceId();
         $this->traceIdHigh = 0;
@@ -30,6 +37,19 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         $this->tags = $tags;
         $this->logs = $logs;
         parent::__construct();
+    }
+
+    public function __destruct()
+    {
+        if (null !== $this->duration) {
+            return $this;
+        }
+        $this->tags[] = new ErrorTag();
+        $this->tags[] = new OutOfScopeTag();
+
+        $this->tracer->finish($this);
+
+        return $this;
     }
 
     public function getContext(): ?SpanContext
