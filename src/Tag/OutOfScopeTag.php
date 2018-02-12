@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Tag;
 
 class OutOfScopeTag extends BoolTag

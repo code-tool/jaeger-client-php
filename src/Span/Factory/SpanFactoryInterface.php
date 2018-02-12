@@ -21,8 +21,6 @@ interface SpanFactoryInterface
         TracerInterface $tracer,
         $operationName,
         $debugId,
-        $operationName,
-        $debugId,
         array $tags = [],
         array $logs = []
     );
@@ -38,7 +36,6 @@ interface SpanFactoryInterface
      */
     public function child(
         TracerInterface $tracer,
-        $operationName,
         $operationName,
         SpanContext $parentContext,
         array $tags = [],
