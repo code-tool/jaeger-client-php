@@ -71,6 +71,11 @@ class Tracer implements TracerInterface,
         return null;
     }
 
+    public function getClient(): ClientInterface
+    {
+        return $this->client;
+    }
+
     public function debug(string $operationName, array $tags = []): SpanInterface
     {
         $span = $this->factory->parent($this, $operationName, str_shuffle('01234567890abcdef'), $tags);
