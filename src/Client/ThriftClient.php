@@ -2,15 +2,17 @@
 
 namespace Jaeger\Client;
 
+use Jaeger\Process\CliProcess;
 use Jaeger\Process\FpmProcess;
 use Jaeger\Process\InternalServerProcess;
-use Jaeger\Thrift\Agent\AgentIf as AgentInterface;
-use Jaeger\Process\CliProcess;
 use Jaeger\Span\Batch\SpanBatch;
 use Jaeger\Span\SpanInterface;
+use Jaeger\Thrift\Agent\AgentIf as AgentInterface;
 
 class ThriftClient implements ClientInterface
 {
+    const MAX_BATCH_SIZE = 100;
+
     private $serviceName;
 
     private $agent;
@@ -38,10 +40,10 @@ class ThriftClient implements ClientInterface
     {
         $this->spans[] = $span;
 
-        return $this;
+        return $this->flush();
     }
 
-    public function getSpans() : array
+    public function getSpans(): array
     {
         return $this->spans;
     }
@@ -62,7 +64,9 @@ class ThriftClient implements ClientInterface
                 $process = new FpmProcess($this->serviceName);
                 break;
         }
-        $this->agent->emitBatch(new SpanBatch($process, $this->spans));
+        foreach (array_chunk($this->spans, self::MAX_BATCH_SIZE) as $batch) {
+            $this->agent->emitBatch(new SpanBatch($process, $batch));
+        }
         $this->spans = [];
 
         return $this;
