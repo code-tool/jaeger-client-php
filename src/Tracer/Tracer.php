@@ -134,10 +134,10 @@ class Tracer implements TracerInterface,
         if (0 !== $this->stack->count()) {
             $this->stack->pop();
         }
-        if (false === $span->isSampled()) {
+        if (false === $span->finish($duration)->isSampled()) {
             return $this;
         }
-        $this->client->add($span->finish($duration));
+        $this->client->add($span);
 
         return $this;
     }
