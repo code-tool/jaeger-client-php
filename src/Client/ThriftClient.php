@@ -41,6 +41,11 @@ class ThriftClient implements ClientInterface
         return $this;
     }
 
+    public function getSpans() : array
+    {
+        return $this->spans;
+    }
+
     /**
      * @return ClientInterface
      */

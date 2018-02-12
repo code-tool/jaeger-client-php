@@ -90,6 +90,11 @@ class Tracer implements TracerInterface,
         return null;
     }
 
+    public function getClient(): ClientInterface
+    {
+        return $this->client;
+    }
+
     /**
      * @param string $operationName
      * @param array  $tags
