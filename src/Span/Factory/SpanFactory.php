@@ -8,6 +8,7 @@ use Jaeger\Sampler\SamplerInterface;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Span;
 use Jaeger\Span\SpanInterface;
+use Jaeger\Tracer\TracerInterface;
 
 class SpanFactory implements SpanFactoryInterface
 {
@@ -22,6 +23,7 @@ class SpanFactory implements SpanFactoryInterface
     }
 
     public function parent(
+        TracerInterface $tracer,
         string $operationName,
         string $debugId,
         array $tags = [],
@@ -32,6 +34,7 @@ class SpanFactory implements SpanFactoryInterface
         $samplerResult = $this->sampler->decide($traceId, $operationName, $debugId);
 
         return new Span(
+            $tracer,
             new SpanContext(
                 (int)$traceId,
                 (int)$spanId,
@@ -46,12 +49,14 @@ class SpanFactory implements SpanFactoryInterface
     }
 
     public function child(
+        TracerInterface $tracer,
         string $operationName,
         SpanContext $parentContext,
         array $tags = [],
         array $logs = []
     ): SpanInterface {
         return new Span(
+            $tracer,
             new SpanContext(
                 $parentContext->getTraceId(),
                 $this->idGenerator->next(),
