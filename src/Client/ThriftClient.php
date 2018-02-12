@@ -31,6 +31,11 @@ class ThriftClient implements ClientInterface
         return $this;
     }
 
+    public function getSpans() : array
+    {
+        return $this->spans;
+    }
+
     public function flush(): ClientInterface
     {
         switch (PHP_SAPI) {
