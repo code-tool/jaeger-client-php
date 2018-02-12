@@ -94,7 +94,9 @@ class Tracer implements TracerInterface,
 
     public function finish(SpanInterface $span, int $duration = 0): TracerInterface
     {
-        $this->stack->pop();
+        if (0 !== $this->stack->count()) {
+            $this->stack->pop();
+        }
         if (false === $span->isSampled()) {
             return $this;
         }
