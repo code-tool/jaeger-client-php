@@ -8,7 +8,10 @@ use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Factory\SpanFactoryInterface;
 use Jaeger\Span\SpanInterface;
 
-class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterface, FlushableInterface,
+class Tracer implements TracerInterface,
+                        ContextAwareInterface,
+                        InjectableInterface,
+                        FlushableInterface,
                         DebuggableInterface
 {
     private $stack;
@@ -95,7 +98,7 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
      */
     public function debug($operationName, array $tags = [])
     {
-        $span = $this->factory->parent($operationName, str_shuffle('01234567890abcdef'), $tags);
+        $span = $this->factory->parent($this, $operationName, str_shuffle('01234567890abcdef'), $tags);
         $this->stack->push($span->getContext());
 
         return $span;
@@ -111,9 +114,9 @@ class Tracer implements TracerInterface, ContextAwareInterface, InjectableInterf
     public function start($operationName, array $tags = [], SpanContext $userContext = null)
     {
         if (null === ($context = $this->getContext($userContext))) {
-            $span = $this->factory->parent($operationName, $this->debugId, $tags);
+            $span = $this->factory->parent($this, $operationName, $this->debugId, $tags);
         } else {
-            $span = $this->factory->child($operationName, $context, $tags);
+            $span = $this->factory->child($this, $operationName, $context, $tags);
         }
         $this->stack->push($span->getContext());
 
