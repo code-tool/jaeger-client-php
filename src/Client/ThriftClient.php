@@ -30,7 +30,7 @@ class ThriftClient implements ClientInterface
     {
         $this->spans[] = $span;
 
-        return $this->flush();
+        return $this;
     }
 
     public function getSpans(): array
