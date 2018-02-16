@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Jaeger\Span;
 
+use Jaeger\Span\Context\SpanContext;
 use Jaeger\Tag\ErrorTag;
 use Jaeger\Tag\OutOfScopeTag;
 use Jaeger\Thrift\Log;
 use Jaeger\Thrift\Tag;
-use Jaeger\Span\Context\SpanContext;
 use Jaeger\Tracer\TracerInterface;
 
 class Span extends \Jaeger\Thrift\Span implements SpanInterface
@@ -62,7 +62,7 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         return (bool)($this->flags & 1);
     }
 
-    public function start(int $startTimeUsec) : SpanInterface
+    public function start(int $startTimeUsec): SpanInterface
     {
         $this->startTime = $startTimeUsec;
 
