@@ -8,7 +8,8 @@
   },
   "require": {
     "php": ">=7.1",
-    "apache/thrift": "@stable"
+    "apache/thrift": "@stable",
+    "psr/log": "~1.0.2"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"
