@@ -9,15 +9,17 @@ class ErrorLog extends AbstractLog
      *
      * @param string $message
      * @param string $stack
+     * @param int    $timestamp
      */
-    public function __construct($message, $stack)
+    public function __construct($message, $stack, $timestamp = 0)
     {
         parent::__construct(
             [
                 new EventTag('error'),
                 new MessageTag($message),
                 new StackTag($stack)
-            ]
+            ],
+            $timestamp
         );
     }
 }
