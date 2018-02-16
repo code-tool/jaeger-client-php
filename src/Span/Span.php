@@ -2,6 +2,7 @@
 
 namespace Jaeger\Span;
 
+use Jaeger\Span\Context\SpanContext;
 use Jaeger\Tag\ErrorTag;
 use Jaeger\Tag\OutOfScopeTag;
 use Jaeger\Span\Context\SpanContext;

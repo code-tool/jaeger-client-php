@@ -65,17 +65,14 @@ class TUDPTransport extends TTransport
         $this->buffer .= $buf;
     }
 
-    private function getConnectedSocket()
+    public function flush()
     {
-        if (null === $this->socket) {
-            if (false !== $socket = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
-                @\socket_connect($socket, $this->host, $this->port);
-            }
-
-            $this->socket = $socket;
+        if ('' === $this->buffer) {
+            return;
         }
 
-        return $this->socket;
+        $this->doWrite($this->buffer);
+        $this->buffer = '';
     }
 
     private function doWrite($buf)
@@ -94,13 +91,16 @@ class TUDPTransport extends TTransport
         }
     }
 
-    public function flush()
+    private function getConnectedSocket()
     {
-        if ('' === $this->buffer) {
-            return;
+        if (null === $this->socket) {
+            if (false !== $socket = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+                @\socket_connect($socket, $this->host, $this->port);
+            }
+
+            $this->socket = $socket;
         }
 
-        $this->doWrite($this->buffer);
-        $this->buffer = '';
+        return $this->socket;
     }
 }

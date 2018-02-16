@@ -2,9 +2,9 @@
 
 namespace Jaeger\Span;
 
+use Jaeger\Span\Context\ContextAwareInterface;
 use Jaeger\Thrift\Log;
 use Jaeger\Thrift\Tag;
-use Jaeger\Span\Context\ContextAwareInterface;
 
 interface SpanInterface extends ContextAwareInterface
 {
