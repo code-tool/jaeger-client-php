@@ -5,14 +5,15 @@ namespace Jaeger\Log;
 
 class UserLog extends AbstractLog
 {
-    public function __construct(string $level, string $message)
+    public function __construct(string $level, string $message, int $timestamp = 0)
     {
         parent::__construct(
             [
                 new EventTag('log'),
                 new LevelTag($level),
                 new MessageTag($message),
-            ]
+            ],
+            $timestamp
         );
     }
 }
