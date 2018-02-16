@@ -5,5 +5,5 @@ namespace Jaeger\Id;
 
 interface IdGeneratorInterface
 {
-    public function next() : int;
+    public function next(): int;
 }

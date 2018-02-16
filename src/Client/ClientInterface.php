@@ -7,7 +7,7 @@ use Jaeger\Span\SpanInterface;
 
 interface ClientInterface
 {
-    public function add(SpanInterface $span) : ClientInterface;
+    public function add(SpanInterface $span): ClientInterface;
 
-    public function flush() : ClientInterface;
+    public function flush(): ClientInterface;
 }

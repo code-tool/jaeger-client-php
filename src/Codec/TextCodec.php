@@ -7,13 +7,6 @@ use Jaeger\Span\Context\SpanContext;
 
 class TextCodec implements CodecInterface
 {
-    public function convertInt64(string $hex): int
-    {
-        $hex8byte = str_pad($hex, 16, '0', STR_PAD_LEFT);
-
-        return unpack('Jint64', pack('H*', $hex8byte))['int64'];
-    }
-
     public function decode($data): ?SpanContext
     {
         if (false === is_string($data)) {
@@ -30,6 +23,13 @@ class TextCodec implements CodecInterface
             $this->convertInt64($elements[2]),
             $this->convertInt64($elements[3])
         );
+    }
+
+    public function convertInt64(string $hex): int
+    {
+        $hex8byte = str_pad($hex, 16, '0', STR_PAD_LEFT);
+
+        return unpack('Jint64', pack('H*', $hex8byte))['int64'];
     }
 
     public function encode(SpanContext $context)

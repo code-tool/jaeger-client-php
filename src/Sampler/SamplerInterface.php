@@ -5,5 +5,5 @@ namespace Jaeger\Sampler;
 
 interface SamplerInterface
 {
-    public function decide(int $traceId, string $operationName, string $debugId) : SamplerResult;
+    public function decide(int $traceId, string $operationName, string $debugId): SamplerResult;
 }

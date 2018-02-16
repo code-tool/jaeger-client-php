@@ -7,8 +7,6 @@ use Jaeger\Tag\DebugRequestTag;
 
 abstract class AbstractSampler implements SamplerInterface
 {
-    abstract public function doDecide(int $tracerId, string $operationName): SamplerResult;
-
     public function decide(int $traceId, string $operationName, string $debugId): SamplerResult
     {
         if ('' === $debugId) {
@@ -27,4 +25,6 @@ abstract class AbstractSampler implements SamplerInterface
             ]
         );
     }
+
+    abstract public function doDecide(int $tracerId, string $operationName): SamplerResult;
 }

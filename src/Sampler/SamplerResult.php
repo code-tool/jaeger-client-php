@@ -18,7 +18,7 @@ class SamplerResult
         $this->tags = $tags;
     }
 
-    public function getFlags() : int
+    public function getFlags(): int
     {
         return $this->flags;
     }

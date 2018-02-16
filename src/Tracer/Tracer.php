@@ -58,19 +58,6 @@ class Tracer implements TracerInterface,
         return $this;
     }
 
-    public function getContext(SpanContext $userContext = null): ?SpanContext
-    {
-        if (null !== $userContext) {
-            return $userContext;
-        }
-
-        if (0 !== $this->stack->count()) {
-            return $this->stack->top();
-        }
-
-        return null;
-    }
-
     public function getClient(): ClientInterface
     {
         return $this->client;
@@ -94,6 +81,19 @@ class Tracer implements TracerInterface,
         $this->stack->push($span->getContext());
 
         return $span;
+    }
+
+    public function getContext(SpanContext $userContext = null): ?SpanContext
+    {
+        if (null !== $userContext) {
+            return $userContext;
+        }
+
+        if (0 !== $this->stack->count()) {
+            return $this->stack->top();
+        }
+
+        return null;
     }
 
     public function finish(SpanInterface $span, int $duration = 0): TracerInterface
