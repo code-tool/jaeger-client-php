@@ -8,4 +8,6 @@ use Jaeger\Span\Context\SpanContext;
 interface InjectableInterface
 {
     public function assign(SpanContext $context): InjectableInterface;
+
+    public function remove(SpanContext $context) : InjectableInterface;
 }
