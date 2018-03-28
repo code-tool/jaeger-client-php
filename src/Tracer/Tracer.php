@@ -60,14 +60,14 @@ class Tracer implements TracerInterface,
 
     public function remove(SpanContext $context): InjectableInterface
     {
-        if (0 === $this->stack->count()) {
-            return $this;
-        }
+        while ($this->stack->valid()) {
+            if (spl_object_hash($this->stack->top()) !== spl_object_hash($context)) {
+                $this->stack->pop();
+                continue;
+            }
 
-        if (spl_object_hash($this->stack->top()) !== spl_object_hash($context)) {
-            throw new \LogicException('Current context is different');
+            break;
         }
-        $this->stack->pop();
 
         return $this;
     }
