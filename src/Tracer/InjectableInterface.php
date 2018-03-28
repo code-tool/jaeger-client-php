@@ -12,4 +12,11 @@ interface InjectableInterface
      * @return InjectableInterface
      */
     public function assign(SpanContext $context);
+
+    /**
+     * @param SpanContext $context
+     *
+     * @return InjectableInterface
+     */
+    public function remove(SpanContext $context);
 }
