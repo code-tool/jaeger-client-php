@@ -14,12 +14,6 @@
   "require-dev": {
     "phpunit/phpunit": "@stable"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:apache/thrift.git"
-    }
-  ],
   "minimum-stability": "dev",
   "prefer-stable": true
 }
