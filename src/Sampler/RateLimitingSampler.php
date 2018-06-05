@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Sampler;
 
 class RateLimitingSampler extends AbstractSampler
@@ -9,13 +7,25 @@ class RateLimitingSampler extends AbstractSampler
 
     private $generator;
 
-    public function __construct(float $rate, GeneratorInterface $generator)
+    /**
+     * RateLimitingSampler constructor.
+     *
+     * @param float              $rate
+     * @param GeneratorInterface $generator
+     */
+    public function __construct($rate, GeneratorInterface $generator)
     {
         $this->rate = $rate;
         $this->generator = $generator;
     }
 
-    public function doDecide(int $traceId, string $operationName): SamplerResult
+    /**
+     * @param int    $traceId
+     * @param string $operationName
+     *
+     * @return SamplerResult
+     */
+    public function doDecide($traceId, $operationName)
     {
         $key = $this->generator->generate($traceId, $operationName);
         if (false !== ($current = apcu_add($key, sprintf('%s:%d', time(), 1), 1 / $this->rate))) {

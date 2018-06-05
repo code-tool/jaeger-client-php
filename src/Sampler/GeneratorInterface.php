@@ -1,9 +1,13 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Sampler;
 
 interface GeneratorInterface
 {
-    public function generate(int $traceId, string $operationName) : string;
+    /**
+     * @param int    $traceId
+     * @param string $operationName
+     *
+     * @return string
+     */
+    public function generate($traceId, $operationName);
 }
