@@ -15,9 +15,9 @@ class RateLimitingSampler extends AbstractSampler
         $this->generator = $generator;
     }
 
-    public function doDecide(int $traceId, string $operationName): SamplerResult
+    public function doDecide(int $tracerId, string $operationName): SamplerResult
     {
-        $key = $this->generator->generate($traceId, $operationName);
+        $key = $this->generator->generate($tracerId, $operationName);
         if (false !== ($current = apcu_add($key, sprintf('%s:%d', time(), 1), 1 / $this->rate))) {
             return new SamplerResult(
                 true, 0x01, [
@@ -31,7 +31,7 @@ class RateLimitingSampler extends AbstractSampler
 
         while (true) {
             if (false === ($current = apcu_fetch($key))) {
-                return $this->doDecide($traceId, $operationName);
+                return $this->doDecide($tracerId, $operationName);
             }
             list ($timestamp, $count) = explode(':', $current);
             if ($count / (time() - $timestamp) > $this->rate) {
