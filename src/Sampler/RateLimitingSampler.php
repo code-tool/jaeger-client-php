@@ -28,7 +28,8 @@ class RateLimitingSampler extends AbstractSampler
     public function doDecide($tracerId, $operationName)
     {
         $key = $this->generator->generate($tracerId, $operationName);
-        if (false !== ($current = apcu_add($key, sprintf('%s:%d', time(), 1), 1 / $this->rate))) {
+        $ttl = max((int)(1 / $this->rate + 1), 1);
+        if (false !== ($current = apcu_add($key, sprintf('%s:%d', time(), 1), $ttl))) {
             return new SamplerResult(
                 true, 0x01, [
                         new SamplerTypeTag('ratelimiting'),
