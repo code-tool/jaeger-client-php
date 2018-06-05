@@ -20,6 +20,27 @@ class RateLimitingSampler extends AbstractSampler
     }
 
     /**
+     * @param int $sec
+     * @param int $count
+     *
+     * @return int
+     */
+    public function value($sec, $count)
+    {
+        return (($sec & 0xffffffff) << 16) + ($count & 0xffff);
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return array
+     */
+    public function spec($value)
+    {
+        return [$value >> 16, $value & 0xffff];
+    }
+
+    /**
      * @param int    $tracerId
      * @param string $operationName
      *
@@ -29,7 +50,7 @@ class RateLimitingSampler extends AbstractSampler
     {
         $key = $this->generator->generate($tracerId, $operationName);
         $ttl = max((int)(1 / $this->rate + 1), 1);
-        if (apcu_add($key, sprintf('%s:%d', microtime(true), 1), $ttl)) {
+        if (apcu_add($key, $this->value(time(), 1), $ttl)) {
             return new SamplerResult(
                 true, 0x01, [
                         new SamplerTypeTag('ratelimiting'),
@@ -45,11 +66,13 @@ class RateLimitingSampler extends AbstractSampler
             if (false === ($current = apcu_fetch($key))) {
                 return $this->doDecide($tracerId, $operationName);
             }
-            list ($timestamp, $count) = explode(':', $current);
-            if ($this->rate * (microtime(true) - (float)$timestamp) < (int)$count) {
+            list ($timestamp, $count) = $this->spec((int)$current);
+            $now = time();
+            $diff = ($now === $timestamp) ? 1 : $now - $timestamp;
+            if ($this->rate * $diff <= $count) {
                 return new SamplerResult(false, 0);
             }
-            if (false === apcu_cas($key, $current, sprintf('%s:%d', $timestamp, (int)$count + 1))) {
+            if (false === apcu_cas($key, (int)$current, $this->value($timestamp, $count + 1))) {
                 $retries++;
                 continue;
             }
