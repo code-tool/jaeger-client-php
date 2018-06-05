@@ -1,6 +1,4 @@
 <?php
-declare(strict_types=1);
-
 namespace Jaeger\Sampler;
 
 class AdaptiveSampler implements SamplerInterface
@@ -15,7 +13,14 @@ class AdaptiveSampler implements SamplerInterface
         $this->probabilistic = $probabilistic;
     }
 
-    public function decide(int $tracerId, string $operationName, string $debugId): SamplerResult
+    /**
+     * @param int    $tracerId
+     * @param string $operationName
+     * @param string $debugId
+     *
+     * @return SamplerResult
+     */
+    public function decide($tracerId, $operationName, $debugId)
     {
         $rateLimitResult = $this->rateLimit->decide($tracerId, $operationName, $debugId);
         if ($rateLimitResult->isSampled()) {
