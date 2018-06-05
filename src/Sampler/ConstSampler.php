@@ -6,23 +6,18 @@ class ConstSampler extends AbstractSampler
 {
     private $debugEnabled;
 
-    /**
-     * ConstSampler constructor.
-     *
-     * @param bool $debugEnabled
-     */
     public function __construct($debugEnabled)
     {
-        $this->debugEnabled = $debugEnabled;
+        $this->debugEnabled = (bool)$debugEnabled;
     }
 
     /**
-     * @param int    $traceId
+     * @param int    $tracerId
      * @param string $operationName
      *
      * @return SamplerResult
      */
-    public function doDecide($traceId, $operationName)
+    public function doDecide($tracerId, $operationName)
     {
         if (false === $this->debugEnabled) {
             return new SamplerResult(

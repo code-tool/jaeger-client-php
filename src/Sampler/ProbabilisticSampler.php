@@ -20,14 +20,14 @@ class ProbabilisticSampler extends AbstractSampler
     }
 
     /**
-     * @param int    $traceId
+     * @param int    $tracerId
      * @param string $operationName
      *
      * @return SamplerResult
      */
-    public function doDecide($traceId, $operationName)
+    public function doDecide($tracerId, $operationName)
     {
-        if (abs($traceId) > $this->threshold) {
+        if (abs($tracerId) > $this->threshold) {
             return new SamplerResult(
                 false,
                 0x00,
