@@ -11,7 +11,7 @@ use Jaeger\Thrift\Agent\AgentIf as AgentInterface;
 
 class ThriftClient implements ClientInterface
 {
-    const MAX_BATCH_SIZE = 100;
+    const MAX_BATCH_SIZE = 32;
 
     private $serviceName;
 
