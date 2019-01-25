@@ -13,6 +13,7 @@ class Tracer implements TracerInterface,
                         ContextAwareInterface,
                         InjectableInterface,
                         FlushableInterface,
+                        ResettableInterface,
                         DebuggableInterface
 {
     private $stack;
@@ -58,6 +59,13 @@ class Tracer implements TracerInterface,
         return $this;
     }
 
+    public function reset(): ResettableInterface
+    {
+        $this->stack = new \SplStack();
+
+        return $this;
+    }
+
     public function remove(SpanContext $context): InjectableInterface
     {
         while ($this->stack->valid()) {
@@ -65,13 +73,11 @@ class Tracer implements TracerInterface,
                 $this->stack->pop();
                 continue;
             }
-
             break;
         }
 
         return $this;
     }
-
 
     public function getClient(): ClientInterface
     {
@@ -103,7 +109,6 @@ class Tracer implements TracerInterface,
         if (null !== $userContext) {
             return $userContext;
         }
-
         if (0 !== $this->stack->count()) {
             return $this->stack->top();
         }
