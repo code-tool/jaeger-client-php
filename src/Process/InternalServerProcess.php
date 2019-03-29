@@ -3,6 +3,6 @@ declare(strict_types=1);
 
 namespace Jaeger\Process;
 
-class InternalServerProcess extends AbstractProcess
+class InternalServerProcess extends CliProcess
 {
 }
