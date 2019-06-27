@@ -33,7 +33,6 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         $this->flags = $context->getFlags();
         $this->operationName = $operationName;
         $this->startTime = $startTime;
-
         $this->tags = $tags;
         $this->logs = $logs;
         parent::__construct();
@@ -42,14 +41,11 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
     public function __destruct()
     {
         if (null !== $this->duration) {
-            return $this;
+            return;
         }
         $this->tags[] = new ErrorTag();
         $this->tags[] = new OutOfScopeTag();
-
         $this->tracer->finish($this);
-
-        return $this;
     }
 
     public function getContext(): ?SpanContext
@@ -59,7 +55,7 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
 
     public function isSampled(): bool
     {
-        return (bool)($this->flags & 1);
+        return $this->context->isSampled();
     }
 
     public function start(int $startTimeUsec): SpanInterface
