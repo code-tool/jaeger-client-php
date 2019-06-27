@@ -8,7 +8,7 @@ use Jaeger\Tag\ErrorTag;
 use Jaeger\Tag\OutOfScopeTag;
 use Jaeger\Thrift\Log;
 use Jaeger\Thrift\Tag;
-use Jaeger\Tracer\TracerInterface;
+use Jaeger\Tracer\FinishableInterface;
 
 class Span extends \Jaeger\Thrift\Span implements SpanInterface
 {
@@ -17,7 +17,7 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
     private $context;
 
     public function __construct(
-        TracerInterface $tracer,
+        FinishableInterface $tracer,
         SpanContext $context,
         string $operationName,
         int $startTime,
@@ -67,12 +67,9 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
 
     public function finish(int $durationUsec = 0): SpanInterface
     {
-        if (0 === $durationUsec) {
-            $durationUsec = (int)(microtime(true) * 1000000) - $this->startTime;
-        }
-        $this->duration = $durationUsec;
+        $this->duration = $durationUsec ?: (microtime(true) * 1000000) - $this->startTime;
 
-        return $this;
+        return $this->tracer->finish($this, -1);
     }
 
     public function addTag(Tag $tag): SpanInterface

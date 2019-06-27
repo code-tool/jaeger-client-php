@@ -8,15 +8,17 @@ use Jaeger\Span\Context\ContextAwareInterface;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Factory\SpanFactoryInterface;
 use Jaeger\Span\SpanInterface;
+use Jaeger\Span\SpanManager;
 
-class Tracer implements TracerInterface,
-                        ContextAwareInterface,
-                        InjectableInterface,
-                        FlushableInterface,
-                        ResettableInterface,
-                        DebuggableInterface
+class Tracer implements
+    TracerInterface,
+    ContextAwareInterface,
+    InjectableInterface,
+    FlushableInterface,
+    ResettableInterface,
+    DebuggableInterface
 {
-    private $stack;
+    private $manager;
 
     private $debugId = '';
 
@@ -24,9 +26,9 @@ class Tracer implements TracerInterface,
 
     private $client;
 
-    public function __construct(\SplStack $stack, SpanFactoryInterface $factory, ClientInterface $client)
+    public function __construct(SpanManager $manager, SpanFactoryInterface $factory, ClientInterface $client)
     {
-        $this->stack = $stack;
+        $this->manager = $manager;
         $this->factory = $factory;
         $this->client = $client;
     }
@@ -54,27 +56,21 @@ class Tracer implements TracerInterface,
 
     public function assign(SpanContext $context): InjectableInterface
     {
-        $this->stack->push($context);
+        $this->manager->assign($context);
 
         return $this;
     }
 
     public function reset(): ResettableInterface
     {
-        $this->stack = new \SplStack();
+        $this->manager->reset();
 
         return $this;
     }
 
     public function remove(SpanContext $context): InjectableInterface
     {
-        while ($this->stack->valid()) {
-            if (spl_object_hash($this->stack->top()) !== spl_object_hash($context)) {
-                $this->stack->pop();
-                continue;
-            }
-            break;
-        }
+        $this->manager->remove($context);
 
         return $this;
     }
@@ -87,45 +83,39 @@ class Tracer implements TracerInterface,
     public function debug(string $operationName, array $tags = []): SpanInterface
     {
         $span = $this->factory->parent($this, $operationName, str_shuffle('01234567890abcdef'), $tags);
-        $this->stack->push($span->getContext());
+        $this->manager->push($span);
 
         return $span;
     }
 
     public function start(string $operationName, array $tags = [], SpanContext $userContext = null): SpanInterface
     {
-        if (null === ($context = $this->getContext($userContext))) {
+        if (null === ($context = $userContext ?: $this->manager->getContext())) {
             $span = $this->factory->parent($this, $operationName, $this->debugId, $tags);
         } else {
             $span = $this->factory->child($this, $operationName, $context, $tags);
         }
-        $this->stack->push($span->getContext());
+        $this->manager->push($span);
 
         return $span;
     }
 
     public function getContext(SpanContext $userContext = null): ?SpanContext
     {
-        if (null !== $userContext) {
-            return $userContext;
-        }
-        if (0 !== $this->stack->count()) {
-            return $this->stack->top();
-        }
-
-        return null;
+        return $this->manager->getContext();
     }
 
-    public function finish(SpanInterface $span, int $duration = 0): TracerInterface
+    public function finish(SpanInterface $span, int $duration = 0): void
     {
-        if (0 !== $this->stack->count()) {
-            $this->stack->pop();
+        if (-1 !== $duration) {
+            $span->finish($duration);
+
+            return;
         }
-        if (false === $span->finish($duration)->isSampled()) {
-            return $this;
+        $this->manager->pop();
+        if (false === $span->isSampled()) {
+            return;
         }
         $this->client->add($span);
-
-        return $this;
     }
 }
