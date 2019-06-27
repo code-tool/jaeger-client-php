@@ -8,7 +8,7 @@ use Jaeger\Span\Context\ContextAwareInterface;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Factory\SpanFactoryInterface;
 use Jaeger\Span\SpanInterface;
-use Jaeger\Span\SpanManager;
+use Jaeger\Span\SpanManagerInterface;
 
 class Tracer implements
     TracerInterface,
@@ -26,7 +26,7 @@ class Tracer implements
 
     private $client;
 
-    public function __construct(SpanManager $manager, SpanFactoryInterface $factory, ClientInterface $client)
+    public function __construct(SpanManagerInterface $manager, SpanFactoryInterface $factory, ClientInterface $client)
     {
         $this->manager = $manager;
         $this->factory = $factory;
@@ -83,7 +83,7 @@ class Tracer implements
     public function debug(string $operationName, array $tags = []): SpanInterface
     {
         $span = $this->factory->parent($this, $operationName, str_shuffle('01234567890abcdef'), $tags);
-        $this->manager->push($span);
+        $this->manager->new($span);
 
         return $span;
     }
@@ -95,7 +95,7 @@ class Tracer implements
         } else {
             $span = $this->factory->child($this, $operationName, $context, $tags);
         }
-        $this->manager->push($span);
+        $this->manager->new($span);
 
         return $span;
     }
@@ -112,7 +112,7 @@ class Tracer implements
 
             return;
         }
-        $this->manager->pop();
+        $this->manager->finish($span);
         if (false === $span->isSampled()) {
             return;
         }

@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace Jaeger\Span;
 
-use Jaeger\Span\Context\ContextAwareInterface;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Tracer\InjectableInterface;
 use Jaeger\Tracer\ResettableInterface;
 
-class SpanManager implements InjectableInterface, ContextAwareInterface, ResettableInterface
+class StackSpanManager implements SpanManagerInterface
 {
     private $stack;
 
@@ -64,12 +63,12 @@ class SpanManager implements InjectableInterface, ContextAwareInterface, Resetta
         return $this->stack->count() ? $this->stack->top() : null;
     }
 
-    public function push(SpanInterface $span): void
+    public function new(SpanInterface $span): void
     {
         $this->stack->push($span);
     }
 
-    public function pop(): ?SpanInterface
+    public function finish(SpanInterface $span): ?SpanInterface
     {
         return $this->stack->count() ? $this->stack->pop() : null;
     }
