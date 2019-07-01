@@ -22,11 +22,11 @@ class ThriftClient implements ClientInterface
 
     private $spans = [];
 
-    public function __construct(string $serviceName, AgentInterface $agent, int $batch = self::MAX_BATCH_SIZE)
+    public function __construct(string $serviceName, AgentInterface $agent, $batch = self::MAX_BATCH_SIZE)
     {
         $this->serviceName = $serviceName;
         $this->agent = $agent;
-        $this->batch = $batch;
+        $this->batch = (int)$batch;
     }
 
     public function add(SpanInterface $span): ClientInterface
