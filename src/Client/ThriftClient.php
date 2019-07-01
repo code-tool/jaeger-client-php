@@ -12,18 +12,21 @@ use Jaeger\Thrift\Agent\AgentIf as AgentInterface;
 
 class ThriftClient implements ClientInterface
 {
-    const MAX_BATCH_SIZE = 32;
+    public const MAX_BATCH_SIZE = 32;
 
     private $serviceName;
 
     private $agent;
 
+    private $batch;
+
     private $spans = [];
 
-    public function __construct(string $serviceName, AgentInterface $agent)
+    public function __construct(string $serviceName, AgentInterface $agent, int $batch = self::MAX_BATCH_SIZE)
     {
         $this->serviceName = $serviceName;
         $this->agent = $agent;
+        $this->batch = $batch;
     }
 
     public function add(SpanInterface $span): ClientInterface
@@ -51,7 +54,7 @@ class ThriftClient implements ClientInterface
                 $process = new FpmProcess($this->serviceName);
                 break;
         }
-        foreach (array_chunk($this->spans, self::MAX_BATCH_SIZE) as $batch) {
+        foreach (array_chunk($this->spans, $this->batch) as $batch) {
             $this->agent->emitBatch(new SpanBatch($process, $batch));
         }
         $this->spans = [];
