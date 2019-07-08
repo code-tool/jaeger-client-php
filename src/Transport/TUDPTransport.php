@@ -29,16 +29,15 @@ class TUDPTransport extends TTransport
         return true;
     }
 
-    public function open()
+    public function open(): void
     {
     }
 
-    public function close()
+    public function close(): void
     {
         if (null === $this->socket) {
             return;
         }
-
         \socket_close($this->socket);
         $this->socket = null;
     }
@@ -48,28 +47,29 @@ class TUDPTransport extends TTransport
         return '';
     }
 
-    public function write($buf)
+    public function write($buf): void
     {
         $this->buffer .= $buf;
     }
 
-    public function flush()
+    public function flush(): void
     {
+        parent::flush();
         if ('' === $this->buffer) {
             return;
         }
-
         $this->doWrite($this->buffer);
         $this->buffer = '';
     }
 
-    private function doWrite($buf)
+    private function doWrite($buf): void
     {
-        $socket = $this->getConnectedSocket();
-
+        if (null === ($socket = $this->connect())) {
+            return;
+        }
         $length = \strlen($buf);
         while (true) {
-            if (false === $result = @\socket_write($socket, $buf)) {
+            if (false === ($result = @\socket_write($socket, $buf))) {
                 break;
             }
             if ($result >= $length) {
@@ -80,16 +80,19 @@ class TUDPTransport extends TTransport
         }
     }
 
-    private function getConnectedSocket()
+    private function connect()
     {
-        if (null === $this->socket) {
-            if (false !== $socket = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)) {
+        $count = 0;
+        while (false === \is_resource($this->socket) && $count < 5) {
+            if (false !== ($socket = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))) {
                 @\socket_connect($socket, $this->host, $this->port);
+                $this->socket = $socket;
+                break;
             }
-
-            $this->socket = $socket;
+            $count++;
+            usleep(10);
         }
 
-        return $this->socket;
+        return $this->socket ?: null;
     }
 }
