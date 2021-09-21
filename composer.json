@@ -9,7 +9,7 @@
   "require": {
     "php": ">=7.1",
     "ext-sockets": "*",
-    "apache/thrift": "^0.11",
+    "apache/thrift": "^0.15",
     "psr/log": "^1.0.2"
   },
   "require-dev": {
