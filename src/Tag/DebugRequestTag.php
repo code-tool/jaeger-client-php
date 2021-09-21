@@ -7,6 +7,6 @@ class DebugRequestTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('debug.request', $value);
+        parent::__construct('debug', $value);
     }
 }
