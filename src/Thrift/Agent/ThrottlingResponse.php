@@ -16,40 +16,53 @@ use Thrift\Protocol\TProtocol;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Exception\TApplicationException;
 
-class Dependencies
+class ThrottlingResponse
 {
     static public $isValidate = false;
 
     static public $_TSPEC = array(
         1 => array(
-            'var' => 'links',
+            'var' => 'defaultConfig',
+            'isRequired' => true,
+            'type' => TType::STRUCT,
+            'class' => '\Jaeger\Thrift\Agent\ThrottlingConfig',
+        ),
+        2 => array(
+            'var' => 'serviceConfigs',
             'isRequired' => true,
             'type' => TType::LST,
             'etype' => TType::STRUCT,
             'elem' => array(
                 'type' => TType::STRUCT,
-                'class' => '\Jaeger\Thrift\Agent\DependencyLink',
+                'class' => '\Jaeger\Thrift\Agent\ServiceThrottlingConfig',
                 ),
         ),
     );
 
     /**
-     * @var \Jaeger\Thrift\Agent\DependencyLink[]
+     * @var \Jaeger\Thrift\Agent\ThrottlingConfig
      */
-    public $links = null;
+    public $defaultConfig = null;
+    /**
+     * @var \Jaeger\Thrift\Agent\ServiceThrottlingConfig[]
+     */
+    public $serviceConfigs = null;
 
     public function __construct($vals = null)
     {
         if (is_array($vals)) {
-            if (isset($vals['links'])) {
-                $this->links = $vals['links'];
+            if (isset($vals['defaultConfig'])) {
+                $this->defaultConfig = $vals['defaultConfig'];
+            }
+            if (isset($vals['serviceConfigs'])) {
+                $this->serviceConfigs = $vals['serviceConfigs'];
             }
         }
     }
 
     public function getName()
     {
-        return 'Dependencies';
+        return 'ThrottlingResponse';
     }
 
 
@@ -67,16 +80,24 @@ class Dependencies
             }
             switch ($fid) {
                 case 1:
+                    if ($ftype == TType::STRUCT) {
+                        $this->defaultConfig = new \Jaeger\Thrift\Agent\ThrottlingConfig();
+                        $xfer += $this->defaultConfig->read($input);
+                    } else {
+                        $xfer += $input->skip($ftype);
+                    }
+                    break;
+                case 2:
                     if ($ftype == TType::LST) {
-                        $this->links = array();
+                        $this->serviceConfigs = array();
                         $_size0 = 0;
                         $_etype3 = 0;
                         $xfer += $input->readListBegin($_etype3, $_size0);
                         for ($_i4 = 0; $_i4 < $_size0; ++$_i4) {
                             $elem5 = null;
-                            $elem5 = new \Jaeger\Thrift\Agent\DependencyLink();
+                            $elem5 = new \Jaeger\Thrift\Agent\ServiceThrottlingConfig();
                             $xfer += $elem5->read($input);
-                            $this->links []= $elem5;
+                            $this->serviceConfigs []= $elem5;
                         }
                         $xfer += $input->readListEnd();
                     } else {
@@ -96,14 +117,22 @@ class Dependencies
     public function write($output)
     {
         $xfer = 0;
-        $xfer += $output->writeStructBegin('Dependencies');
-        if ($this->links !== null) {
-            if (!is_array($this->links)) {
+        $xfer += $output->writeStructBegin('ThrottlingResponse');
+        if ($this->defaultConfig !== null) {
+            if (!is_object($this->defaultConfig)) {
                 throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
             }
-            $xfer += $output->writeFieldBegin('links', TType::LST, 1);
-            $output->writeListBegin(TType::STRUCT, count($this->links));
-            foreach ($this->links as $iter6) {
+            $xfer += $output->writeFieldBegin('defaultConfig', TType::STRUCT, 1);
+            $xfer += $this->defaultConfig->write($output);
+            $xfer += $output->writeFieldEnd();
+        }
+        if ($this->serviceConfigs !== null) {
+            if (!is_array($this->serviceConfigs)) {
+                throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
+            }
+            $xfer += $output->writeFieldBegin('serviceConfigs', TType::LST, 2);
+            $output->writeListBegin(TType::STRUCT, count($this->serviceConfigs));
+            foreach ($this->serviceConfigs as $iter6) {
                 $xfer += $iter6->write($output);
             }
             $output->writeListEnd();
