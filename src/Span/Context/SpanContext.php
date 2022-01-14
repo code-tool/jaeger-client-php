@@ -64,6 +64,10 @@ class SpanContext implements \IteratorAggregate
         return $this->baggage;
     }
 
+    /**
+     * @return \Traversable
+     */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->baggage);
