@@ -16,7 +16,7 @@ use Thrift\Protocol\TProtocol;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Exception\TApplicationException;
 
-class DependencyClient implements \Jaeger\Thrift\Agent\DependencyIf
+class ThrottlingServiceClient implements \Jaeger\Thrift\Agent\ThrottlingServiceIf
 {
     protected $input_ = null;
     protected $output_ = null;
@@ -30,41 +30,41 @@ class DependencyClient implements \Jaeger\Thrift\Agent\DependencyIf
     }
 
 
-    public function getDependenciesForTrace($traceId)
+    public function getThrottlingConfigs(array $serviceNames)
     {
-        $this->send_getDependenciesForTrace($traceId);
-        return $this->recv_getDependenciesForTrace();
+        $this->send_getThrottlingConfigs($serviceNames);
+        return $this->recv_getThrottlingConfigs();
     }
 
-    public function send_getDependenciesForTrace($traceId)
+    public function send_getThrottlingConfigs(array $serviceNames)
     {
-        $args = new \Jaeger\Thrift\Agent\Dependency_getDependenciesForTrace_args();
-        $args->traceId = $traceId;
+        $args = new \Jaeger\Thrift\Agent\ThrottlingService_getThrottlingConfigs_args();
+        $args->serviceNames = $serviceNames;
         $bin_accel = ($this->output_ instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
         if ($bin_accel) {
             thrift_protocol_write_binary(
                 $this->output_,
-                'getDependenciesForTrace',
+                'getThrottlingConfigs',
                 TMessageType::CALL,
                 $args,
                 $this->seqid_,
                 $this->output_->isStrictWrite()
             );
         } else {
-            $this->output_->writeMessageBegin('getDependenciesForTrace', TMessageType::CALL, $this->seqid_);
+            $this->output_->writeMessageBegin('getThrottlingConfigs', TMessageType::CALL, $this->seqid_);
             $args->write($this->output_);
             $this->output_->writeMessageEnd();
             $this->output_->getTransport()->flush();
         }
     }
 
-    public function recv_getDependenciesForTrace()
+    public function recv_getThrottlingConfigs()
     {
         $bin_accel = ($this->input_ instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_read_binary');
         if ($bin_accel) {
             $result = thrift_protocol_read_binary(
                 $this->input_,
-                '\Jaeger\Thrift\Agent\Dependency_getDependenciesForTrace_result',
+                '\Jaeger\Thrift\Agent\ThrottlingService_getThrottlingConfigs_result',
                 $this->input_->isStrictRead()
             );
         } else {
@@ -79,40 +79,13 @@ class DependencyClient implements \Jaeger\Thrift\Agent\DependencyIf
                 $this->input_->readMessageEnd();
                 throw $x;
             }
-            $result = new \Jaeger\Thrift\Agent\Dependency_getDependenciesForTrace_result();
+            $result = new \Jaeger\Thrift\Agent\ThrottlingService_getThrottlingConfigs_result();
             $result->read($this->input_);
             $this->input_->readMessageEnd();
         }
         if ($result->success !== null) {
             return $result->success;
         }
-        throw new \Exception("getDependenciesForTrace failed: unknown result");
-    }
-
-    public function saveDependencies(\Jaeger\Thrift\Agent\Dependencies $dependencies)
-    {
-        $this->send_saveDependencies($dependencies);
-    }
-
-    public function send_saveDependencies(\Jaeger\Thrift\Agent\Dependencies $dependencies)
-    {
-        $args = new \Jaeger\Thrift\Agent\Dependency_saveDependencies_args();
-        $args->dependencies = $dependencies;
-        $bin_accel = ($this->output_ instanceof TBinaryProtocolAccelerated) && function_exists('thrift_protocol_write_binary');
-        if ($bin_accel) {
-            thrift_protocol_write_binary(
-                $this->output_,
-                'saveDependencies',
-                TMessageType::ONEWAY,
-                $args,
-                $this->seqid_,
-                $this->output_->isStrictWrite()
-            );
-        } else {
-            $this->output_->writeMessageBegin('saveDependencies', TMessageType::ONEWAY, $this->seqid_);
-            $args->write($this->output_);
-            $this->output_->writeMessageEnd();
-            $this->output_->getTransport()->flush();
-        }
+        throw new \Exception("getThrottlingConfigs failed: unknown result");
     }
 }
