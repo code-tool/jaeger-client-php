@@ -44,6 +44,11 @@ class SpanContext implements \IteratorAggregate
         return $this->parentId;
     }
 
+    public function isSampled(): bool
+    {
+        return (bool)($this->flags & 0x01);
+    }
+
     public function isDebug(): bool
     {
         return (bool)($this->flags & 0x02);
@@ -59,6 +64,10 @@ class SpanContext implements \IteratorAggregate
         return $this->baggage;
     }
 
+    /**
+     * @return \Traversable
+     */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->baggage);

@@ -7,6 +7,6 @@ class OperationGenerator implements GeneratorInterface
 {
     public function generate(int $traceId, string $operationName): string
     {
-        return $operationName;
+        return 'operation:' . $operationName;
     }
 }

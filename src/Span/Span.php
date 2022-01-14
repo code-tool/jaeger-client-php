@@ -8,7 +8,7 @@ use Jaeger\Tag\ErrorTag;
 use Jaeger\Tag\OutOfScopeTag;
 use Jaeger\Thrift\Log;
 use Jaeger\Thrift\Tag;
-use Jaeger\Tracer\TracerInterface;
+use Jaeger\Tracer\FinishableInterface;
 
 class Span extends \Jaeger\Thrift\Span implements SpanInterface
 {
@@ -17,7 +17,7 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
     private $context;
 
     public function __construct(
-        TracerInterface $tracer,
+        FinishableInterface $tracer,
         SpanContext $context,
         string $operationName,
         int $startTime,
@@ -33,7 +33,6 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         $this->flags = $context->getFlags();
         $this->operationName = $operationName;
         $this->startTime = $startTime;
-
         $this->tags = $tags;
         $this->logs = $logs;
         parent::__construct();
@@ -42,14 +41,11 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
     public function __destruct()
     {
         if (null !== $this->duration) {
-            return $this;
+            return;
         }
         $this->tags[] = new ErrorTag();
         $this->tags[] = new OutOfScopeTag();
-
         $this->tracer->finish($this);
-
-        return $this;
     }
 
     public function getContext(): ?SpanContext
@@ -59,7 +55,7 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
 
     public function isSampled(): bool
     {
-        return (bool)($this->flags & 1);
+        return $this->context->isSampled();
     }
 
     public function start(int $startTimeUsec): SpanInterface
@@ -71,10 +67,8 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
 
     public function finish(int $durationUsec = 0): SpanInterface
     {
-        if (0 === $durationUsec) {
-            $durationUsec = (int)(microtime(true) * 1000000) - $this->startTime;
-        }
-        $this->duration = $durationUsec;
+        $this->duration = $durationUsec ?: (microtime(true) * 1000000) - $this->startTime;
+        $this->tracer->finish($this, -1);
 
         return $this;
     }

@@ -16,36 +16,39 @@ use Thrift\Protocol\TProtocol;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Exception\TApplicationException;
 
-class Dependency_saveDependencies_args
+class ThrottlingService_getThrottlingConfigs_args
 {
     static public $isValidate = false;
 
     static public $_TSPEC = array(
         1 => array(
-            'var' => 'dependencies',
+            'var' => 'serviceNames',
             'isRequired' => false,
-            'type' => TType::STRUCT,
-            'class' => '\Jaeger\Thrift\Agent\Dependencies',
+            'type' => TType::LST,
+            'etype' => TType::STRING,
+            'elem' => array(
+                'type' => TType::STRING,
+                ),
         ),
     );
 
     /**
-     * @var \Jaeger\Thrift\Agent\Dependencies
+     * @var string[]
      */
-    public $dependencies = null;
+    public $serviceNames = null;
 
     public function __construct($vals = null)
     {
         if (is_array($vals)) {
-            if (isset($vals['dependencies'])) {
-                $this->dependencies = $vals['dependencies'];
+            if (isset($vals['serviceNames'])) {
+                $this->serviceNames = $vals['serviceNames'];
             }
         }
     }
 
     public function getName()
     {
-        return 'Dependency_saveDependencies_args';
+        return 'ThrottlingService_getThrottlingConfigs_args';
     }
 
 
@@ -63,9 +66,17 @@ class Dependency_saveDependencies_args
             }
             switch ($fid) {
                 case 1:
-                    if ($ftype == TType::STRUCT) {
-                        $this->dependencies = new \Jaeger\Thrift\Agent\Dependencies();
-                        $xfer += $this->dependencies->read($input);
+                    if ($ftype == TType::LST) {
+                        $this->serviceNames = array();
+                        $_size7 = 0;
+                        $_etype10 = 0;
+                        $xfer += $input->readListBegin($_etype10, $_size7);
+                        for ($_i11 = 0; $_i11 < $_size7; ++$_i11) {
+                            $elem12 = null;
+                            $xfer += $input->readString($elem12);
+                            $this->serviceNames []= $elem12;
+                        }
+                        $xfer += $input->readListEnd();
                     } else {
                         $xfer += $input->skip($ftype);
                     }
@@ -83,13 +94,17 @@ class Dependency_saveDependencies_args
     public function write($output)
     {
         $xfer = 0;
-        $xfer += $output->writeStructBegin('Dependency_saveDependencies_args');
-        if ($this->dependencies !== null) {
-            if (!is_object($this->dependencies)) {
+        $xfer += $output->writeStructBegin('ThrottlingService_getThrottlingConfigs_args');
+        if ($this->serviceNames !== null) {
+            if (!is_array($this->serviceNames)) {
                 throw new TProtocolException('Bad type in structure.', TProtocolException::INVALID_DATA);
             }
-            $xfer += $output->writeFieldBegin('dependencies', TType::STRUCT, 1);
-            $xfer += $this->dependencies->write($output);
+            $xfer += $output->writeFieldBegin('serviceNames', TType::LST, 1);
+            $output->writeListBegin(TType::STRING, count($this->serviceNames));
+            foreach ($this->serviceNames as $iter13) {
+                $xfer += $output->writeString($iter13);
+            }
+            $output->writeListEnd();
             $xfer += $output->writeFieldEnd();
         }
         $xfer += $output->writeFieldStop();

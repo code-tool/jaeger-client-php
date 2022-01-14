@@ -16,15 +16,11 @@ use Thrift\Protocol\TProtocol;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Exception\TApplicationException;
 
-final class SamplingStrategyType
+interface ThrottlingServiceIf
 {
-    const PROBABILISTIC = 0;
-
-    const RATE_LIMITING = 1;
-
-    static public $__names = array(
-        0 => 'PROBABILISTIC',
-        1 => 'RATE_LIMITING',
-    );
+    /**
+     * @param string[] $serviceNames
+     * @return \Jaeger\Thrift\Agent\ThrottlingResponse
+     */
+    public function getThrottlingConfigs(array $serviceNames);
 }
-

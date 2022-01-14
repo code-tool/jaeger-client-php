@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 cd "$(dirname "$0")/.."
 
-git clone https://github.com/uber/jaeger-idl
+git clone https://github.com/jaegertracing/jaeger-idl
 pushd jaeger-idl
 
 rm -rf ../src/Thrift

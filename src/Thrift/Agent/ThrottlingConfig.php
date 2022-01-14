@@ -16,59 +16,59 @@ use Thrift\Protocol\TProtocol;
 use Thrift\Protocol\TBinaryProtocolAccelerated;
 use Thrift\Exception\TApplicationException;
 
-class DependencyLink
+class ThrottlingConfig
 {
     static public $isValidate = false;
 
     static public $_TSPEC = array(
         1 => array(
-            'var' => 'parent',
+            'var' => 'maxOperations',
             'isRequired' => true,
-            'type' => TType::STRING,
+            'type' => TType::I32,
         ),
         2 => array(
-            'var' => 'child',
+            'var' => 'creditsPerSecond',
             'isRequired' => true,
-            'type' => TType::STRING,
+            'type' => TType::DOUBLE,
         ),
-        4 => array(
-            'var' => 'callCount',
+        3 => array(
+            'var' => 'maxBalance',
             'isRequired' => true,
-            'type' => TType::I64,
+            'type' => TType::DOUBLE,
         ),
     );
 
     /**
-     * @var string
-     */
-    public $parent = null;
-    /**
-     * @var string
-     */
-    public $child = null;
-    /**
      * @var int
      */
-    public $callCount = null;
+    public $maxOperations = null;
+    /**
+     * @var double
+     */
+    public $creditsPerSecond = null;
+    /**
+     * @var double
+     */
+    public $maxBalance = null;
 
     public function __construct($vals = null)
     {
         if (is_array($vals)) {
-            if (isset($vals['parent'])) {
-                $this->parent = $vals['parent'];
+            if (isset($vals['maxOperations'])) {
+                $this->maxOperations = $vals['maxOperations'];
             }
-            if (isset($vals['child'])) {
-                $this->child = $vals['child'];
+            if (isset($vals['creditsPerSecond'])) {
+                $this->creditsPerSecond = $vals['creditsPerSecond'];
             }
-            if (isset($vals['callCount'])) {
-                $this->callCount = $vals['callCount'];
+            if (isset($vals['maxBalance'])) {
+                $this->maxBalance = $vals['maxBalance'];
             }
         }
     }
 
     public function getName()
     {
-        return 'DependencyLink';
+        return 'ThrottlingConfig';
     }
 
 
@@ -86,22 +86,22 @@ class DependencyLink
             }
             switch ($fid) {
                 case 1:
-                    if ($ftype == TType::STRING) {
-                        $xfer += $input->readString($this->parent);
+                    if ($ftype == TType::I32) {
+                        $xfer += $input->readI32($this->maxOperations);
                     } else {
                         $xfer += $input->skip($ftype);
                     }
                     break;
                 case 2:
-                    if ($ftype == TType::STRING) {
-                        $xfer += $input->readString($this->child);
+                    if ($ftype == TType::DOUBLE) {
+                        $xfer += $input->readDouble($this->creditsPerSecond);
                     } else {
                         $xfer += $input->skip($ftype);
                     }
                     break;
-                case 4:
-                    if ($ftype == TType::I64) {
-                        $xfer += $input->readI64($this->callCount);
+                case 3:
+                    if ($ftype == TType::DOUBLE) {
+                        $xfer += $input->readDouble($this->maxBalance);
                     } else {
                         $xfer += $input->skip($ftype);
                     }
@@ -119,20 +119,20 @@ class DependencyLink
     public function write($output)
     {
         $xfer = 0;
-        $xfer += $output->writeStructBegin('DependencyLink');
-        if ($this->parent !== null) {
-            $xfer += $output->writeFieldBegin('parent', TType::STRING, 1);
-            $xfer += $output->writeString($this->parent);
+        $xfer += $output->writeStructBegin('ThrottlingConfig');
+        if ($this->maxOperations !== null) {
+            $xfer += $output->writeFieldBegin('maxOperations', TType::I32, 1);
+            $xfer += $output->writeI32($this->maxOperations);
             $xfer += $output->writeFieldEnd();
         }
-        if ($this->child !== null) {
-            $xfer += $output->writeFieldBegin('child', TType::STRING, 2);
-            $xfer += $output->writeString($this->child);
+        if ($this->creditsPerSecond !== null) {
+            $xfer += $output->writeFieldBegin('creditsPerSecond', TType::DOUBLE, 2);
+            $xfer += $output->writeDouble($this->creditsPerSecond);
             $xfer += $output->writeFieldEnd();
         }
-        if ($this->callCount !== null) {
-            $xfer += $output->writeFieldBegin('callCount', TType::I64, 4);
-            $xfer += $output->writeI64($this->callCount);
+        if ($this->maxBalance !== null) {
+            $xfer += $output->writeFieldBegin('maxBalance', TType::DOUBLE, 3);
+            $xfer += $output->writeDouble($this->maxBalance);
             $xfer += $output->writeFieldEnd();
         }
         $xfer += $output->writeFieldStop();
