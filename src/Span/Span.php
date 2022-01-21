@@ -26,8 +26,7 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
     ) {
         $this->tracer = $tracer;
         $this->context = $context;
-        $this->traceIdLow = $context->getTraceId();
-        $this->traceIdHigh = 0;
+        $this->setTraceIdFromHexString($context->getTraceId());
         $this->spanId = $context->getSpanId();
         $this->parentSpanId = $context->getParentId();
         $this->flags = $context->getFlags();
@@ -36,6 +35,14 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         $this->tags = $tags;
         $this->logs = $logs;
         parent::__construct();
+    }
+
+    private function setTraceIdFromHexString(string $traceId): void
+    {
+        $traceIdPaddedTo32Chars = str_pad($traceId, 32, '0', STR_PAD_LEFT);
+
+        $this->traceIdHigh = $this->convertInt64(substr($traceIdPaddedTo32Chars, 0, 16));
+        $this->traceIdLow = $this->convertInt64(substr($traceIdPaddedTo32Chars, 16, 16));
     }
 
     public function __destruct()
@@ -104,5 +111,12 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         $this->context = $this->context->withoutItem($key);
 
         return $this;
+    }
+
+    private function convertInt64(string $hex): int
+    {
+        $hex8byte = str_pad($hex, 16, '0', STR_PAD_LEFT);
+
+        return unpack('Jint64', pack('H*', $hex8byte))['int64'];
     }
 }

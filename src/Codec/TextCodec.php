@@ -18,7 +18,7 @@ class TextCodec implements CodecInterface
         }
 
         return new SpanContext(
-            $this->convertInt64($elements[0]),
+            $elements[0],
             $this->convertInt64($elements[1]),
             $this->convertInt64($elements[2]),
             $this->convertInt64($elements[3])
@@ -35,7 +35,7 @@ class TextCodec implements CodecInterface
     public function encode(SpanContext $context)
     {
         return sprintf(
-            '%x:%x:%x:%x',
+            '%s:%x:%x:%x',
             $context->getTraceId(),
             $context->getSpanId(),
             $context->getParentId(),

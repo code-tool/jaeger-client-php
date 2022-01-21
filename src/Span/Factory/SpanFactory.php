@@ -36,7 +36,7 @@ class SpanFactory implements SpanFactoryInterface
         return new Span(
             $tracer,
             new SpanContext(
-                (int)$traceId,
+                sprintf('%x', $traceId),
                 (int)$spanId,
                 0,
                 (int)$samplerResult->getFlags()

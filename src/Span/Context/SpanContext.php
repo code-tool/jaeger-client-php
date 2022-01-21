@@ -16,7 +16,7 @@ class SpanContext implements \IteratorAggregate
     private $baggage;
 
     public function __construct(
-        int $traceId,
+        string $traceId,
         int $spanId,
         int $parentId,
         int $flags = 0,
@@ -29,7 +29,7 @@ class SpanContext implements \IteratorAggregate
         $this->baggage = $baggage;
     }
 
-    public function getTraceId(): int
+    public function getTraceId(): string
     {
         return $this->traceId;
     }
