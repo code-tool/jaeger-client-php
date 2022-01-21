@@ -12,22 +12,25 @@ use Jaeger\Tracer\TracerInterface;
 
 class SpanFactory implements SpanFactoryInterface
 {
-    private $idGenerator;
+    private IdGeneratorInterface $idGenerator;
 
-    private $sampler;
+    private SamplerInterface $sampler;
 
-    public function __construct(IdGeneratorInterface $idGenerator, SamplerInterface $sampler)
+    private bool $trace128;
+
+    public function __construct(IdGeneratorInterface $idGenerator, SamplerInterface $sampler, bool $trace128 = false)
     {
         $this->idGenerator = $idGenerator;
         $this->sampler = $sampler;
+        $this->trace128 = $trace128;
     }
 
     public function parent(
         TracerInterface $tracer,
-        string $operationName,
-        string $debugId,
-        array $tags = [],
-        array $logs = []
+        string          $operationName,
+        string          $debugId,
+        array           $tags = [],
+        array           $logs = []
     ): SpanInterface {
         $spanId = $this->idGenerator->next();
         $traceId = $spanId;
@@ -36,8 +39,9 @@ class SpanFactory implements SpanFactoryInterface
         return new Span(
             $tracer,
             new SpanContext(
-                (int)$traceId,
-                (int)$spanId,
+                $this->trace128 ? $this->idGenerator->next() : 0,
+                $this->idGenerator->next(),
+                $this->idGenerator->next(),
                 0,
                 (int)$samplerResult->getFlags()
             ),
@@ -50,10 +54,10 @@ class SpanFactory implements SpanFactoryInterface
 
     public function child(
         TracerInterface $tracer,
-        string $operationName,
-        SpanContext $parentContext,
-        array $tags = [],
-        array $logs = []
+        string          $operationName,
+        SpanContext     $parentContext,
+        array           $tags = [],
+        array           $logs = []
     ): SpanInterface {
         return new Span(
             $tracer,
