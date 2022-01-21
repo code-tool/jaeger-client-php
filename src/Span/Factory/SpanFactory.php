@@ -58,7 +58,8 @@ class SpanFactory implements SpanFactoryInterface
         return new Span(
             $tracer,
             new SpanContext(
-                $parentContext->getTraceId(),
+                $parentContext->getTraceIdHigh(),
+                $parentContext->getTraceIdLow(),
                 $this->idGenerator->next(),
                 $parentContext->getSpanId(),
                 $parentContext->getFlags(),
