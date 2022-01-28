@@ -5,24 +5,28 @@ namespace Jaeger\Span\Context;
 
 class SpanContext implements \IteratorAggregate
 {
-    private $traceId;
+    private int $traceIdHigh;
 
-    private $spanId;
+    private int $traceIdLow;
 
-    private $parentId;
+    private int $spanId;
 
-    private $flags;
+    private int $parentId;
 
-    private $baggage;
+    private int $flags;
+
+    private array $baggage;
 
     public function __construct(
-        int $traceId,
-        int $spanId,
-        int $parentId,
-        int $flags = 0,
+        int   $traceIdHigh,
+        int   $traceIdLow,
+        int   $spanId,
+        int   $parentId,
+        int   $flags = 0,
         array $baggage = []
     ) {
-        $this->traceId = $traceId;
+        $this->traceIdHigh = $traceIdHigh;
+        $this->traceIdLow = $traceIdLow;
         $this->spanId = $spanId;
         $this->parentId = $parentId;
         $this->flags = $flags;
@@ -31,7 +35,17 @@ class SpanContext implements \IteratorAggregate
 
     public function getTraceId(): int
     {
-        return $this->traceId;
+        return $this->traceIdLow;
+    }
+
+    public function getTraceIdHigh(): int
+    {
+        return $this->traceIdHigh;
+    }
+
+    public function getTraceIdLow(): int
+    {
+        return $this->traceIdLow;
     }
 
     public function getSpanId(): int

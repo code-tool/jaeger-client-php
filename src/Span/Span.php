@@ -12,22 +12,22 @@ use Jaeger\Tracer\FinishableInterface;
 
 class Span extends \Jaeger\Thrift\Span implements SpanInterface
 {
-    private $tracer;
+    private FinishableInterface $tracer;
 
-    private $context;
+    private SpanContext $context;
 
     public function __construct(
         FinishableInterface $tracer,
-        SpanContext $context,
-        string $operationName,
-        int $startTime,
-        array $tags = [],
-        array $logs = []
+        SpanContext         $context,
+        string              $operationName,
+        int                 $startTime,
+        array               $tags = [],
+        array               $logs = []
     ) {
         $this->tracer = $tracer;
         $this->context = $context;
-        $this->traceIdLow = $context->getTraceId();
-        $this->traceIdHigh = 0;
+        $this->traceIdLow = $context->getTraceIdLow();
+        $this->traceIdHigh = $context->getTraceIdHigh();
         $this->spanId = $context->getSpanId();
         $this->parentSpanId = $context->getParentId();
         $this->flags = $context->getFlags();
