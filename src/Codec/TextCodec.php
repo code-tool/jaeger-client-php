@@ -16,12 +16,14 @@ class TextCodec implements CodecInterface
         if (4 !== \count($elements)) {
             return null;
         }
+        [$traceIdHigh, $traceIdLow] = $this->convertInt128($elements[0]);
 
         return new SpanContext(
-            ...$this->convertInt128($elements[0]),
-               $this->convertInt64($elements[1]),
-               $this->convertInt64($elements[2]),
-               $this->convertInt64($elements[3])
+            $traceIdHigh,
+            $traceIdLow,
+            $this->convertInt64($elements[1]),
+            $this->convertInt64($elements[2]),
+            $this->convertInt64($elements[3])
         );
     }
 
