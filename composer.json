@@ -9,7 +9,7 @@
   "require": {
     "php": ">=7.4",
     "ext-sockets": "*",
-    "apache/thrift": ">=0.11, <0.16"
+    "apache/thrift": ">=0.11, <0.17"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"
