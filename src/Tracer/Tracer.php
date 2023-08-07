@@ -64,6 +64,7 @@ class Tracer implements
     public function reset(): ResettableInterface
     {
         $this->manager->reset();
+        $this->debugId = '';
 
         return $this;
     }
