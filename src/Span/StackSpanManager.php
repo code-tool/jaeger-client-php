@@ -11,6 +11,7 @@ class StackSpanManager implements SpanManagerInterface
 {
     private $stack;
 
+    /** @var SpanContext|null */
     private $context;
 
     public function __construct()
@@ -24,6 +25,7 @@ class StackSpanManager implements SpanManagerInterface
     public function reset(): ResettableInterface
     {
         $this->stack = new \SplStack();
+        $this->context = null;
 
         return $this;
     }
@@ -36,8 +38,9 @@ class StackSpanManager implements SpanManagerInterface
     public function assign(SpanContext $context): InjectableInterface
     {
         $this->context = $context;
+        $this->stack = new \SplStack();
 
-        return $this->reset();
+        return $this;
     }
 
     /**
