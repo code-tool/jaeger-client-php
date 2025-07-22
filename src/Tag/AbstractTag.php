@@ -10,11 +10,11 @@ abstract class AbstractTag extends Tag implements TagInterface
     public function __construct(
         string $key,
         int $type,
-        string $vStr = null,
-        float $vDouble = null,
-        bool $vBool = null,
-        int $vLong = null,
-        string $vBinary = null
+        ?string $vStr = null,
+        ?float $vDouble = null,
+        ?bool $vBool = null,
+        ?int $vLong = null,
+        ?string $vBinary = null
     ) {
         $this->key = $key;
         $this->vType = $type;
