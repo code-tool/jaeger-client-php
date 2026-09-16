@@ -3,20 +3,18 @@ declare(strict_types=1);
 
 namespace Jaeger\Transport;
 
+use Thrift\Exception\TTransportException;
 use Thrift\Transport\TTransport;
 
 class TUDPTransport extends TTransport
 {
-    private $host;
+    private string $host;
 
-    private $port;
+    private int $port;
 
-    /**
-     * @var resource
-     */
-    private $socket;
+    private ?\Socket $socket = null;
 
-    private $buffer = '';
+    private string $buffer = '';
 
     public function __construct(string $host, int $port)
     {
@@ -42,12 +40,12 @@ class TUDPTransport extends TTransport
         $this->socket = null;
     }
 
-    public function read($len): string
+    public function read(int $len): string
     {
-        return '';
+        throw new TTransportException('TUDPTransport is write-only', TTransportException::UNKNOWN);
     }
 
-    public function write($buf): void
+    public function write(string $buf): void
     {
         $this->buffer .= $buf;
     }
@@ -62,7 +60,7 @@ class TUDPTransport extends TTransport
         $this->buffer = '';
     }
 
-    private function doWrite($buf): void
+    private function doWrite(string $buf): void
     {
         if (null === ($socket = $this->connect())) {
             return;
@@ -80,10 +78,10 @@ class TUDPTransport extends TTransport
         }
     }
 
-    private function connect()
+    private function connect(): ?\Socket
     {
         $count = 0;
-        while (false === \is_resource($this->socket) && $count < 5) {
+        while (null === $this->socket && $count < 5) {
             if (false !== ($socket = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))) {
                 @\socket_connect($socket, $this->host, $this->port);
                 $this->socket = $socket;
@@ -93,6 +91,6 @@ class TUDPTransport extends TTransport
             usleep(10);
         }
 
-        return $this->socket ?: null;
+        return $this->socket;
     }
 }
