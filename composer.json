@@ -14,7 +14,8 @@
   "require-dev": {
     "phpunit/phpunit": "@stable",
     "friendsofphp/php-cs-fixer": "^3.95",
-    "rector/rector": "^2.6"
+    "rector/rector": "^2.6",
+    "vimeo/psalm": "^6"
   },
   "minimum-stability": "dev",
   "prefer-stable": true
