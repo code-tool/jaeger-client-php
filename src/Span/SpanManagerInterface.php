@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Span;
@@ -8,9 +9,9 @@ use Jaeger\Tracer\InjectableInterface;
 use Jaeger\Tracer\ResettableInterface;
 
 interface SpanManagerInterface extends ContextAwareInterface,
-                                       InjectableInterface,
-                                       ResettableInterface,
-                                       SpanAwareInterface
+    InjectableInterface,
+    ResettableInterface,
+    SpanAwareInterface
 {
     public function new(SpanInterface $span);
 

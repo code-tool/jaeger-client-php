@@ -1,9 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Span\Context;
 
-class SpanContext implements \IteratorAggregate
+use ArrayIterator;
+use IteratorAggregate;
+use ReturnTypeWillChange;
+use Traversable;
+
+class SpanContext implements IteratorAggregate
 {
     private int $traceIdHigh;
 
@@ -18,12 +24,12 @@ class SpanContext implements \IteratorAggregate
     private array $baggage;
 
     public function __construct(
-        int   $traceIdHigh,
-        int   $traceIdLow,
-        int   $spanId,
-        int   $parentId,
-        int   $flags = 0,
-        array $baggage = []
+        int $traceIdHigh,
+        int $traceIdLow,
+        int $spanId,
+        int $parentId,
+        int $flags = 0,
+        array $baggage = [],
     ) {
         $this->traceIdHigh = $traceIdHigh;
         $this->traceIdLow = $traceIdLow;
@@ -60,12 +66,12 @@ class SpanContext implements \IteratorAggregate
 
     public function isSampled(): bool
     {
-        return (bool)($this->flags & 0x01);
+        return (bool) ($this->flags & 0x01);
     }
 
     public function isDebug(): bool
     {
-        return (bool)($this->flags & 0x02);
+        return (bool) ($this->flags & 0x02);
     }
 
     public function getFlags(): int
@@ -79,12 +85,12 @@ class SpanContext implements \IteratorAggregate
     }
 
     /**
-     * @return \Traversable
+     * @return Traversable
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
-        return new \ArrayIterator($this->baggage);
+        return new ArrayIterator($this->baggage);
     }
 
     public function withItem(string $key, $item)
@@ -97,7 +103,7 @@ class SpanContext implements \IteratorAggregate
 
     public function getItem(string $key, $default = null)
     {
-        if (false === array_key_exists($key, $this->baggage)) {
+        if (false === \array_key_exists($key, $this->baggage)) {
             return $default;
         }
 

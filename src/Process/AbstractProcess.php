@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Process;
@@ -24,8 +25,8 @@ abstract class AbstractProcess extends Process
                 new ProcessPidTag(),
                 new ProcessSapiTag(),
                 new ProcessUidTag(),
-                new ProcessGidTag()
-            ]
+                new ProcessGidTag(),
+            ],
         );
         parent::__construct();
     }

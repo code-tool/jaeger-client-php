@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Tracer;
@@ -12,8 +13,6 @@ use Jaeger\Span\SpanInterface;
 interface FinishableInterface
 {
     /**
-     * @param SpanInterface $span
-     * @param int           $duration
      *
      * @return mixed
      */

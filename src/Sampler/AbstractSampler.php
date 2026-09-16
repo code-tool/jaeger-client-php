@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Sampler;
@@ -21,8 +22,8 @@ abstract class AbstractSampler implements SamplerInterface
                 new SamplerTypeTag('debug'),
                 new DebugRequestTag($debugId),
                 new SamplerFlagsTag(0x03),
-                new SamplingPriorityTag(1)
-            ]
+                new SamplingPriorityTag(1),
+            ],
         );
     }
 

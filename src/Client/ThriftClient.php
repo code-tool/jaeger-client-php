@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Client;
@@ -26,7 +27,7 @@ class ThriftClient implements ClientInterface
     {
         $this->serviceName = $serviceName;
         $this->agent = $agent;
-        $this->batch = (int)$batch;
+        $this->batch = (int) $batch;
     }
 
     public function add(SpanInterface $span): ClientInterface

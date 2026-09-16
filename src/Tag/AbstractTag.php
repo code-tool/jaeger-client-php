@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Tag;
@@ -14,7 +15,7 @@ abstract class AbstractTag extends Tag implements TagInterface
         ?float $vDouble = null,
         ?bool $vBool = null,
         ?int $vLong = null,
-        ?string $vBinary = null
+        ?string $vBinary = null,
     ) {
         $this->key = $key;
         $this->vType = $type;

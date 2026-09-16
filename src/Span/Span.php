@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Span;
@@ -18,11 +19,11 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
 
     public function __construct(
         FinishableInterface $tracer,
-        SpanContext         $context,
-        string              $operationName,
-        int                 $startTime,
-        array               $tags = [],
-        array               $logs = []
+        SpanContext $context,
+        string $operationName,
+        int $startTime,
+        array $tags = [],
+        array $logs = [],
     ) {
         $this->tracer = $tracer;
         $this->context = $context;

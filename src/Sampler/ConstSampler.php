@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Sampler;
@@ -9,7 +10,7 @@ class ConstSampler extends AbstractSampler
 
     public function __construct($debugEnabled)
     {
-        $this->debugEnabled = (bool)$debugEnabled;
+        $this->debugEnabled = (bool) $debugEnabled;
     }
 
     public function doDecide(int $tracerId, string $operationName): SamplerResult
@@ -23,7 +24,7 @@ class ConstSampler extends AbstractSampler
                     new SamplerParamTag('False'),
                     new SamplerDecisionTag(false),
                     new SamplerFlagsTag(0x00),
-                ]
+                ],
             );
         }
 
@@ -35,7 +36,7 @@ class ConstSampler extends AbstractSampler
                 new SamplerParamTag('True'),
                 new SamplerDecisionTag(true),
                 new SamplerFlagsTag(0x01),
-            ]
+            ],
         );
     }
 }

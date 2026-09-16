@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Sampler;
@@ -23,10 +24,10 @@ class ProbabilisticSampler extends AbstractSampler
                 0x00,
                 [
                     new SamplerTypeTag('probabilistic'),
-                    new SamplerParamTag((string)$this->rate),
+                    new SamplerParamTag((string) $this->rate),
                     new SamplerDecisionTag(false),
                     new SamplerFlagsTag(0x00),
-                ]
+                ],
             );
         }
 
@@ -37,8 +38,8 @@ class ProbabilisticSampler extends AbstractSampler
                 new SamplerTypeTag('probabilistic'),
                 new SamplerDecisionTag(true),
                 new SamplerFlagsTag(0x01),
-                new SamplerParamTag((string)$this->rate)
-            ]
+                new SamplerParamTag((string) $this->rate),
+            ],
         );
     }
 }

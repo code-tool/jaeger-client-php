@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Log;
@@ -13,7 +14,7 @@ class UserLog extends AbstractLog
                 new LevelTag($level),
                 new MessageTag($message),
             ],
-            $timestamp
+            $timestamp,
         );
     }
 }

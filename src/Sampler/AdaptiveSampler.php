@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Sampler;
@@ -22,7 +23,7 @@ class AdaptiveSampler implements SamplerInterface
             return new SamplerResult(
                 true,
                 $rateLimitResult->getFlags(),
-                array_merge([new SamplerTypeTag('adaptive'),], $rateLimitResult->getTags())
+                array_merge([new SamplerTypeTag('adaptive'),], $rateLimitResult->getTags()),
             );
         }
 
@@ -31,7 +32,7 @@ class AdaptiveSampler implements SamplerInterface
             return new SamplerResult(
                 true,
                 $rateLimitResult->getFlags(),
-                array_merge([new SamplerTypeTag('adaptive'),], $rateLimitResult->getTags())
+                array_merge([new SamplerTypeTag('adaptive'),], $rateLimitResult->getTags()),
             );
         }
 
@@ -42,7 +43,7 @@ class AdaptiveSampler implements SamplerInterface
                 new SamplerTypeTag('adaptive'),
                 new SamplerDecisionTag(false),
                 new SamplerFlagsTag(0x00),
-            ]
+            ],
         );
     }
 }

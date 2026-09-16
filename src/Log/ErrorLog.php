@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Log;
@@ -11,9 +12,9 @@ class ErrorLog extends AbstractLog
             [
                 new EventTag('error'),
                 new MessageTag($message),
-                new StackTag($stack)
+                new StackTag($stack),
             ],
-            $timestamp
+            $timestamp,
         );
     }
 }

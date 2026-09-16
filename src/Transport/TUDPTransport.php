@@ -1,8 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Transport;
 
+use Socket;
 use Thrift\Exception\TTransportException;
 use Thrift\Transport\TTransport;
 
@@ -12,7 +14,7 @@ class TUDPTransport extends TTransport
 
     private int $port;
 
-    private ?\Socket $socket = null;
+    private ?Socket $socket = null;
 
     private string $buffer = '';
 
@@ -27,16 +29,14 @@ class TUDPTransport extends TTransport
         return true;
     }
 
-    public function open(): void
-    {
-    }
+    public function open(): void {}
 
     public function close(): void
     {
         if (null === $this->socket) {
             return;
         }
-        \socket_close($this->socket);
+        socket_close($this->socket);
         $this->socket = null;
     }
 
@@ -67,23 +67,23 @@ class TUDPTransport extends TTransport
         }
         $length = \strlen($buf);
         while (true) {
-            if (false === ($result = @\socket_write($socket, $buf))) {
+            if (false === ($result = @socket_write($socket, $buf))) {
                 break;
             }
             if ($result >= $length) {
                 break;
             }
-            $buf = \substr($buf, $result);
+            $buf = substr($buf, $result);
             $length -= $result;
         }
     }
 
-    private function connect(): ?\Socket
+    private function connect(): ?Socket
     {
         $count = 0;
         while (null === $this->socket && $count < 5) {
-            if (false !== ($socket = \socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))) {
-                @\socket_connect($socket, $this->host, $this->port);
+            if (false !== ($socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP))) {
+                @socket_connect($socket, $this->host, $this->port);
                 $this->socket = $socket;
                 break;
             }
