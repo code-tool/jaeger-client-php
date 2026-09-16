@@ -52,16 +52,27 @@ class StackSpanManager implements SpanManagerInterface
      */
     public function remove(SpanContext $context): InjectableInterface
     {
-        while ($this->stack->valid()) {
-            if (spl_object_hash($this->stack->top()) !== spl_object_hash($context)) {
-                $this->stack->pop();
-                continue;
+        while (!$this->stack->isEmpty()) {
+            $spanContext = $this->stack->top()->getContext();
+            if (null !== $spanContext && $this->isSameContext($spanContext, $context)) {
+                break;
             }
 
-            break;
+            $this->stack->pop();
         }
 
         return $this;
+    }
+
+    /**
+     * A span's context is replaced by a copy whenever baggage changes, so identity is compared
+     * through the trace and span identifiers rather than through the object itself.
+     */
+    private function isSameContext(SpanContext $left, SpanContext $right): bool
+    {
+        return $left->getTraceIdHigh() === $right->getTraceIdHigh()
+            && $left->getTraceIdLow() === $right->getTraceIdLow()
+            && $left->getSpanId() === $right->getSpanId();
     }
 
     public function getSpan(): ?SpanInterface

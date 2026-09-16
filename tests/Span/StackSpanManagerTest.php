@@ -113,20 +113,12 @@ final class StackSpanManagerTest extends TestCase
         self::assertNull($manager->getContext());
     }
 
-    /**
-     * KNOWN DEFECT: remove() never unwinds anything. Two independent bugs cause it:
-     *  1. `while ($this->stack->valid())` — SplStack::valid() is an iterator method and returns
-     *     false until rewind() is called, so the loop body never runs;
-     *  2. even if it ran, it compares spl_object_hash() of a Span against spl_object_hash() of a
-     *     SpanContext, which can never match.
-     * These tests pin the current no-op behaviour so a fix is a deliberate, visible change.
-     */
-    public function testShouldLeaveTheStackUntouchedWhenRemovingAMatchingContext(): void
+    public function testShouldUnwindTheStackDownToTheMatchingContext(): void
     {
         $manager = new StackSpanManager();
-        $bottom = $this->makeSpan();
-        $middle = $this->makeSpan();
-        $top = $this->makeSpan();
+        $bottom = $this->makeSpan(new SpanContext(1, 2, 10, 0, 1));
+        $middle = $this->makeSpan(new SpanContext(1, 2, 20, 10, 1));
+        $top = $this->makeSpan(new SpanContext(1, 2, 30, 20, 1));
         $manager->new($bottom);
         $manager->new($middle);
         $manager->new($top);
@@ -135,10 +127,21 @@ final class StackSpanManagerTest extends TestCase
         self::assertInstanceOf(SpanContext::class, $middleContext);
         self::assertSame($manager, $manager->remove($middleContext));
 
-        self::assertSame($top, $manager->getSpan(), 'remove() is currently a no-op');
+        self::assertSame($middle, $manager->getSpan(), 'spans above the match are discarded');
     }
 
-    public function testShouldLeaveTheStackUntouchedWhenNoSpanMatches(): void
+    public function testShouldEmptyTheStackWhenNoSpanMatches(): void
+    {
+        $manager = new StackSpanManager();
+        $manager->new($this->makeSpan());
+        $manager->new($this->makeSpan());
+
+        $manager->remove(new SpanContext(99, 99, 99, 99));
+
+        self::assertNull($manager->getSpan());
+    }
+
+    public function testShouldLeaveTheStackAloneWhenTheMatchIsAlreadyOnTop(): void
     {
         $manager = new StackSpanManager();
         $manager->new($this->makeSpan());
@@ -146,9 +149,36 @@ final class StackSpanManagerTest extends TestCase
         $top = $this->makeSpan();
         $manager->new($top);
 
-        $manager->remove(new SpanContext(99, 99, 99, 99));
+        $topContext = $top->getContext();
+        self::assertInstanceOf(SpanContext::class, $topContext);
+        $manager->remove($topContext);
 
-        self::assertSame($top, $manager->getSpan(), 'remove() is currently a no-op');
+        self::assertSame($top, $manager->getSpan());
+    }
+
+    /**
+     * Baggage changes swap a span's context for a copy, so matching must compare the trace and
+     * span identifiers rather than object identity.
+     */
+    public function testShouldMatchAnEquivalentContextRatherThanTheSameInstance(): void
+    {
+        $manager = new StackSpanManager();
+        $target = $this->makeSpan(new SpanContext(1, 2, 3, 4, 1));
+        $manager->new($target);
+        $manager->new($this->makeSpan(new SpanContext(1, 2, 5, 3, 1)));
+
+        $manager->remove(new SpanContext(1, 2, 3, 4, 1));
+
+        self::assertSame($target, $manager->getSpan());
+    }
+
+    public function testShouldTolerateRemovingFromAnEmptyStack(): void
+    {
+        $manager = new StackSpanManager();
+
+        self::assertSame($manager, $manager->remove(new SpanContext(1, 2, 3, 4)));
+
+        self::assertNull($manager->getSpan());
     }
 
     private function makeSpan(?SpanContext $context = null): Span
