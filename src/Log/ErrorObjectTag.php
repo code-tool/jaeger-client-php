@@ -13,7 +13,7 @@ class ErrorObjectTag extends StringTag
     {
         parent::__construct(
             'error.object',
-            json_encode($value),
+            false === ($json = json_encode($value)) ? '' : $json,
         );
     }
 }

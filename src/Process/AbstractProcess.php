@@ -9,9 +9,13 @@ use Jaeger\General\JaegerVersionTag;
 use Jaeger\General\PhpBinaryTag;
 use Jaeger\General\PhpVersionTag;
 use Jaeger\Thrift\Process;
+use Jaeger\Thrift\Tag;
 
 abstract class AbstractProcess extends Process
 {
+    /**
+     * @param array<array-key, Tag> $tags
+     */
     public function __construct(
         string $serviceName,
         array $tags = [],

@@ -12,7 +12,7 @@ class JaegerHostnameTag extends StringTag
     {
         parent::__construct(
             'jaeger.hostname',
-            gethostname(),
+            false === ($hostname = gethostname()) ? 'unknown' : $hostname,
         );
     }
 }

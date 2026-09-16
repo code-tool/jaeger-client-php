@@ -9,6 +9,8 @@ use Jaeger\Sampler\SamplerInterface;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Span;
 use Jaeger\Span\SpanInterface;
+use Jaeger\Thrift\Log;
+use Jaeger\Thrift\Tag;
 use Jaeger\Tracer\TracerInterface;
 
 class SpanFactory implements SpanFactoryInterface
@@ -19,6 +21,10 @@ class SpanFactory implements SpanFactoryInterface
         private readonly bool $trace128 = false,
     ) {}
 
+    /**
+     * @param array<array-key, Tag> $tags
+     * @param array<array-key, Log> $logs
+     */
     public function parent(
         TracerInterface $tracer,
         string $operationName,
@@ -40,12 +46,16 @@ class SpanFactory implements SpanFactoryInterface
                 $samplerResult->getFlags(),
             ),
             $operationName,
-            (int) (microtime(true) * 1000000),
+            (int) (microtime(true) * 1000000.0),
             array_merge($tags, $samplerResult->getTags()),
             $logs,
         );
     }
 
+    /**
+     * @param array<array-key, Tag> $tags
+     * @param array<array-key, Log> $logs
+     */
     public function child(
         TracerInterface $tracer,
         string $operationName,
@@ -64,7 +74,7 @@ class SpanFactory implements SpanFactoryInterface
                 $parentContext->getBaggage(),
             ),
             $operationName,
-            (int) (microtime(true) * 1000000),
+            (int) (microtime(true) * 1000000.0),
             $tags,
             $logs,
         );

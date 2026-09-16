@@ -5,56 +5,45 @@ declare(strict_types=1);
 namespace Jaeger\Codec;
 
 use ArrayAccess;
-use ReturnTypeWillChange;
+use InvalidArgumentException;
 
+/**
+ * @implements ArrayAccess<string, CodecInterface>
+ */
 class CodecRegistry implements ArrayAccess
 {
-    private $codecs = [];
-
     /**
-     * @return bool
+     * @var array<string, CodecInterface>
      */
-    #[ReturnTypeWillChange]
-    public function offsetExists($offset)
+    private array $codecs = [];
+
+    public function offsetExists(mixed $offset): bool
     {
         return \array_key_exists($offset, $this->codecs);
     }
 
-    /**
-     */
-    #[ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): ?CodecInterface
     {
-        if (false === \array_key_exists($offset, $this->codecs)) {
-            return null;
-        }
-
-        return $this->codecs[$offset];
+        return $this->codecs[$offset] ?? null;
     }
 
-    /**
-     * @return $this
-     */
-    #[ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
+        if (null === $offset) {
+            throw new InvalidArgumentException('A codec must be registered under a key, appending is not supported');
+        }
+
+        if (!$value instanceof CodecInterface) {
+            throw new InvalidArgumentException(
+                \sprintf('Codec must implement %s, %s given', CodecInterface::class, get_debug_type($value)),
+            );
+        }
+
         $this->codecs[$offset] = $value;
-
-        return $this;
     }
 
-    /**
-     * @return $this
-     */
-    #[ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
-        if (false === \array_key_exists($offset, $this->codecs)) {
-            return $this;
-        }
-
         unset($this->codecs[$offset]);
-
-        return $this;
     }
 }

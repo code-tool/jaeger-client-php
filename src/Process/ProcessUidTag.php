@@ -12,7 +12,7 @@ class ProcessUidTag extends LongTag
     {
         parent::__construct(
             'process.uid',
-            getmyuid(),
+            false === ($id = getmyuid()) ? 0 : $id,
         );
     }
 }

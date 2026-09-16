@@ -13,6 +13,10 @@ use Jaeger\Tracer\FinishableInterface;
 
 class Span extends \Jaeger\Thrift\Span implements SpanInterface
 {
+    /**
+     * @param array<array-key, Tag> $tags
+     * @param array<array-key, Log> $logs
+     */
     public function __construct(
         private readonly FinishableInterface $tracer,
         private SpanContext $context,
@@ -63,7 +67,9 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
 
     public function finish(int $durationUsec = 0): SpanInterface
     {
-        $this->duration = $durationUsec ?: (microtime(true) * 1000000) - $this->startTime;
+        $this->duration = 0 !== $durationUsec
+            ? $durationUsec
+            : (int) (microtime(true) * 1000000.0) - (int) $this->startTime;
         $this->tracer->finish($this, -1);
 
         return $this;
@@ -83,14 +89,14 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         return $this;
     }
 
-    public function withItem(string $key, $item): SpanInterface
+    public function withItem(string $key, mixed $item): SpanInterface
     {
         $this->context = $this->context->withItem($key, $item);
 
         return $this;
     }
 
-    public function getItem(string $key, $default = null)
+    public function getItem(string $key, mixed $default = null): mixed
     {
         return $this->context->getItem($key, $default);
     }

@@ -8,7 +8,7 @@ use Jaeger\Span\Context\SpanContext;
 
 interface CodecInterface
 {
-    public function decode($data): ?SpanContext;
+    public function decode(mixed $data): ?SpanContext;
 
-    public function encode(SpanContext $context);
+    public function encode(SpanContext $context): string;
 }
