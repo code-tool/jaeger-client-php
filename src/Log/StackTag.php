@@ -10,6 +10,9 @@ class StackTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('stack', $value);
+        parent::__construct(
+            'stack',
+            $value,
+        );
     }
 }

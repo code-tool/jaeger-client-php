@@ -11,7 +11,14 @@ use Traversable;
 
 class SpanContext implements IteratorAggregate
 {
-    public function __construct(private int $traceIdHigh, private int $traceIdLow, private int $spanId, private int $parentId, private int $flags = 0, private array $baggage = []) {}
+    public function __construct(
+        private int $traceIdHigh,
+        private int $traceIdLow,
+        private int $spanId,
+        private int $parentId,
+        private int $flags = 0,
+        private array $baggage = [],
+    ) {}
 
     public function getTraceId(): int
     {

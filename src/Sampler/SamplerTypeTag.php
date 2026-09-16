@@ -10,6 +10,9 @@ class SamplerTypeTag extends StringTag
 {
     public function __construct(string $type)
     {
-        parent::__construct('sampler.type', $type);
+        parent::__construct(
+            'sampler.type',
+            $type,
+        );
     }
 }

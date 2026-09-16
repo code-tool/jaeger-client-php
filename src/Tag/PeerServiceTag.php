@@ -8,6 +8,9 @@ class PeerServiceTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('peer.service', $value);
+        parent::__construct(
+            'peer.service',
+            $value,
+        );
     }
 }

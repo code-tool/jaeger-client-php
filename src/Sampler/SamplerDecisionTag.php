@@ -10,6 +10,9 @@ class SamplerDecisionTag extends BoolTag
 {
     public function __construct(bool $decision)
     {
-        parent::__construct('sampler.decision', $decision);
+        parent::__construct(
+            'sampler.decision',
+            $decision,
+        );
     }
 }

@@ -11,6 +11,9 @@ class ErrorObjectTag extends StringTag
 {
     public function __construct(JsonSerializable $value)
     {
-        parent::__construct('error.object', json_encode($value));
+        parent::__construct(
+            'error.object',
+            json_encode($value),
+        );
     }
 }

@@ -19,8 +19,11 @@ class ThriftClient implements ClientInterface
 
     private array $spans = [];
 
-    public function __construct(private readonly string $serviceName, private readonly AgentInterface $agent, $batch = self::MAX_BATCH_SIZE)
-    {
+    public function __construct(
+        private readonly string $serviceName,
+        private readonly AgentInterface $agent,
+        $batch = self::MAX_BATCH_SIZE,
+    ) {
         $this->batch = (int) $batch;
     }
 

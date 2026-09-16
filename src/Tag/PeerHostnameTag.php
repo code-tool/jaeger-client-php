@@ -8,6 +8,9 @@ class PeerHostnameTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('peer.hostname', $value);
+        parent::__construct(
+            'peer.hostname',
+            $value,
+        );
     }
 }

@@ -10,6 +10,9 @@ class HttpMethodTag extends StringTag
 {
     public function __construct(string $method)
     {
-        parent::__construct('http.method', $method);
+        parent::__construct(
+            'http.method',
+            $method,
+        );
     }
 }

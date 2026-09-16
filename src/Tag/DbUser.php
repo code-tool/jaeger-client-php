@@ -8,6 +8,9 @@ class DbUser extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('db.user', $value);
+        parent::__construct(
+            'db.user',
+            $value,
+        );
     }
 }

@@ -23,6 +23,9 @@ class ProcessIpTag extends StringTag
 
     public function __construct()
     {
-        parent::__construct('ip', $this->getIp());
+        parent::__construct(
+            'ip',
+            $this->getIp(),
+        );
     }
 }

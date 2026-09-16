@@ -10,6 +10,9 @@ class PhpBinaryTag extends StringTag
 {
     public function __construct()
     {
-        parent::__construct('php.bin', PHP_BINARY);
+        parent::__construct(
+            'php.bin',
+            PHP_BINARY,
+        );
     }
 }

@@ -10,6 +10,9 @@ class ProcessGidTag extends LongTag
 {
     public function __construct()
     {
-        parent::__construct('process.gid', getmygid());
+        parent::__construct(
+            'process.gid',
+            getmygid(),
+        );
     }
 }

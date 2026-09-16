@@ -8,6 +8,9 @@ class MessageBusDestinationTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('message_bus.destination', $value);
+        parent::__construct(
+            'message_bus.destination',
+            $value,
+        );
     }
 }

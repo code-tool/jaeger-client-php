@@ -10,6 +10,9 @@ class HttpUriTag extends StringTag
 {
     public function __construct(string $uri)
     {
-        parent::__construct('http.url', $uri);
+        parent::__construct(
+            'http.url',
+            $uri,
+        );
     }
 }

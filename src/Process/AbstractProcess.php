@@ -12,8 +12,10 @@ use Jaeger\Thrift\Process;
 
 abstract class AbstractProcess extends Process
 {
-    public function __construct(string $serviceName, array $tags = [])
-    {
+    public function __construct(
+        string $serviceName,
+        array $tags = [],
+    ) {
         $this->serviceName = $serviceName;
         $this->tags = array_merge(
             $tags,

@@ -8,6 +8,9 @@ class DbType extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('db.type', $value);
+        parent::__construct(
+            'db.type',
+            $value,
+        );
     }
 }

@@ -8,8 +8,14 @@ use Jaeger\Thrift\TagType;
 
 class StringTag extends AbstractTag
 {
-    public function __construct(string $key, string $value)
-    {
-        parent::__construct($key, TagType::STRING, $value);
+    public function __construct(
+        string $key,
+        string $value,
+    ) {
+        parent::__construct(
+            $key,
+            TagType::STRING,
+            $value,
+        );
     }
 }

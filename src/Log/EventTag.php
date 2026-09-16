@@ -10,6 +10,9 @@ class EventTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('event', $value);
+        parent::__construct(
+            'event',
+            $value,
+        );
     }
 }

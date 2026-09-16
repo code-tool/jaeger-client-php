@@ -10,6 +10,9 @@ class LevelTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('level', $value);
+        parent::__construct(
+            'level',
+            $value,
+        );
     }
 }

@@ -21,7 +21,11 @@ class Tracer implements
 {
     private string $debugId = '';
 
-    public function __construct(private readonly SpanManagerInterface $manager, private readonly SpanFactoryInterface $factory, private readonly ClientInterface $client) {}
+    public function __construct(
+        private readonly SpanManagerInterface $manager,
+        private readonly SpanFactoryInterface $factory,
+        private readonly ClientInterface $client,
+    ) {}
 
     public function enable(string $debugId): DebuggableInterface
     {

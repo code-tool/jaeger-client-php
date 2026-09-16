@@ -8,8 +8,15 @@ use Jaeger\Thrift\TagType;
 
 class DoubleTag extends AbstractTag
 {
-    public function __construct(string $key, float $value)
-    {
-        parent::__construct($key, TagType::DOUBLE, null, $value);
+    public function __construct(
+        string $key,
+        float $value,
+    ) {
+        parent::__construct(
+            $key,
+            TagType::DOUBLE,
+            null,
+            $value,
+        );
     }
 }

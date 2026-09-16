@@ -6,8 +6,11 @@ namespace Jaeger\Log;
 
 class ErrorLog extends AbstractLog
 {
-    public function __construct(string $message, string $stack, int $timestamp = 0)
-    {
+    public function __construct(
+        string $message,
+        string $stack,
+        int $timestamp = 0,
+    ) {
         parent::__construct(
             [
                 new EventTag('error'),

@@ -10,6 +10,9 @@ class ErrorKindTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('error.kind', $value);
+        parent::__construct(
+            'error.kind',
+            $value,
+        );
     }
 }

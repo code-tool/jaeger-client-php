@@ -6,7 +6,10 @@ namespace Jaeger\Sampler;
 
 class RateLimitingSampler extends AbstractSampler
 {
-    public function __construct(private readonly float $rate, private readonly GeneratorInterface $generator) {}
+    public function __construct(
+        private readonly float $rate,
+        private readonly GeneratorInterface $generator,
+    ) {}
 
     public function value(int $sec, int $count): int
     {

@@ -8,6 +8,9 @@ class CliProcess extends AbstractProcess
 {
     public function __construct(string $serviceName)
     {
-        parent::__construct($serviceName, [new ProcessIpTag()]);
+        parent::__construct(
+            $serviceName,
+            [new ProcessIpTag()],
+        );
     }
 }

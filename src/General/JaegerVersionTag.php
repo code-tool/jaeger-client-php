@@ -10,6 +10,9 @@ class JaegerVersionTag extends StringTag
 {
     public function __construct()
     {
-        parent::__construct('jaeger.version', 'PHP');
+        parent::__construct(
+            'jaeger.version',
+            'PHP',
+        );
     }
 }

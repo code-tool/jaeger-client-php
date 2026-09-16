@@ -14,7 +14,10 @@ class TUDPTransport extends TTransport
 
     private string $buffer = '';
 
-    public function __construct(private readonly string $host, private readonly int $port) {}
+    public function __construct(
+        private readonly string $host,
+        private readonly int $port,
+    ) {}
 
     public function isOpen(): bool
     {

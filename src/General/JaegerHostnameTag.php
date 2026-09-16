@@ -10,6 +10,9 @@ class JaegerHostnameTag extends StringTag
 {
     public function __construct()
     {
-        parent::__construct('jaeger.hostname', gethostname());
+        parent::__construct(
+            'jaeger.hostname',
+            gethostname(),
+        );
     }
 }

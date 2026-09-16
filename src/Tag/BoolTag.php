@@ -8,8 +8,16 @@ use Jaeger\Thrift\TagType;
 
 class BoolTag extends AbstractTag
 {
-    public function __construct(string $key, bool $value)
-    {
-        parent::__construct($key, TagType::BOOL, null, null, $value);
+    public function __construct(
+        string $key,
+        bool $value,
+    ) {
+        parent::__construct(
+            $key,
+            TagType::BOOL,
+            null,
+            null,
+            $value,
+        );
     }
 }

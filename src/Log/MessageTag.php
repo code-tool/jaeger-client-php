@@ -10,6 +10,9 @@ class MessageTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('message', $value);
+        parent::__construct(
+            'message',
+            $value,
+        );
     }
 }

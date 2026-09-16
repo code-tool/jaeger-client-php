@@ -6,7 +6,10 @@ namespace Jaeger\Sampler;
 
 class AdaptiveSampler implements SamplerInterface
 {
-    public function __construct(private readonly SamplerInterface $rateLimit, private readonly SamplerInterface $probabilistic) {}
+    public function __construct(
+        private readonly SamplerInterface $rateLimit,
+        private readonly SamplerInterface $probabilistic,
+    ) {}
 
     public function decide(int $tracerId, string $operationName, string $debugId): SamplerResult
     {

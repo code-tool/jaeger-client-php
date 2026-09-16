@@ -6,7 +6,11 @@ namespace Jaeger\Sampler;
 
 class SamplerResult
 {
-    public function __construct(private readonly bool $sampled, private readonly int $flags, private readonly array $tags = []) {}
+    public function __construct(
+        private readonly bool $sampled,
+        private readonly int $flags,
+        private readonly array $tags = [],
+    ) {}
 
     public function getFlags(): int
     {

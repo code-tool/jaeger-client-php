@@ -8,8 +8,17 @@ use Jaeger\Thrift\TagType;
 
 class LongTag extends AbstractTag
 {
-    public function __construct(string $key, int $value)
-    {
-        parent::__construct($key, TagType::LONG, null, null, null, $value);
+    public function __construct(
+        string $key,
+        int $value,
+    ) {
+        parent::__construct(
+            $key,
+            TagType::LONG,
+            null,
+            null,
+            null,
+            $value,
+        );
     }
 }
