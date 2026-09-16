@@ -60,12 +60,24 @@ class TextCodec implements CodecInterface
     public function encode(SpanContext $context): string
     {
         return \sprintf(
-            '%x%x:%x:%x:%x',
-            $context->getTraceIdHigh(),
-            $context->getTraceIdLow(),
+            '%s:%x:%x:%x',
+            $this->encodeTraceId($context->getTraceIdHigh(), $context->getTraceIdLow()),
             $context->getSpanId(),
             $context->getParentId(),
             $context->getFlags(),
         );
+    }
+
+    /**
+     * A 128-bit trace id pads its low half to a full 16 hex digits, otherwise decode() cannot tell
+     * where the high half ends. A 64-bit trace id is written as-is, with no leading zero.
+     */
+    private function encodeTraceId(int $traceIdHigh, int $traceIdLow): string
+    {
+        if (0 === $traceIdHigh) {
+            return \sprintf('%x', $traceIdLow);
+        }
+
+        return \sprintf('%x%016x', $traceIdHigh, $traceIdLow);
     }
 }

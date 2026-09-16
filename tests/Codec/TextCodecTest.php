@@ -37,10 +37,15 @@ final class TextCodecTest extends TestCase
      */
     public static function encodingCases(): iterable
     {
-        yield '📭 all zeroes' => [new SpanContext(0, 0, 0, 0, 0), '00:0:0:0'];
-        yield '✅ sampled context' => [new SpanContext(0, 0x1a, 0x2b, 0x3c, 1), '01a:2b:3c:1'];
-        // traceIdLow must occupy a full 16 hex digits for the high/low boundary to survive a round trip.
+        yield '📭 all zeroes' => [new SpanContext(0, 0, 0, 0, 0), '0:0:0:0'];
+        yield '✅ 64-bit trace id' => [new SpanContext(0, 0x1a, 0x2b, 0x3c, 1), '1a:2b:3c:1'];
+        yield '✅ 64-bit trace id, negative' => [new SpanContext(0, -1, 0x2b, 0x3c, 1), 'ffffffffffffffff:2b:3c:1'];
+        // A 128-bit trace id pads the low half to a full 16 hex digits so decode() can split it back out.
         yield '✅ 128-bit trace id' => [
+            new SpanContext(0xaa, 0xbb, 0xcc, 0xdd, 3),
+            'aa00000000000000bb:cc:dd:3',
+        ];
+        yield '✅ 128-bit trace id, full low half' => [
             new SpanContext(0xaa, 0x7abcdef012345678, 0xcc, 0xdd, 3),
             'aa7abcdef012345678:cc:dd:3',
         ];
@@ -77,11 +82,7 @@ final class TextCodecTest extends TestCase
         self::assertSame($original->getTraceIdLow(), $decoded->getTraceIdLow());
     }
 
-    /**
-     * encode() writes the trace id as '%x%x' with no padding, so a traceIdLow shorter than
-     * 16 hex digits makes the high/low boundary unrecoverable. This pins that known asymmetry.
-     */
-    public function testShouldLoseTheHighLowBoundaryWhenTraceIdLowIsNotPadded(): void
+    public function testShouldRoundTripAShortHighAndLowHalf(): void
     {
         $codec = new TextCodec();
         $original = new SpanContext(0xaa, 0xbb, 0xcc, 0xdd, 3);
@@ -89,8 +90,13 @@ final class TextCodecTest extends TestCase
         $decoded = $codec->decode($codec->encode($original));
 
         self::assertInstanceOf(SpanContext::class, $decoded);
-        self::assertSame(0, $decoded->getTraceIdHigh());
-        self::assertSame(0xaabb, $decoded->getTraceIdLow());
+        self::assertSame(0xaa, $decoded->getTraceIdHigh());
+        self::assertSame(0xbb, $decoded->getTraceIdLow());
+    }
+
+    public function testShouldNotPadA64BitTraceId(): void
+    {
+        self::assertSame('1a:0:0:0', new TextCodec()->encode(new SpanContext(0, 0x1a, 0, 0, 0)));
     }
 
     public function testShouldConvertHexToSignedInt64(): void
