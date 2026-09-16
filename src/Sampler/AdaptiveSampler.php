@@ -26,8 +26,8 @@ class AdaptiveSampler implements SamplerInterface
         if ($probabilisticResult->isSampled()) {
             return new SamplerResult(
                 true,
-                $rateLimitResult->getFlags(),
-                array_merge([new SamplerTypeTag('adaptive'),], $rateLimitResult->getTags()),
+                $probabilisticResult->getFlags(),
+                array_merge([new SamplerTypeTag('adaptive'),], $probabilisticResult->getTags()),
             );
         }
 

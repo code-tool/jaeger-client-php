@@ -39,21 +39,24 @@ final class AdaptiveSamplerTest extends TestCase
         self::assertTrue($sampler->decide(1, 'an-operation', '')->isSampled());
     }
 
-    /**
-     * KNOWN DEFECT: when the probabilistic sampler is the one that decides to sample,
-     * AdaptiveSampler still copies flags and tags from the rate limiter that just rejected
-     * the trace. The span is marked sampled but carries flags 0 and the rejecting sampler's
-     * tags. Pinned here so the behaviour cannot change silently.
-     */
-    public function testShouldCopyTheRateLimiterFlagsEvenWhenTheProbabilisticSamplerDecides(): void
+    public function testShouldTakeTheFlagsFromWhicheverSamplerAccepted(): void
     {
         $sampler = new AdaptiveSampler(new ConstSampler(false), new ConstSampler(true));
 
         $result = $sampler->decide(1, 'an-operation', '');
 
         self::assertTrue($result->isSampled());
-        self::assertSame(0, $result->getFlags(), 'flags come from the rejecting rate limiter');
-        self::assertSame([false], $this->tagValues($result, 'sampler.decision'));
+        self::assertSame(0x01, $result->getFlags());
+    }
+
+    public function testShouldTakeTheTagsFromWhicheverSamplerAccepted(): void
+    {
+        $sampler = new AdaptiveSampler(new ConstSampler(false), new ConstSampler(true));
+
+        $result = $sampler->decide(1, 'an-operation', '');
+
+        self::assertSame([true], $this->tagValues($result, 'sampler.decision'));
+        self::assertSame(['adaptive', 'const'], $this->tagValues($result, 'sampler.type'));
     }
 
     public function testShouldRejectWhenNeitherSamplerSamples(): void
