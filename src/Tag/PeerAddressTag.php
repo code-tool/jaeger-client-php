@@ -9,7 +9,7 @@ class PeerAddressTag extends StringTag
     public function __construct(string $value)
     {
         parent::__construct(
-            'peer.adress',
+            'peer.address',
             $value,
         );
     }

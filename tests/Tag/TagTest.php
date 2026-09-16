@@ -170,11 +170,9 @@ final class TagTest extends TestCase
         yield '✅ ErrorTag' => [ErrorTag::class, [], 'error', TagType::BOOL, 'vBool', true];
         yield '✅ MessageBusDestinationTag' => [MessageBusDestinationTag::class, ['queue'], 'message_bus.destination', TagType::STRING, 'vStr', 'queue'];
         yield '✅ OutOfScopeTag' => [OutOfScopeTag::class, [], 'scope.missing', TagType::BOOL, 'vBool', true];
-        // NOTE: 'peer.adress' is a typo in the library and 'peer.ip' deviates from the OpenTracing
-        // convention ('peer.ipv4'). Both are pinned here so the current wire format is not changed by accident.
-        yield '✅ PeerAddressTag' => [PeerAddressTag::class, ['1.2.3.4:80'], 'peer.adress', TagType::STRING, 'vStr', '1.2.3.4:80'];
+        yield '✅ PeerAddressTag' => [PeerAddressTag::class, ['1.2.3.4:80'], 'peer.address', TagType::STRING, 'vStr', '1.2.3.4:80'];
         yield '✅ PeerHostnameTag' => [PeerHostnameTag::class, ['example.test'], 'peer.hostname', TagType::STRING, 'vStr', 'example.test'];
-        yield '✅ PeerIpv4Tag' => [PeerIpv4Tag::class, ['1.2.3.4'], 'peer.ip', TagType::STRING, 'vStr', '1.2.3.4'];
+        yield '✅ PeerIpv4Tag' => [PeerIpv4Tag::class, ['1.2.3.4'], 'peer.ipv4', TagType::STRING, 'vStr', '1.2.3.4'];
         yield '✅ PeerPortTag' => [PeerPortTag::class, [8080], 'peer.port', TagType::LONG, 'vLong', 8080];
         yield '✅ PeerServiceTag' => [PeerServiceTag::class, ['svc'], 'peer.service', TagType::STRING, 'vStr', 'svc'];
 
