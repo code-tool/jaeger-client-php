@@ -3,3 +3,5 @@
 composer.lock
 composer.phar
 .php-cs-fixer.cache
+/.phpunit.cache
+/phpunit.xml
