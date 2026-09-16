@@ -13,18 +13,7 @@ use Jaeger\Tracer\TracerInterface;
 
 class SpanFactory implements SpanFactoryInterface
 {
-    private IdGeneratorInterface $idGenerator;
-
-    private SamplerInterface $sampler;
-
-    private bool $trace128;
-
-    public function __construct(IdGeneratorInterface $idGenerator, SamplerInterface $sampler, bool $trace128 = false)
-    {
-        $this->idGenerator = $idGenerator;
-        $this->sampler = $sampler;
-        $this->trace128 = $trace128;
-    }
+    public function __construct(private readonly IdGeneratorInterface $idGenerator, private readonly SamplerInterface $sampler, private readonly bool $trace128 = false) {}
 
     public function parent(
         TracerInterface $tracer,
@@ -44,7 +33,7 @@ class SpanFactory implements SpanFactoryInterface
                 $this->idGenerator->next(),
                 $this->idGenerator->next(),
                 0,
-                (int) $samplerResult->getFlags(),
+                $samplerResult->getFlags(),
             ),
             $operationName,
             (int) (microtime(true) * 1000000),

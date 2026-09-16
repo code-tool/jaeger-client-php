@@ -52,6 +52,7 @@ class CodecRegistry implements ArrayAccess
         if (false === \array_key_exists($offset, $this->codecs)) {
             return $this;
         }
+
         unset($this->codecs[$offset]);
 
         return $this;

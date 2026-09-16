@@ -11,10 +11,9 @@ use SplStack;
 
 class StackSpanManager implements SpanManagerInterface
 {
-    private $stack;
+    private SplStack $stack;
 
-    /** @var SpanContext|null */
-    private $context;
+    private ?SpanContext $context = null;
 
     public function __construct()
     {
@@ -55,6 +54,7 @@ class StackSpanManager implements SpanManagerInterface
                 $this->stack->pop();
                 continue;
             }
+
             break;
         }
 
@@ -78,6 +78,6 @@ class StackSpanManager implements SpanManagerInterface
 
     public function getContext(): ?SpanContext
     {
-        return ($span = $this->getSpan()) ? $span->getContext() : $this->context;
+        return (($span = $this->getSpan()) instanceof SpanInterface) ? $span->getContext() : $this->context;
     }
 }

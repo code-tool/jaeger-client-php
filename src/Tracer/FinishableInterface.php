@@ -12,9 +12,5 @@ use Jaeger\Span\SpanInterface;
  */
 interface FinishableInterface
 {
-    /**
-     *
-     * @return mixed
-     */
     public function finish(SpanInterface $span, int $duration = 0): void;
 }

@@ -6,14 +6,11 @@ namespace Jaeger\Sampler;
 
 class ProbabilisticSampler extends AbstractSampler
 {
-    private $rate;
+    private readonly float $threshold;
 
-    private $threshold;
-
-    public function __construct(float $rate)
+    public function __construct(private readonly float $rate)
     {
-        $this->rate = $rate;
-        $this->threshold = 0.5 * $rate * PHP_INT_MAX;
+        $this->threshold = 0.5 * $this->rate * PHP_INT_MAX;
     }
 
     public function doDecide(int $tracerId, string $operationName): SamplerResult

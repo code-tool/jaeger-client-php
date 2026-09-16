@@ -13,10 +13,12 @@ class TextCodec implements CodecInterface
         if (false === \is_string($data)) {
             return null;
         }
+
         $elements = explode(':', $data);
         if (4 !== \count($elements)) {
             return null;
         }
+
         [$traceIdHigh, $traceIdLow] = $this->convertInt128($elements[0]);
 
         return new SpanContext(

@@ -10,6 +10,6 @@ class StringTag extends AbstractTag
 {
     public function __construct(string $key, string $value)
     {
-        parent::__construct($key, TagType::STRING, $value, null, null, null, null);
+        parent::__construct($key, TagType::STRING, $value);
     }
 }

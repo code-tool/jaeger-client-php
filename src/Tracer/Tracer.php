@@ -19,20 +19,9 @@ class Tracer implements
     ResettableInterface,
     DebuggableInterface
 {
-    private $manager;
+    private string $debugId = '';
 
-    private $debugId = '';
-
-    private $factory;
-
-    private $client;
-
-    public function __construct(SpanManagerInterface $manager, SpanFactoryInterface $factory, ClientInterface $client)
-    {
-        $this->manager = $manager;
-        $this->factory = $factory;
-        $this->client = $client;
-    }
+    public function __construct(private readonly SpanManagerInterface $manager, private readonly SpanFactoryInterface $factory, private readonly ClientInterface $client) {}
 
     public function enable(string $debugId): DebuggableInterface
     {
@@ -92,11 +81,12 @@ class Tracer implements
 
     public function start(string $operationName, array $tags = [], ?SpanContext $userContext = null): SpanInterface
     {
-        if (null === ($context = $userContext ?: $this->manager->getContext())) {
+        if (!($context = $userContext ?: $this->manager->getContext()) instanceof SpanContext) {
             $span = $this->factory->parent($this, $operationName, $this->debugId, $tags);
         } else {
             $span = $this->factory->child($this, $operationName, $context, $tags);
         }
+
         $this->manager->new($span);
 
         return $span;
@@ -114,10 +104,12 @@ class Tracer implements
 
             return;
         }
+
         $this->manager->finish($span);
         if (false === $span->isSampled()) {
             return;
         }
+
         $this->client->add($span);
     }
 }

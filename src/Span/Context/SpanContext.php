@@ -11,33 +11,7 @@ use Traversable;
 
 class SpanContext implements IteratorAggregate
 {
-    private int $traceIdHigh;
-
-    private int $traceIdLow;
-
-    private int $spanId;
-
-    private int $parentId;
-
-    private int $flags;
-
-    private array $baggage;
-
-    public function __construct(
-        int $traceIdHigh,
-        int $traceIdLow,
-        int $spanId,
-        int $parentId,
-        int $flags = 0,
-        array $baggage = [],
-    ) {
-        $this->traceIdHigh = $traceIdHigh;
-        $this->traceIdLow = $traceIdLow;
-        $this->spanId = $spanId;
-        $this->parentId = $parentId;
-        $this->flags = $flags;
-        $this->baggage = $baggage;
-    }
+    public function __construct(private int $traceIdHigh, private int $traceIdLow, private int $spanId, private int $parentId, private int $flags = 0, private array $baggage = []) {}
 
     public function getTraceId(): int
     {
@@ -93,7 +67,7 @@ class SpanContext implements IteratorAggregate
         return new ArrayIterator($this->baggage);
     }
 
-    public function withItem(string $key, $item)
+    public function withItem(string $key, $item): static
     {
         $copy = clone $this;
         $copy->baggage[$key] = $item;
@@ -110,7 +84,7 @@ class SpanContext implements IteratorAggregate
         return $this->baggage[$key];
     }
 
-    public function withoutItem(string $key)
+    public function withoutItem(string $key): static
     {
         $copy = clone $this;
         unset($copy->baggage[$key]);

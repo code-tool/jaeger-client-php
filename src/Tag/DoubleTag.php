@@ -10,6 +10,6 @@ class DoubleTag extends AbstractTag
 {
     public function __construct(string $key, float $value)
     {
-        parent::__construct($key, TagType::DOUBLE, null, $value, null, null, null);
+        parent::__construct($key, TagType::DOUBLE, null, $value);
     }
 }

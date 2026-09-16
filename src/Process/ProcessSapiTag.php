@@ -10,6 +10,6 @@ class ProcessSapiTag extends StringTag
 {
     public function __construct()
     {
-        parent::__construct('process.sapi', php_sapi_name());
+        parent::__construct('process.sapi', PHP_SAPI);
     }
 }
