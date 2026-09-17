@@ -1,22 +1,36 @@
 {
   "name": "code-tool/jaeger-client-php",
+  "description": "PHP OpenTracing client for Jaeger",
   "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "Jaeger\\": "src/"
-    }
-  },
+  "type": "library",
+  "keywords": [
+    "jaeger",
+    "opentracing",
+    "tracing",
+    "thrift"
+  ],
   "require": {
     "php": "^8.4",
     "ext-sockets": "*",
     "apache/thrift": "^0.24.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "@stable",
     "friendsofphp/php-cs-fixer": "^3.95",
+    "phpunit/phpunit": "^13",
     "rector/rector": "^2.6",
     "vimeo/psalm": "^6"
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  "suggest": {
+    "ext-apcu": "Required by RateLimitingSampler to share its rate counters between requests"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jaeger\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Jaeger\\Tests\\": "tests/"
+    }
+  }
 }
