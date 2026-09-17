@@ -13,7 +13,7 @@ interface SpanManagerInterface extends ContextAwareInterface,
     ResettableInterface,
     SpanAwareInterface
 {
-    public function new(SpanInterface $span);
+    public function new(SpanInterface $span): void;
 
     public function finish(SpanInterface $span): ?SpanInterface;
 }

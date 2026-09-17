@@ -10,6 +10,7 @@ use Jaeger\Span\Context\SpanContext;
 use Jaeger\Span\Factory\SpanFactoryInterface;
 use Jaeger\Span\SpanInterface;
 use Jaeger\Span\SpanManagerInterface;
+use Jaeger\Thrift\Tag;
 
 class Tracer implements
     TracerInterface,
@@ -75,6 +76,9 @@ class Tracer implements
         return $this->client;
     }
 
+    /**
+     * @param array<array-key, Tag> $tags
+     */
     public function debug(string $operationName, array $tags = []): SpanInterface
     {
         $span = $this->factory->parent($this, $operationName, str_shuffle('01234567890abcdef'), $tags);
@@ -83,12 +87,16 @@ class Tracer implements
         return $span;
     }
 
-    public function start(string $operationName, array $tags = [], ?SpanContext $userContext = null): SpanInterface
+    /**
+     * @param array<array-key, Tag> $tags
+     */
+    public function start(string $operationName, array $tags = [], ?SpanContext $context = null): SpanInterface
     {
-        if (!($context = $userContext ?: $this->manager->getContext()) instanceof SpanContext) {
+        $spanContext = $context ?? $this->manager->getContext();
+        if (!$spanContext instanceof SpanContext) {
             $span = $this->factory->parent($this, $operationName, $this->debugId, $tags);
         } else {
-            $span = $this->factory->child($this, $operationName, $context, $tags);
+            $span = $this->factory->child($this, $operationName, $spanContext, $tags);
         }
 
         $this->manager->new($span);

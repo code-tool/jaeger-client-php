@@ -65,7 +65,8 @@ class TUDPTransport extends TTransport
 
         $length = \strlen($buf);
         while (true) {
-            if (false === ($result = @socket_write($socket, $buf))) {
+            $result = @socket_write($socket, $buf);
+            if (false === $result) {
                 break;
             }
 

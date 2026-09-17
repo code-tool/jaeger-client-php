@@ -6,11 +6,16 @@ namespace Jaeger\Span\Context;
 
 use ArrayIterator;
 use IteratorAggregate;
-use ReturnTypeWillChange;
 use Traversable;
 
+/**
+ * @implements IteratorAggregate<string, mixed>
+ */
 class SpanContext implements IteratorAggregate
 {
+    /**
+     * @param array<string, mixed> $baggage
+     */
     public function __construct(
         private int $traceIdHigh,
         private int $traceIdLow,
@@ -60,21 +65,23 @@ class SpanContext implements IteratorAggregate
         return $this->flags;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getBaggage(): array
     {
         return $this->baggage;
     }
 
     /**
-     * @return Traversable
+     * @return Traversable<string, mixed>
      */
-    #[ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator($this->baggage);
     }
 
-    public function withItem(string $key, $item): static
+    public function withItem(string $key, mixed $item): static
     {
         $copy = clone $this;
         $copy->baggage[$key] = $item;
@@ -82,7 +89,7 @@ class SpanContext implements IteratorAggregate
         return $copy;
     }
 
-    public function getItem(string $key, $default = null)
+    public function getItem(string $key, mixed $default = null): mixed
     {
         if (false === \array_key_exists($key, $this->baggage)) {
             return $default;

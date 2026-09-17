@@ -11,13 +11,16 @@ use SplStack;
 
 class StackSpanManager implements SpanManagerInterface
 {
+    /**
+     * @var SplStack<SpanInterface>
+     */
     private SplStack $stack;
 
     private ?SpanContext $context = null;
 
     public function __construct()
     {
-        $this->stack = new SplStack();
+        $this->stack = $this->createStack();
     }
 
     /**
@@ -25,7 +28,7 @@ class StackSpanManager implements SpanManagerInterface
      */
     public function reset(): ResettableInterface
     {
-        $this->stack = new SplStack();
+        $this->stack = $this->createStack();
         $this->context = null;
 
         return $this;
@@ -38,7 +41,7 @@ class StackSpanManager implements SpanManagerInterface
     public function assign(SpanContext $context): InjectableInterface
     {
         $this->context = $context;
-        $this->stack = new SplStack();
+        $this->stack = $this->createStack();
 
         return $this;
     }
@@ -79,5 +82,16 @@ class StackSpanManager implements SpanManagerInterface
     public function getContext(): ?SpanContext
     {
         return (($span = $this->getSpan()) instanceof SpanInterface) ? $span->getContext() : $this->context;
+    }
+
+    /**
+     * @return SplStack<SpanInterface>
+     */
+    private function createStack(): SplStack
+    {
+        /** @var SplStack<SpanInterface> $stack */
+        $stack = new SplStack();
+
+        return $stack;
     }
 }

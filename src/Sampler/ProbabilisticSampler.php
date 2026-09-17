@@ -10,7 +10,7 @@ class ProbabilisticSampler extends AbstractSampler
 
     public function __construct(private readonly float $rate)
     {
-        $this->threshold = 0.5 * $this->rate * PHP_INT_MAX;
+        $this->threshold = 0.5 * $this->rate * (float) PHP_INT_MAX;
     }
 
     public function doDecide(int $tracerId, string $operationName): SamplerResult

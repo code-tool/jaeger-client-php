@@ -6,12 +6,7 @@ namespace Jaeger\Sampler;
 
 class ConstSampler extends AbstractSampler
 {
-    private readonly bool $debugEnabled;
-
-    public function __construct($debugEnabled)
-    {
-        $this->debugEnabled = (bool) $debugEnabled;
-    }
+    public function __construct(private readonly bool $debugEnabled) {}
 
     public function doDecide(int $tracerId, string $operationName): SamplerResult
     {

@@ -11,9 +11,9 @@ class AdaptiveSampler implements SamplerInterface
         private readonly SamplerInterface $probabilistic,
     ) {}
 
-    public function decide(int $tracerId, string $operationName, string $debugId): SamplerResult
+    public function decide(int $traceId, string $operationName, string $debugId): SamplerResult
     {
-        $rateLimitResult = $this->rateLimit->decide($tracerId, $operationName, $debugId);
+        $rateLimitResult = $this->rateLimit->decide($traceId, $operationName, $debugId);
         if ($rateLimitResult->isSampled()) {
             return new SamplerResult(
                 true,
@@ -22,7 +22,7 @@ class AdaptiveSampler implements SamplerInterface
             );
         }
 
-        $probabilisticResult = $this->probabilistic->decide($tracerId, $operationName, $debugId);
+        $probabilisticResult = $this->probabilistic->decide($traceId, $operationName, $debugId);
         if ($probabilisticResult->isSampled()) {
             return new SamplerResult(
                 true,

@@ -12,7 +12,7 @@ class ProcessGidTag extends LongTag
     {
         parent::__construct(
             'process.gid',
-            getmygid(),
+            false === ($id = getmygid()) ? 0 : $id,
         );
     }
 }

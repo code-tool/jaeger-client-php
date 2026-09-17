@@ -18,9 +18,9 @@ interface SpanInterface extends ContextAwareInterface
 
     public function addLog(Log $log): SpanInterface;
 
-    public function withItem(string $key, $item): SpanInterface;
+    public function withItem(string $key, mixed $item): SpanInterface;
 
-    public function getItem(string $key, $default = null);
+    public function getItem(string $key, mixed $default = null): mixed;
 
     public function withoutItem(string $key): SpanInterface;
 
