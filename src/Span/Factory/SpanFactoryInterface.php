@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Span\Factory;
@@ -14,7 +15,7 @@ interface SpanFactoryInterface
         string $operationName,
         string $debugId,
         array $tags = [],
-        array $logs = []
+        array $logs = [],
     ): SpanInterface;
 
     public function child(
@@ -22,6 +23,6 @@ interface SpanFactoryInterface
         string $operationName,
         SpanContext $parentContext,
         array $tags = [],
-        array $logs = []
+        array $logs = [],
     ): SpanInterface;
 }

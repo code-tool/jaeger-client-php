@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Sampler;
@@ -9,6 +10,9 @@ class SamplerFlagsTag extends LongTag
 {
     public function __construct(int $flags)
     {
-        parent::__construct('sampler.flags', $flags);
+        parent::__construct(
+            'sampler.flags',
+            $flags,
+        );
     }
 }

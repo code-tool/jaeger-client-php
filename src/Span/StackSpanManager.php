@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Span;
@@ -6,17 +7,17 @@ namespace Jaeger\Span;
 use Jaeger\Span\Context\SpanContext;
 use Jaeger\Tracer\InjectableInterface;
 use Jaeger\Tracer\ResettableInterface;
+use SplStack;
 
 class StackSpanManager implements SpanManagerInterface
 {
-    private $stack;
+    private SplStack $stack;
 
-    /** @var SpanContext|null */
-    private $context;
+    private ?SpanContext $context = null;
 
     public function __construct()
     {
-        $this->stack = new \SplStack();
+        $this->stack = new SplStack();
     }
 
     /**
@@ -24,27 +25,25 @@ class StackSpanManager implements SpanManagerInterface
      */
     public function reset(): ResettableInterface
     {
-        $this->stack = new \SplStack();
+        $this->stack = new SplStack();
         $this->context = null;
 
         return $this;
     }
 
     /**
-     * @param SpanContext $context
      *
      * @return self
      */
     public function assign(SpanContext $context): InjectableInterface
     {
         $this->context = $context;
-        $this->stack = new \SplStack();
+        $this->stack = new SplStack();
 
         return $this;
     }
 
     /**
-     * @param SpanContext $context
      *
      * @return self
      */
@@ -55,6 +54,7 @@ class StackSpanManager implements SpanManagerInterface
                 $this->stack->pop();
                 continue;
             }
+
             break;
         }
 
@@ -78,6 +78,6 @@ class StackSpanManager implements SpanManagerInterface
 
     public function getContext(): ?SpanContext
     {
-        return ($span = $this->getSpan()) ? $span->getContext() : $this->context;
+        return (($span = $this->getSpan()) instanceof SpanInterface) ? $span->getContext() : $this->context;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Http;
@@ -9,6 +10,9 @@ class HttpMethodTag extends StringTag
 {
     public function __construct(string $method)
     {
-        parent::__construct('http.method', $method);
+        parent::__construct(
+            'http.method',
+            $method,
+        );
     }
 }

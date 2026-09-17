@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Process;
@@ -9,6 +10,9 @@ class ProcessSapiTag extends StringTag
 {
     public function __construct()
     {
-        parent::__construct('process.sapi', php_sapi_name());
+        parent::__construct(
+            'process.sapi',
+            PHP_SAPI,
+        );
     }
 }

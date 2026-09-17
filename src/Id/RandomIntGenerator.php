@@ -1,7 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Id;
+
+use Exception;
 
 class RandomIntGenerator implements IdGeneratorInterface
 {
@@ -9,9 +12,9 @@ class RandomIntGenerator implements IdGeneratorInterface
     {
         try {
             return random_int(PHP_INT_MIN, PHP_INT_MAX);
-        } catch (\Exception $e) {
+        } catch (Exception) {
         } finally {
-            return rand(PHP_INT_MIN, PHP_INT_MAX);
+            return random_int(PHP_INT_MIN, PHP_INT_MAX);
         }
     }
 }

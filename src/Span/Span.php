@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Span;
@@ -12,25 +13,19 @@ use Jaeger\Tracer\FinishableInterface;
 
 class Span extends \Jaeger\Thrift\Span implements SpanInterface
 {
-    private FinishableInterface $tracer;
-
-    private SpanContext $context;
-
     public function __construct(
-        FinishableInterface $tracer,
-        SpanContext         $context,
-        string              $operationName,
-        int                 $startTime,
-        array               $tags = [],
-        array               $logs = []
+        private readonly FinishableInterface $tracer,
+        private SpanContext $context,
+        string $operationName,
+        int $startTime,
+        array $tags = [],
+        array $logs = [],
     ) {
-        $this->tracer = $tracer;
-        $this->context = $context;
-        $this->traceIdLow = $context->getTraceIdLow();
-        $this->traceIdHigh = $context->getTraceIdHigh();
-        $this->spanId = $context->getSpanId();
-        $this->parentSpanId = $context->getParentId();
-        $this->flags = $context->getFlags();
+        $this->traceIdLow = $this->context->getTraceIdLow();
+        $this->traceIdHigh = $this->context->getTraceIdHigh();
+        $this->spanId = $this->context->getSpanId();
+        $this->parentSpanId = $this->context->getParentId();
+        $this->flags = $this->context->getFlags();
         $this->operationName = $operationName;
         $this->startTime = $startTime;
         $this->tags = $tags;
@@ -43,6 +38,7 @@ class Span extends \Jaeger\Thrift\Span implements SpanInterface
         if (null !== $this->duration) {
             return;
         }
+
         $this->tags[] = new ErrorTag();
         $this->tags[] = new OutOfScopeTag();
         $this->tracer->finish($this);

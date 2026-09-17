@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Log;
@@ -9,6 +10,9 @@ class MessageTag extends StringTag
 {
     public function __construct(string $value)
     {
-        parent::__construct('message', $value);
+        parent::__construct(
+            'message',
+            $value,
+        );
     }
 }

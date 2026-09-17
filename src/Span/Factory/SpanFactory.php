@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Span\Factory;
@@ -12,25 +13,18 @@ use Jaeger\Tracer\TracerInterface;
 
 class SpanFactory implements SpanFactoryInterface
 {
-    private IdGeneratorInterface $idGenerator;
-
-    private SamplerInterface $sampler;
-
-    private bool $trace128;
-
-    public function __construct(IdGeneratorInterface $idGenerator, SamplerInterface $sampler, bool $trace128 = false)
-    {
-        $this->idGenerator = $idGenerator;
-        $this->sampler = $sampler;
-        $this->trace128 = $trace128;
-    }
+    public function __construct(
+        private readonly IdGeneratorInterface $idGenerator,
+        private readonly SamplerInterface $sampler,
+        private readonly bool $trace128 = false,
+    ) {}
 
     public function parent(
         TracerInterface $tracer,
-        string          $operationName,
-        string          $debugId,
-        array           $tags = [],
-        array           $logs = []
+        string $operationName,
+        string $debugId,
+        array $tags = [],
+        array $logs = [],
     ): SpanInterface {
         $spanId = $this->idGenerator->next();
         $traceId = $spanId;
@@ -43,21 +37,21 @@ class SpanFactory implements SpanFactoryInterface
                 $this->idGenerator->next(),
                 $this->idGenerator->next(),
                 0,
-                (int)$samplerResult->getFlags()
+                $samplerResult->getFlags(),
             ),
             $operationName,
-            (int)(microtime(true) * 1000000),
+            (int) (microtime(true) * 1000000),
             array_merge($tags, $samplerResult->getTags()),
-            $logs
+            $logs,
         );
     }
 
     public function child(
         TracerInterface $tracer,
-        string          $operationName,
-        SpanContext     $parentContext,
-        array           $tags = [],
-        array           $logs = []
+        string $operationName,
+        SpanContext $parentContext,
+        array $tags = [],
+        array $logs = [],
     ): SpanInterface {
         return new Span(
             $tracer,
@@ -67,12 +61,12 @@ class SpanFactory implements SpanFactoryInterface
                 $this->idGenerator->next(),
                 $parentContext->getSpanId(),
                 $parentContext->getFlags(),
-                $parentContext->getBaggage()
+                $parentContext->getBaggage(),
             ),
             $operationName,
-            (int)(microtime(true) * 1000000),
+            (int) (microtime(true) * 1000000),
             $tags,
-            $logs
+            $logs,
         );
     }
 }

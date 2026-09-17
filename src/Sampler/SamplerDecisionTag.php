@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Sampler;
@@ -9,6 +10,9 @@ class SamplerDecisionTag extends BoolTag
 {
     public function __construct(bool $decision)
     {
-        parent::__construct('sampler.decision', $decision);
+        parent::__construct(
+            'sampler.decision',
+            $decision,
+        );
     }
 }

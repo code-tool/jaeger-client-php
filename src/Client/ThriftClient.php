@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Client;
@@ -14,19 +15,16 @@ class ThriftClient implements ClientInterface
 {
     public const MAX_BATCH_SIZE = 32;
 
-    private $serviceName;
+    private readonly int $batch;
 
-    private $agent;
+    private array $spans = [];
 
-    private $batch;
-
-    private $spans = [];
-
-    public function __construct(string $serviceName, AgentInterface $agent, $batch = self::MAX_BATCH_SIZE)
-    {
-        $this->serviceName = $serviceName;
-        $this->agent = $agent;
-        $this->batch = (int)$batch;
+    public function __construct(
+        private readonly string $serviceName,
+        private readonly AgentInterface $agent,
+        $batch = self::MAX_BATCH_SIZE,
+    ) {
+        $this->batch = (int) $batch;
     }
 
     public function add(SpanInterface $span): ClientInterface
@@ -43,20 +41,15 @@ class ThriftClient implements ClientInterface
 
     public function flush(): ClientInterface
     {
-        switch (PHP_SAPI) {
-            case 'cli':
-                $process = new CliProcess($this->serviceName);
-                break;
-            case 'cli-server':
-                $process = new InternalServerProcess($this->serviceName);
-                break;
-            default:
-                $process = new FpmProcess($this->serviceName);
-                break;
-        }
+        $process = match (PHP_SAPI) {
+            'cli' => new CliProcess($this->serviceName),
+            'cli-server' => new InternalServerProcess($this->serviceName),
+            default => new FpmProcess($this->serviceName),
+        };
         foreach (array_chunk($this->spans, $this->batch) as $batch) {
             $this->agent->emitBatch(new SpanBatch($process, $batch));
         }
+
         $this->spans = [];
 
         return $this;

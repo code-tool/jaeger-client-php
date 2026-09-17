@@ -1,28 +1,31 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Codec;
 
-class CodecRegistry implements \ArrayAccess
+use ArrayAccess;
+use ReturnTypeWillChange;
+
+class CodecRegistry implements ArrayAccess
 {
     private $codecs = [];
 
     /**
      * @return bool
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
-        return array_key_exists($offset, $this->codecs);
+        return \array_key_exists($offset, $this->codecs);
     }
 
     /**
-     * @return mixed
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
-        if (false === array_key_exists($offset, $this->codecs)) {
+        if (false === \array_key_exists($offset, $this->codecs)) {
             return null;
         }
 
@@ -32,7 +35,7 @@ class CodecRegistry implements \ArrayAccess
     /**
      * @return $this
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->codecs[$offset] = $value;
@@ -43,12 +46,13 @@ class CodecRegistry implements \ArrayAccess
     /**
      * @return $this
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
-        if (false === array_key_exists($offset, $this->codecs)) {
+        if (false === \array_key_exists($offset, $this->codecs)) {
             return $this;
         }
+
         unset($this->codecs[$offset]);
 
         return $this;

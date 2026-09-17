@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Tracer;
@@ -9,5 +10,5 @@ interface InjectableInterface
 {
     public function assign(SpanContext $context): InjectableInterface;
 
-    public function remove(SpanContext $context) : InjectableInterface;
+    public function remove(SpanContext $context): InjectableInterface;
 }

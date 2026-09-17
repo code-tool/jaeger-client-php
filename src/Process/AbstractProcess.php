@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Process;
@@ -11,8 +12,10 @@ use Jaeger\Thrift\Process;
 
 abstract class AbstractProcess extends Process
 {
-    public function __construct(string $serviceName, array $tags = [])
-    {
+    public function __construct(
+        string $serviceName,
+        array $tags = [],
+    ) {
         $this->serviceName = $serviceName;
         $this->tags = array_merge(
             $tags,
@@ -24,8 +27,8 @@ abstract class AbstractProcess extends Process
                 new ProcessPidTag(),
                 new ProcessSapiTag(),
                 new ProcessUidTag(),
-                new ProcessGidTag()
-            ]
+                new ProcessGidTag(),
+            ],
         );
         parent::__construct();
     }

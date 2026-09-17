@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Jaeger\Process;
@@ -9,6 +10,9 @@ class ProcessGidTag extends LongTag
 {
     public function __construct()
     {
-        parent::__construct('process.gid', getmygid());
+        parent::__construct(
+            'process.gid',
+            getmygid(),
+        );
     }
 }
